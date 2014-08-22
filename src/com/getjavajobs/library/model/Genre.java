@@ -12,6 +12,8 @@ public class Genre {
     public String getGenreType(){
         return genreType;
     }
+    
+    
     public void setGenreType(String inputGenreType){
         genreType=inputGenreType;
     }
