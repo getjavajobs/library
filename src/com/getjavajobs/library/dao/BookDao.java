@@ -1,6 +1,6 @@
 package com.getjavajobs.library.dao;
 
-import com.getjavajobs.library.exceptions.DaoException;
+import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Book;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
  * Created by Vlad on 21.08.2014.
  */
 public interface BookDao {
-    public Book add(Book book) throws DaoException;
-    public void delete(int id) throws DaoException;
-    public Book get(int id) throws DaoException;
-    public Book update(Book book) throws DaoException;
-    public List<Book> getAll() throws DaoException;
+    public Book add(Book book) throws DAOException;
+    public void delete(int id) throws DAOException;
+    public Book get(int id) throws DAOException;
+    public Book update(Book book) throws DAOException;
+    public List<Book> getAll() throws DAOException;
 }
