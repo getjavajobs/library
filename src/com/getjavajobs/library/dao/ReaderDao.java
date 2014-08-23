@@ -156,7 +156,7 @@ public class ReaderDao {
     }
 }
 
-    //to use this connection use : " Connection con = connectBase(); "
+//to use this connection use : " Connection con = connectBase(); "
    /* private Connection connectBase() throws FileNotFoundException, IOException, SQLException {
  Properties props = new Properties();
  props.load(new FileInputStream("jdbc.properties"));
