@@ -91,7 +91,7 @@ public class AuthorDao {
                 author.setName(resultSet.getString("name"));
                 author.setSurname(resultSet.getString("surname"));
                 author.setPatronymic(resultSet.getString("patronymic"));
-                author.setBirthDate((java.util.Date)resultSet.getDate("dateofbirth"));
+                author.setBirthDate((java.util.Date) resultSet.getDate("dateofbirth"));
                 author.setBirthPlace(resultSet.getString("country"));
                 if (!con.getAutoCommit()){
                     con.commit();
@@ -126,7 +126,7 @@ public class AuthorDao {
             ps.setString(1, author.getName());
             ps.setString(2, author.getSurname());
             ps.setString(3,author.getPatronymic());
-            ps.setDate(4, (java.sql.Date)author.getBirthDate());
+            ps.setDate(4, (java.sql.Date) author.getBirthDate());
             ps.setString(5, author.getBirthPlace());
             ps.setInt(6,author.getId());
             ps.executeUpdate();
@@ -162,7 +162,7 @@ public class AuthorDao {
                 author.setName(resultSet.getString("name"));
                 author.setSurname(resultSet.getString("surname"));
                 author.setPatronymic(resultSet.getString("patronymic"));
-                author.setBirthDate((java.util.Date)resultSet.getDate("dateofbirth"));
+                author.setBirthDate((java.util.Date) resultSet.getDate("dateofbirth"));
                 author.setBirthPlace(resultSet.getString("country"));
                 authors.add(author);
             }
