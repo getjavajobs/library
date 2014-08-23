@@ -34,7 +34,7 @@ public class BookDao {
                 "books(title, author_id, publishing_id, year, pagenumber, price) " +
                 "values(?,?,?,?,?,?);";
 
-        try (PreparedStatement addStatement = connection.prepareStatement(command);){
+        try (PreparedStatement addStatement = connection.prepareStatement(command)){
             bookToStatement(addStatement,book);
             addStatement.execute();
             book.setId(getLastId(connection));
@@ -65,7 +65,7 @@ public class BookDao {
     public Book get(int id) throws DAOException {
         Connection connection = connectionHolder.getConnection();
         boolean success = true;
-        try (PreparedStatement statement = connection.prepareStatement("select * from books where id=?;");){
+        try (PreparedStatement statement = connection.prepareStatement("select * from books where id=?;")){
             statement.setInt(1,id);
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
@@ -128,7 +128,7 @@ public class BookDao {
     public void delete(int id) throws DAOException {
         Connection connection = connectionHolder.getConnection();
         boolean success = true;
-        try (PreparedStatement statement = connection.prepareStatement("delete from books where id=?;");){
+        try (PreparedStatement statement = connection.prepareStatement("delete from books where id=?;")){
             statement.setInt(1,id);
             statement.execute();
         } catch (SQLException e) {
