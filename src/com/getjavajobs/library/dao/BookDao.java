@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class BookDao implements GenericDao<Book> {
     private ConnectionHolder connectionHolder;
-    private AuthorDao authorDao;
+    private AuthorDAO authorDAO;
     private PublisherDao publisherDao;
     private GenreDao genreDao;
 
@@ -25,8 +25,8 @@ public class BookDao implements GenericDao<Book> {
         this.genreDao = genreDao;
     }
 
-    public void setAuthorDao(AuthorDao authorDao) {
-        this.authorDao = authorDao;
+    public void setAuthorDAO(AuthorDAO authorDAO) {
+        this.authorDAO = authorDAO;
     }
 
     public void setPublisherDao(PublisherDao publisherDao) {
@@ -244,7 +244,7 @@ public class BookDao implements GenericDao<Book> {
         Book book = new Book();
         book.setId(resultSet.getInt("id"));
         book.setName(resultSet.getString("title"));
-        book.setAuthor(authorDao.get(resultSet.getInt("author_id")));
+        book.setAuthor(authorDAO.get(resultSet.getInt("author_id")));
         book.setPublisher(publisherDao.get(resultSet.getInt("publishing_id")));
         book.setYear(resultSet.getShort("year"));
         book.setPagesNumber(resultSet.getInt("pagenumber"));
