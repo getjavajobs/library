@@ -67,12 +67,18 @@ create table Publishing(
  site char(50),
  primary key(id)
  );
+ 
+ create table Genre(
+ id mediumint auto_increment,
+ genre_type char(50) not null,
+ primary key(id)
+ );
 
 create table Genre_lists(
  book_id mediumint not null;
  genre_id mediumint not null;
  foreign key(book_id) references Books(id);
- foreign key(genre_id) references Genres(id);
+ foreign key(genre_id) references Genre(id);
 )
  
   create index readersname on readers(name, surname);
