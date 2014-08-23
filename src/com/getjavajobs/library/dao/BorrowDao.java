@@ -20,8 +20,8 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO BORROW(books_id, date_of_borrow," +
                 " date_of_return, readers_id, employee_id) VALUES (?,?,?,?,?)")) {
             ps.setInt(1, borrow.getBook().getId());
-            ps.setString(2, borrow.getDateOfBorrow().toString());
-            ps.setString(3, borrow.getDateOfReturn().toString());
+            ps.setDate(2, (Date) borrow.getDateOfBorrow());
+            ps.setDate(3, (Date) borrow.getDateOfReturn());
             ps.setInt(4, borrow.getReader().getReaderId());
             ps.setInt(5, borrow.getEmployee().getId());
             ps.executeUpdate();
