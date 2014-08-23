@@ -178,7 +178,7 @@ public class BookDao {
                 connectionHolder.releaseConnection(connection);
             }
         }
-
+        connectionHolder.releaseConnection(connection);
         return books;
     }
     private int getLastId(Connection connection) throws SQLException {

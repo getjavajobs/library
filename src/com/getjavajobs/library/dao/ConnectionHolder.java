@@ -13,15 +13,15 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Класс - хранилище соединений.
+ * пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  * 
- * Это класс-синглетон.
- * Когда я отдал соединение с базой данных - должен "запомнить" этот факт. 
- * И если кому-то потребуется соединение, а оно уже занято - я должен ожидать,
- * когда оно освободиться.
+ * пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+ * пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ. 
+ * пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+ * пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  * 
- * Данную вещь я решил сделать через Lock->Condition. Мне это кажется довольно простым и логичным решением.
- * При взятии соединения (getConnection) -> await(), при вызове метода releaseConnection -> signal()
+ * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Lock->Condition. пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+ * пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (getConnection) -> await(), пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ releaseConnection -> signal()
  * 
  */
 public class ConnectionHolder {
@@ -43,7 +43,7 @@ public class ConnectionHolder {
 			this.connection = DriverManager.getConnection(url, username, password);
 			this.commanLock = new ReentrantLock();
 			this.commanCondition = commanLock.newCondition();
-			this.commanCondition.signal();		// соединение пока свободно.
+		//	this.commanCondition.signal();		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 			this.firstConnectionFlag = new AtomicBoolean();
 			this.firstConnectionFlag.set(true);
 		} catch (FileNotFoundException e) {
@@ -62,12 +62,12 @@ public class ConnectionHolder {
 		return instance;
 	} 
 	
-	// Получить соединение.
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 	public Connection getConnection() {
 		commanLock.lock();
 		try {
 			if (!firstConnectionFlag.get()) {
-				commanCondition.await();	// Ожидаем освобождения соединения.
+				commanCondition.await();	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 			}
 			return connection;
 		} catch (InterruptedException ex) {
@@ -78,13 +78,13 @@ public class ConnectionHolder {
 		return null;
 	}
 	
-	// Освободить соединение.
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 	// TODO Pool logic
 	public void releaseConnection(Connection con) {
 		commanLock.lock();
 		try {
 			firstConnectionFlag.set(false);
-			commanCondition.signal();	// Соединение вновь свободно.
+			commanCondition.signal();	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		} finally {
 			commanLock.unlock();
 		}

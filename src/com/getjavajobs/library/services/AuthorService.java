@@ -14,7 +14,7 @@ public class AuthorService {
 
     private AuthorDao authorDao;
 
-    public void AuthorService(AuthorDao authorDao) {
+    public AuthorService(AuthorDao authorDao) {
         this.authorDao = authorDao;
     }
 

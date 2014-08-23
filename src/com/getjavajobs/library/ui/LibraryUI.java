@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import com.getjavajobs.library.dao.AuthorDao;
 import com.getjavajobs.library.dao.BookDao;
 import com.getjavajobs.library.dao.ConnectionHolder;
 import com.getjavajobs.library.exceptions.ServiceException;
@@ -67,7 +68,7 @@ public class LibraryUI {
 	private static JPanel employeesTablePanel = null;
 	
 	/* �������� �������� ��� ������ � ������� */
-	private static final AuthorService authorService = new AuthorService();
+	private static final AuthorService authorService = new AuthorService(new AuthorDao());
 	private static final BookService bookService = new BookService();
 	private static final BorrowService borrowService = new BorrowService();
 	private static final EmployeeService employeeService = new EmployeeService();
@@ -86,6 +87,8 @@ public class LibraryUI {
         BookDao bookDao = new BookDao();
         bookDao.setConnectionHolder(ConnectionHolder.getInstance());
         bookService.setBookDao(bookDao);
+
+
 
 		booksTableConfiguration(mainFrame);		// ������������ ������� ����.
 		booksTablePanel.setVisible(true);
