@@ -3,13 +3,13 @@ package com.getjavajobs.library.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.getjavajobs.library.dao.EmployeeDAO;
+import com.getjavajobs.library.dao.EmployeeDao;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Employee;
 import com.getjavajobs.library.services.validators.EmployeeValidator;
 
 public class EmployeeService {
-	private EmployeeDAO employeeDao = new EmployeeDAO();
+	private EmployeeDao employeeDao = new EmployeeDao();
 	private EmployeeValidator employeeValidator = new EmployeeValidator();
 	
 	public Employee add(Employee employee) throws ServiceException {
