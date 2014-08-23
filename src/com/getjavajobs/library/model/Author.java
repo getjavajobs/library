@@ -10,7 +10,7 @@ public class Author {
     private int id;
     private String name;
     private String surname;
-    private String fatherName;
+    private String patronymic;
     private Date birthDate;
     private String birthPlace;
 
@@ -46,12 +46,12 @@ public class Author {
         this.birthDate = birthDate;
     }
 
-    public String getFatherName() {
-        return fatherName;
+    public String getPatronymic() {
+        return patronymic;
     }
 
-    public void setFatherName(String fatherName) {
-        this.fatherName = fatherName;
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 
     public String getBirthPlace() {
@@ -79,7 +79,7 @@ public class Author {
         if (birthPlace != null ? !birthPlace.equals(author.birthPlace) : author.birthPlace != null) {
             return false;
         }
-        if (fatherName != null ? !fatherName.equals(author.fatherName) : author.fatherName != null) {
+        if (patronymic != null ? !patronymic.equals(author.patronymic) : author.patronymic != null) {
             return false;
         }
         if (name != null ? !name.equals(author.name) : author.name != null) {
@@ -96,7 +96,7 @@ public class Author {
     public int hashCode() {
         int result = (name != null) ? name.hashCode() : 0;
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
-        result = 31 * result + (fatherName != null ? fatherName.hashCode() : 0);
+        result = 31 * result + (patronymic != null ? patronymic.hashCode() : 0);
         result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
         result = 31 * result + (birthPlace != null ? birthPlace.hashCode() : 0);
         return result;
@@ -107,7 +107,7 @@ public class Author {
         StringBuilder sb = new StringBuilder();
         sb.append("Name: " + name + ";\n");
         sb.append("Surname: " + surname + ";\n");
-        sb.append("Fathername: " + fatherName + ";\n");
+        sb.append("Fathername: " + patronymic + ";\n");
         sb.append("Birthdate: " + birthDate.toString() + ";\n");
         sb.append("Birthplace: " + birthPlace + ".");
         return sb.toString();
