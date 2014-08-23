@@ -11,10 +11,10 @@ public class GenreService {
 
     private GenreDAO genreDao;
 
-    public void setGenreDao(GenreDAO genreDao) {
-        this.genreDao = genreDao;
+    public GenreService() {
+        genreDao = new GenreDAO();
     }
-    
+
     public Genre add(Genre book) throws ServiceException {
         GenreValidator validator = new GenreValidator(book);
         if (!validator.validate()) {
@@ -27,6 +27,7 @@ public class GenreService {
             throw new ServiceException(e);
         }
     }
+
     public Genre get(int id) throws ServiceException {
         try {
             return genreDao.get(id);
@@ -34,6 +35,7 @@ public class GenreService {
             throw new ServiceException(e);
         }
     }
+
     public Genre update(Genre book) throws ServiceException {
         GenreValidator validator = new GenreValidator(book);
         if (!validator.validate()) {
@@ -46,14 +48,16 @@ public class GenreService {
             throw new ServiceException(e);
         }
     }
-    public void delete(int id) throws ServiceException{
+
+    public void delete(int id) throws ServiceException {
         try {
             genreDao.delete(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
-    public List<Genre> getAll() throws ServiceException{
+
+    public List<Genre> getAll() throws ServiceException {
         try {
             return genreDao.getAll();
         } catch (DAOException e) {
