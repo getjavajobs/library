@@ -9,7 +9,7 @@ import java.util.*;
 
 public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут будут объявлены все методы).
     //private dao
-    private EmployeeDAO employeeDAO = new EmployeeDAO();
+    private EmployeeDao employeeDAO = new EmployeeDao();
     private BookDao bookDao = new BookDao();
     private ReaderDao readerDao = new ReaderDao();
 
