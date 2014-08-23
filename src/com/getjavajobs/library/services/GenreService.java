@@ -1,6 +1,6 @@
 package com.getjavajobs.library.services;
 
-import com.getjavajobs.library.dao.GenreDAO;
+import com.getjavajobs.library.dao.GenreDao;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Genre;
@@ -10,10 +10,10 @@ import java.util.List;
 
 public class GenreService {
 
-    private GenreDAO genreDao;
+    private GenreDao genreDao;
 
     public GenreService() {
-        genreDao = new GenreDAO();
+        genreDao = new GenreDao();
     }
 
     public Genre add(Genre book) throws ServiceException {

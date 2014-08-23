@@ -1,6 +1,5 @@
 package com.getjavajobs.library.services;
 
-import com.getjavajobs.library.dao.BookDao;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Book;
