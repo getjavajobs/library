@@ -2,7 +2,6 @@ package com.getjavajobs.library.dao;
 
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Author;
-import com.getjavajobs.library.model.Publisher;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

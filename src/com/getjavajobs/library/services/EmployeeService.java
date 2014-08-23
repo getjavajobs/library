@@ -1,12 +1,12 @@
 package com.getjavajobs.library.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.getjavajobs.library.dao.EmployeeDao;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Employee;
 import com.getjavajobs.library.services.validators.EmployeeValidator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeeService {
 	private EmployeeDao employeeDao = new EmployeeDao();

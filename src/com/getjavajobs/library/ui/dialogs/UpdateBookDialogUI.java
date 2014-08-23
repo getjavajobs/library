@@ -1,15 +1,5 @@
 package com.getjavajobs.library.ui.dialogs;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Author;
 import com.getjavajobs.library.model.Book;
@@ -18,13 +8,18 @@ import com.getjavajobs.library.services.AuthorService;
 import com.getjavajobs.library.services.BookService;
 import com.getjavajobs.library.services.PublisherService;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
- * Диалог для обновления данных о книге.
+ * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ.
  */
 public class UpdateBookDialogUI extends AbstractDialogUI {
 
 	private static final String dialogTitle = "Update book information in library database";
-	private JTextField[] textFields;	// Набор текстовых полей
+	private JTextField[] textFields;	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	
 	public UpdateBookDialogUI(final JFrame parentFrame, final JTable booksTable, final BookService bookService, 
 			final AuthorService authorService, final PublisherService publisherService, final Book bookInfo) {
@@ -36,16 +31,16 @@ public class UpdateBookDialogUI extends AbstractDialogUI {
 			textFields[i] = new JTextField("");
 		}
 		
-		// Заполняем уже имеющимися данными.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		textFields[0].setText(bookInfo.getName());
 		textFields[1].setText(new Integer(bookInfo.getYear()).toString());
 		textFields[2].setText(new Integer(bookInfo.getPagesNumber()).toString());
 		textFields[3].setText(new Double(bookInfo.getPrice()).toString());
 		
-		/* Поля для ввода */
+		/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
 		addLabeledTextField(textFields[0], "Book name:          ");
 		
-		/* Выпадающие списки авторов и издателей */
+		/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 		Object[] authorsData = null;
 		Object[] publishersData = null;
 		try {
@@ -57,7 +52,7 @@ public class UpdateBookDialogUI extends AbstractDialogUI {
 		final JComboBox<Object> authorsList = addLabeledCombobox("Author:                   ", authorsData);
 		final JComboBox<Object> publishersList = addLabeledCombobox("Publisher:              ", publishersData);
 		
-		// Устанавливаем то, что есть и в ComboBox-ах.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅ ComboBox-пїЅпїЅ.
 		for (int i = 0; i < authorsData.length; ++i) {
 			if (bookInfo.getAuthor().equals((Author) authorsData[i])) {
 				authorsList.setSelectedIndex(i);
@@ -72,21 +67,21 @@ public class UpdateBookDialogUI extends AbstractDialogUI {
 			}
 		}
 		
-		/* Поля для ввода */
+		/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
 		addLabeledTextField(textFields[1], "Publish year:        ");
 		addLabeledTextField(textFields[2], "Page count:          ");
 		addLabeledTextField(textFields[3], "Price:                     ");
 		
-		/* Кнопка "Обновить информацию о книге" */
+		/* пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ" */
 		addButton("Update book information", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isTextFieldsFilled(textFields)) {	// Если заполнены все текстовые поля.
-					// Из выпадающих списков вытягиваем значения авторов и издателей.
+				if (isTextFieldsFilled(textFields)) {	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.
+					// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 					Author author = (Author) authorsList.getSelectedItem();
 					Publisher publisher = (Publisher) publishersList.getSelectedItem();
 
-					// Меняем поля на измененные.
+					// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 					bookInfo.setName(textFields[0].getText());
 					bookInfo.setAuthor(author);
 					bookInfo.setPublisher(publisher);
@@ -94,13 +89,13 @@ public class UpdateBookDialogUI extends AbstractDialogUI {
 					bookInfo.setPagesNumber(Integer.parseInt(textFields[2].getText()));
 					bookInfo.setPrice(Double.parseDouble(textFields[3].getText()));
 					
-					// Пробуем изменить в базе.
+					// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ.
 					try {
 						bookService.update(bookInfo);
 						clearTextFields(textFields);
 						JOptionPane.showMessageDialog(dialogFrame, "Book information succsessfully updated!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						
-						// Меняем в таблице информацию.
+						// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 						DefaultTableModel model = (DefaultTableModel) booksTable.getModel();
 						model.setValueAt(bookInfo.getName(), booksTable.getSelectedRow(), 1);
 						model.setValueAt(bookInfo.getAuthor(), booksTable.getSelectedRow(), 2);
