@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenreDAO implements GenericDao<Genre> {
+public class GenreDao implements GenericDao<Genre> {
 
     private ConnectionHolder connectionHolder;
 
