@@ -14,7 +14,7 @@ import java.util.List;
 public class BookDao implements GenericDao<Book> {
     private ConnectionHolder connectionHolder;
     private AuthorDAO authorDAO;
-    private PublisherDAO publisherDAO;
+    private PublisherDao publisherDao;
     private GenreDao genreDao;
 
     public void setConnectionHolder(ConnectionHolder connectionHolder) {
@@ -29,8 +29,8 @@ public class BookDao implements GenericDao<Book> {
         this.authorDAO = authorDAO;
     }
 
-    public void setPublisherDAO(PublisherDAO publisherDAO) {
-        this.publisherDAO = publisherDAO;
+    public void setPublisherDao(PublisherDao publisherDao) {
+        this.publisherDao = publisherDao;
     }
 
     public Book add(Book book) throws DAOException {
@@ -243,7 +243,7 @@ public class BookDao implements GenericDao<Book> {
         book.setId(resultSet.getInt("id"));
         book.setName(resultSet.getString("title"));
         book.setAuthor(authorDAO.get(resultSet.getInt("author_id")));
-        book.setPublisher(publisherDAO.get(resultSet.getInt("publishing_id")));
+        book.setPublisher(publisherDao.get(resultSet.getInt("publishing_id")));
         book.setYear(resultSet.getShort("year"));
         book.setPagesNumber(resultSet.getInt("pagenumber"));
         book.setPrice(resultSet.getFloat("price"));

@@ -1,6 +1,6 @@
 package com.getjavajobs.library.services;
 
-import com.getjavajobs.library.dao.PublisherDAO;
+import com.getjavajobs.library.dao.PublisherDao;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Publisher;
@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class PublisherService {
 
-    private PublisherDAO publisherDAO;
+    private PublisherDao publisherDao;
     private PublisherValidator validator = new PublisherValidator();
-    public void PublisherService(PublisherDAO publisherDAO) {
-        this.publisherDAO = publisherDAO;
+    public void PublisherService(PublisherDao publisherDao) {
+        this.publisherDao = publisherDao;
     }
 
     public Publisher add(Publisher publisher) throws ServiceException {
@@ -24,14 +24,14 @@ public class PublisherService {
             if (!validator.validate(publisher)) {
                 throw new ServiceException("Ошибка валидации");
             }
-            return publisherDAO.add(publisher);
+            return publisherDao.add(publisher);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
     public Publisher get(int id) throws ServiceException {
         try {
-            return publisherDAO.get(id);
+            return publisherDao.get(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -41,21 +41,21 @@ public class PublisherService {
             if (!validator.validate(publisher)) {
                 throw new ServiceException("Ошибка валидации");
             }
-            return publisherDAO.update(publisher);
+            return publisherDao.update(publisher);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
     public void delete(int id) throws ServiceException{
         try {
-            publisherDAO.delete(id);
+            publisherDao.delete(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
     public List<Publisher> getAll() throws ServiceException{
         try {
-            return publisherDAO.getAll();
+            return publisherDao.getAll();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

@@ -90,12 +90,12 @@ public class Publisher {
 
     @Override
     public String toString() {
-        return "Publisher {" +
-                "name = '" + name + '\'' +
-                ", city = '" + city + '\'' +
-                ", phoneNumber = '" + phoneNumber + '\'' +
-                ", email = '" + email + '\'' +
-                ", siteAddress = '" + siteAddress + '\'' +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Name: " + name + ";\n");
+        sb.append("City: " + city + ";\n");
+        sb.append("PhoneNumber: " + phoneNumber + ";\n");
+        sb.append("Email: " + email + ";\n");
+        sb.append("SiteAdress: " + siteAddress + ".");
+        return sb.toString();
     }
 }
