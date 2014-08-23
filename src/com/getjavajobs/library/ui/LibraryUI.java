@@ -22,6 +22,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import com.getjavajobs.library.dao.BookDao;
+import com.getjavajobs.library.dao.ConnectionHolder;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.*;
 import com.getjavajobs.library.services.*;
@@ -30,7 +32,7 @@ import com.getjavajobs.library.ui.tables.ButtonColumn;
 
 
 /**
- * Главный класс UI.
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ UI.
  */
 public class LibraryUI {
 	
@@ -38,13 +40,13 @@ public class LibraryUI {
 		new LibraryUI();
 	}
 	
-	/* Размеры и положение формы */
+	/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
 	private static final int windowWidth = 1200;
 	private static final int windowHeight = 800;	
 	private static final int startXPosition = 500;
 	private static final int startYPosition = 100;
 	
-	/* Табличные данные */
+	/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
 	private static final int tableWidth = 1000;
 	private static final int tableHeight = 500;
 	private static final String[] booksTableColumnNames = {
@@ -64,7 +66,7 @@ public class LibraryUI {
 	private static JTable employeesTable = null;
 	private static JPanel employeesTablePanel = null;
 	
-	/* Загрузка сервисов для работы с данными */
+	/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 	private static final AuthorService authorService = new AuthorService();
 	private static final BookService bookService = new BookService();
 	private static final BorrowService borrowService = new BorrowService();
@@ -72,7 +74,7 @@ public class LibraryUI {
 	private static final PublisherService publisherService = new PublisherService();
 	private static final ReaderService readerService = new ReaderService();
 	
-	/* Прочее */
+	/* пїЅпїЅпїЅпїЅпїЅпїЅ */
 	private static final Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
 	
 	public LibraryUI() {
@@ -80,28 +82,32 @@ public class LibraryUI {
 		mainFrame.setSize(windowWidth, windowHeight);
 		mainFrame.setLocation(startXPosition, startYPosition);
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-			
-		booksTableConfiguration(mainFrame);		// конфигурация таблицы книг.
+
+        BookDao bookDao = new BookDao();
+        bookDao.setConnectionHolder(ConnectionHolder.getInstance());
+        bookService.setBookDao(bookDao);
+
+		booksTableConfiguration(mainFrame);		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.
 		booksTablePanel.setVisible(true);
 		
-		leftPanelConfiguration(mainFrame);		// конфигурация левой верхней панели.
-		rightPanelConfiguration(mainFrame);		// конфигурация правой верхней панели.
+		leftPanelConfiguration(mainFrame);		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
+		rightPanelConfiguration(mainFrame);		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 
 		mainFrame.setVisible(true);
 	}
 	
 	/**
-	 * Конфигурация таблицы сотрудников.
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 	 */
 	private void employeesTableConfiguration(final JFrame mainFrame) {
 		JPanel tablePanel = new JPanel(new BorderLayout());
 		tablePanel.setPreferredSize(new Dimension(tableWidth, tableHeight));
 		
-		// Создаем модель таблички.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		DefaultTableModel model = new DefaultTableModel(employeesTableColumnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
-			// Возврат класса от каждой колонки позволяет по-своему перерисовывать каждый столбец. (для кнопок-колонок).
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅ).
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
             public Class getColumnClass(int column) {
@@ -114,7 +120,7 @@ public class LibraryUI {
         	}
 		};
 		
-		// Считываем сотрудников из БД.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ.
 		try {
 			List<Employee> employeesList = employeeService.getAll();
 			int rowCount = employeesList.size();
@@ -123,7 +129,7 @@ public class LibraryUI {
 					Employee anotherEmployee = employeesList.get(i);
 					model.addRow(new Object[] {
 							
-							// Данные
+							// пїЅпїЅпїЅпїЅпїЅпїЅ
 							new Integer(anotherEmployee.getId()),
 							anotherEmployee.getName(),
 							anotherEmployee.getSurname(),
@@ -131,7 +137,7 @@ public class LibraryUI {
 							anotherEmployee.getDateOfBirth(),
 							anotherEmployee.getPosition(),
 							
-							// Кнопки
+							// пїЅпїЅпїЅпїЅпїЅпїЅ
 							"Update",
 							"Remove"
 					});
@@ -144,17 +150,17 @@ public class LibraryUI {
 			System.out.println(ex);
 		}
 		
-		employeesTable = new JTable(model);		// Устанавливаем построенную модель.
+		employeesTable = new JTable(model);		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 		
-		// Конфигурируем столбцы с кнопками.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		configureUpdateEmployeeButtonColumn(mainFrame, employeesTable, 6);
 		configureRemoveEmployeeButtonColumn(mainFrame, employeesTable, 7);
 		
-		// Последние установки.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		employeesTable.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		employeesTable.setPreferredSize(new Dimension(tableWidth, tableHeight));
-		employeesTable.getTableHeader().setReorderingAllowed(false);	// чтобы запретить перетаскивание столбцов.
-		JScrollPane scrollPane = new JScrollPane(employeesTable);		// чтобы появился табличный хедер. 
+		employeesTable.getTableHeader().setReorderingAllowed(false);	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+		JScrollPane scrollPane = new JScrollPane(employeesTable);		// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. 
 		tablePanel.add(scrollPane);	
 		
 		tablePanel.add(new JLabel("Employees table"), BorderLayout.NORTH);
@@ -163,11 +169,11 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация колонки с кнопками "Обновить информацию о читателе".
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ".
 	 */
 	private void configureUpdateEmployeeButtonColumn(final JFrame mainFrame, final JTable table, int columnIndex) {
 		new ButtonColumn(table, columnIndex, new ActionListener() {
-			// Действия при нажатии на кнопку.
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TableModel tm = table.getModel();
@@ -189,24 +195,24 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация колонки с кнопками "Удалить информацию о читателе".
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ".
 	 */
 	private void configureRemoveEmployeeButtonColumn(final JFrame mainFrame, final JTable table, int columnIndex) {
 		new ButtonColumn(table, columnIndex, new ActionListener() {
-			// Действия при нажатии на кнопку.
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TableModel tm = table.getModel();
 				int selectedRowIndex = table.getSelectedRow();
 				int employeeID = (Integer) tm.getValueAt(selectedRowIndex, 0);
 
-				// Удаляем из базы данных
+				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 				try {
 					employeeService.delete(employeeID);
 					JOptionPane.showMessageDialog(mainFrame, "Employee successfully removed!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 					
 					/*
-					 * TODO ПРОБЛЕМА С УДАЛЕНИЕМ ПОСЛЕДНЕЙ СТРОКИ
+					 * TODO пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 					 */
 					DefaultTableModel dtm = (DefaultTableModel) table.getModel();
 					if (selectedRowIndex != table.getRowCount() - 1) {
@@ -228,17 +234,17 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация таблицы читателей.
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 	 */
 	private void readersTableConfiguration(final JFrame mainFrame) {
 		JPanel tablePanel = new JPanel(new BorderLayout());
 		tablePanel.setPreferredSize(new Dimension(tableWidth, tableHeight));
 		
-		// Создаем модель таблички.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		DefaultTableModel model = new DefaultTableModel(readersTableColumnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
-			// Возврат класса от каждой колонки позволяет по-своему перерисовывать каждый столбец. (для кнопок-колонок).
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅ).
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
             public Class getColumnClass(int column) {
@@ -251,7 +257,7 @@ public class LibraryUI {
         	}
 		};
 		
-		// Считываем читателей из БД.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ.
 		try {
 			List<Reader> readersList = readerService.getAll();
 			int rowCount = readersList.size();
@@ -260,7 +266,7 @@ public class LibraryUI {
 					Reader anotherReader = readersList.get(i);
 					
 					model.addRow(new Object[] {
-							// Данные
+							// пїЅпїЅпїЅпїЅпїЅпїЅ
 							new Integer(anotherReader.getReaderId()),
 							anotherReader.getSecondName(),
 							anotherReader.getFirstName(),
@@ -268,7 +274,7 @@ public class LibraryUI {
 							anotherReader.getPassport(),
 							anotherReader.getPhone(),
 							
-							// Кнопки
+							// пїЅпїЅпїЅпїЅпїЅпїЅ
 							"Update",
 							"Remove"
 					});
@@ -279,17 +285,17 @@ public class LibraryUI {
 			System.out.println(ex);
 		}
 		
-		readersTable = new JTable(model);		// Устанавливаем построенную модель.
+		readersTable = new JTable(model);		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 		
-		// Конфигурируем столбцы с кнопками.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		configureUpdateReaderButtonColumn(mainFrame, readersTable, 6);
 		configureRemoveReaderButtonColumn(mainFrame, readersTable, 7);
 		
-		// Последние установки.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		readersTable.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		readersTable.setPreferredSize(new Dimension(tableWidth, tableHeight));
-		readersTable.getTableHeader().setReorderingAllowed(false);	// чтобы запретить перетаскивание столбцов.
-		JScrollPane scrollPane = new JScrollPane(readersTable);		// чтобы появился табличный хедер. 
+		readersTable.getTableHeader().setReorderingAllowed(false);	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+		JScrollPane scrollPane = new JScrollPane(readersTable);		// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. 
 		tablePanel.add(scrollPane);	
 		
 		tablePanel.add(new JLabel("Readers table"), BorderLayout.NORTH);
@@ -298,11 +304,11 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация колонки с кнопками "Обновить информацию о читателе".
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ".
 	 */
 	private void configureUpdateReaderButtonColumn(final JFrame mainFrame, final JTable table, int columnIndex) {
 		new ButtonColumn(table, columnIndex, new ActionListener() {
-			// Действия при нажатии на кнопку.
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TableModel tm = table.getModel();
@@ -324,24 +330,24 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация колонки с кнопками "Удалить информацию о читателе".
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ".
 	 */
 	private void configureRemoveReaderButtonColumn(final JFrame mainFrame, final JTable table, int columnIndex) {
 		new ButtonColumn(table, columnIndex, new ActionListener() {
-			// Действия при нажатии на кнопку.
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TableModel tm = table.getModel();
 				int selectedRowIndex = table.getSelectedRow();
 				int readerID = (Integer) tm.getValueAt(selectedRowIndex, 0);
 
-				// Удаляем из базы данных
+				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 				try {
 					readerService.delete(readerID);
 					JOptionPane.showMessageDialog(mainFrame, "Reader successfully removed!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 					
 					/*
-					 * TODO ПРОБЛЕМА С УДАЛЕНИЕМ ПОСЛЕДНЕЙ СТРОКИ
+					 * TODO пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 					 */
 					DefaultTableModel dtm = (DefaultTableModel) table.getModel();
 					if (selectedRowIndex != table.getRowCount() - 1) {
@@ -362,17 +368,17 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация таблицы книг.
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.
 	 */
 	private void booksTableConfiguration(final JFrame mainFrame) {
 		JPanel tablePanel = new JPanel(new BorderLayout());
 		tablePanel.setPreferredSize(new Dimension(tableWidth, tableHeight));
 		
-		// Создаем модель таблицы.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		DefaultTableModel model = new DefaultTableModel(booksTableColumnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
-			// Возврат класса от каждой колонки позволяет по-своему перерисовывать каждый столбец. (для кнопок-колонок).
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅ).
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
             public Class getColumnClass(int column) {
@@ -389,13 +395,13 @@ public class LibraryUI {
 		
 		try {
 			/*
-			 * Считываем список книг из базы данных.
+			 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 			 */	
 			List<Book> booksList = bookService.getAll();
 			int rowCount = booksList.size();
 			if (rowCount != 0) {
 				
-				// Если список не пуст --> заполняем таблицу данными.
+				// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ --> пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 				List<Borrow> borrowsList = borrowService.getAll();
 				int borrowsCount = borrowsList.size();
 				Date todayDate = new Date();
@@ -405,7 +411,7 @@ public class LibraryUI {
 					String status = "Free";
 					for (int j = 0; j < borrowsCount; ++j) {
 						Borrow borrow = borrowsList.get(i);
-						if (borrow.getBook().getId() == anotherBook.getId()) {	// Если в списке выдач нашли книгу - она либо выдана, либо просрочена
+						if (borrow.getBook().getId() == anotherBook.getId()) {	// пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 							if (todayDate.compareTo(borrow.getDateOfReturn()) > 0) {
 								status = "Overdue";
 							} else {
@@ -414,9 +420,9 @@ public class LibraryUI {
 						}
 					}
 					
-					// Создаем новую строчку.
+					// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 					model.addRow(new Object[] {
-							// Данные
+							// пїЅпїЅпїЅпїЅпїЅпїЅ
 							new Integer(anotherBook.getId()),
 							anotherBook.getName(),
 							anotherBook.getGenreList(),
@@ -426,7 +432,7 @@ public class LibraryUI {
 							new Integer(anotherBook.getPagesNumber()),
 							new Double(anotherBook.getPrice()),
 							status,
-							// Кнопки
+							// пїЅпїЅпїЅпїЅпїЅпїЅ
 							"Issue",
 							"Return",
 							"Prolong",
@@ -444,19 +450,19 @@ public class LibraryUI {
 			System.out.println(ex);
 		}
 		
-		booksTable = new JTable(model);		// Устанавливаем построенную модель.
+		booksTable = new JTable(model);		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 		
-		// Конфигурируем столбцы с кнопками.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		configureIssueBookButtonColumn(mainFrame, booksTable, 9);
 		configureReturnBookButtonColumn(mainFrame, booksTable, 10);
 		configureProlongBookButtonColumn(mainFrame, booksTable, 11);
 		configureUpdateBookButtonColumn(mainFrame, booksTable, 12);
 		configureRemoveBookButtonColumn(mainFrame, booksTable, 13);
 		
-		// Последние установки.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		booksTable.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		booksTable.setPreferredSize(new Dimension(tableWidth, tableHeight));
-		booksTable.getTableHeader().setReorderingAllowed(false);	// чтобы запретить перетаскивание столбцов.
+		booksTable.getTableHeader().setReorderingAllowed(false);	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		
 		
 		booksTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -489,7 +495,7 @@ public class LibraryUI {
 				if (value.getClass() == Author.class) {					
 					Author author = (Author) value;
 
-					// !!! вот как надо !!!
+					// !!! пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ !!!
 					this.setText(author.getSurname() + " " + 
 							author.getName().substring(0, 1).toUpperCase() + "." + 
 							author.getPatronymic().substring(0, 1).toUpperCase());
@@ -502,7 +508,7 @@ public class LibraryUI {
 			}
 		});
 		
-		JScrollPane scrollPane = new JScrollPane(booksTable);		// чтобы появился табличный хедер. 
+		JScrollPane scrollPane = new JScrollPane(booksTable);		// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. 
 		tablePanel.add(scrollPane);	
 		
 		tablePanel.add(new JLabel("Books table"), BorderLayout.NORTH);
@@ -511,18 +517,18 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация колонки с кнопками "Удалить книгу".
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ".
 	 */
 	private void configureRemoveBookButtonColumn(final JFrame mainFrame, final JTable table, int columnIndex) {
 		new ButtonColumn(table, columnIndex, new ActionListener() {
-			// Действия при нажатии на кнопку.
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TableModel tm = table.getModel();
 				int selectedRowIndex = table.getSelectedRow();
 				int bookID = (Integer) tm.getValueAt(selectedRowIndex, 0);
 				
-				// Удаляем из базы данных книгу.
+				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
 				try {
 					int reply = JOptionPane.showConfirmDialog(mainFrame, "Do you really want to remove this book from library database?", "Remove book", JOptionPane.YES_NO_OPTION);
 					if (reply == JOptionPane.YES_OPTION) {
@@ -530,14 +536,14 @@ public class LibraryUI {
 						JOptionPane.showMessageDialog(mainFrame, "Book successfully removed!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						
 						/*
-						 * TODO ПРОБЛЕМА С УДАЛЕНИЕМ ПОСЛЕДНЕЙ СТРОКИ
+						 * TODO пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 						 */
 						DefaultTableModel dtm = (DefaultTableModel) table.getModel();
-						if (selectedRowIndex != (table.getRowCount() - 1)) {	// Если не удаляем последнюю строку
+						if (selectedRowIndex != (table.getRowCount() - 1)) {	// пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 							dtm.removeRow(selectedRowIndex);
 						} else {
 							dtm.removeRow(selectedRowIndex);
-							dtm.fireTableStructureChanged();	// Говорим, что таблица изменилась
+							dtm.fireTableStructureChanged();	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 							configureIssueBookButtonColumn(mainFrame, booksTable, 9);
 							configureReturnBookButtonColumn(mainFrame, booksTable, 10);
 							configureProlongBookButtonColumn(mainFrame, booksTable, 11);
@@ -559,16 +565,16 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация колонки с кнопками "Обновить данные о книге".
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ".
 	 */
 	private void configureUpdateBookButtonColumn(final JFrame mainFrame, final JTable table, int columnIndex) {
 		new ButtonColumn(table, columnIndex, new ActionListener() {
-			// Действия при нажатии на кнопку.
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 			@SuppressWarnings("unchecked")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				/**
-				 * Показываем диалог с выпадающим списком читателей, сотрудников и информацией по выбранной книге.
+				 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
 				 */
 				
 				TableModel tm = table.getModel();
@@ -592,26 +598,26 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация колонки с кнопками "Продлить выдачу книги".
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ".
 	 */
 	private void configureProlongBookButtonColumn(final JFrame mainFrame, final JTable table, int columnIndex) {
 		new ButtonColumn(table, columnIndex, new ActionListener() {
-			// Действия при нажатии на кнопку.
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TableModel tm = table.getModel();
 				int selectedRowIndex = table.getSelectedRow();
 				int bookID = (Integer) tm.getValueAt(selectedRowIndex, 0);
 				
-				if (tm.getValueAt(selectedRowIndex, 7).equals("Overdue")) {	// Работаем, только если книга кому-то выдана и она просрочена.
+				if (tm.getValueAt(selectedRowIndex, 7).equals("Overdue")) {	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 					
 					try {
 						Borrow bookBorrow = borrowService.get(bookID);
-						bookBorrow.setDateOfReturn(new Date());	// меняем дату возвращения.
+						bookBorrow.setDateOfReturn(new Date());	// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 						borrowService.update(bookBorrow);
 						JOptionPane.showMessageDialog(mainFrame, "Book successfully prolonged!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						
-						// Меняем статус в строке с книгой.
+						// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 						tm.setValueAt("Issued", selectedRowIndex, 7);
 					} catch (ServiceException ex) {
 						JOptionPane.showMessageDialog(mainFrame, ex.getMessage(), "Book prolonging error", JOptionPane.ERROR_MESSAGE);
@@ -623,23 +629,23 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация колонки с кнопками "Вернуть книгу".
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ".
 	 */
 	private void configureReturnBookButtonColumn(final JFrame mainFrame, final JTable table, int columnIndex) {
 		new ButtonColumn(table, columnIndex, new ActionListener() {
-			// Действия при нажатии на кнопку.
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TableModel tm = table.getModel();
 				int selectedRowIndex = table.getSelectedRow();
 				int bookID = (Integer) tm.getValueAt(selectedRowIndex, 0);
 				
-				if (!tm.getValueAt(selectedRowIndex, 7).equals("Free")) {	// Работаем, только если книга кому-то выдана или она просрочена.
+				if (!tm.getValueAt(selectedRowIndex, 7).equals("Free")) {	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 					try {
 						borrowService.delete(bookID);
 						JOptionPane.showMessageDialog(mainFrame, "Book successfully returned!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						
-						// Меняем статус в строке с книгой.
+						// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 						tm.setValueAt("Free", selectedRowIndex, 7);
 					} catch (ServiceException ex) {
 						JOptionPane.showMessageDialog(mainFrame, ex.getMessage(), "Book returning error", JOptionPane.ERROR_MESSAGE);
@@ -651,20 +657,20 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация колонки с кнопками "Выдать книгу".
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ".
 	 */
 	private void configureIssueBookButtonColumn(final JFrame mainFrame, final JTable table, int columnIndex) {
 		new ButtonColumn(table, columnIndex, new ActionListener() {
-			// Действия при нажатии на кнопку.
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 			@SuppressWarnings("unchecked")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				/**
-				 * Показываем диалог с выпадающим списком читателей, сотрудников и информацией по выбранной книге.
+				 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
 				 */
 				TableModel tm = table.getModel();
 				int selectedRowIndex = table.getSelectedRow();
-				if (tm.getValueAt(selectedRowIndex, 7).equals("Free")) {		// Только если книга "свободна".
+				if (tm.getValueAt(selectedRowIndex, 7).equals("Free")) {		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ".
 					Book selectedBook = new Book();
 					selectedBook.setId((Integer) tm.getValueAt(selectedRowIndex, 0));
 					selectedBook.setName((String) tm.getValueAt(selectedRowIndex, 1));
@@ -684,19 +690,19 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация левой панели с кнопками.
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 	 */
 	private void leftPanelConfiguration(final JFrame mainFrame) {
 		JPanel leftPanel = new JPanel();
 
 		/**
-		 * Настройка кнопки 'Add new book'.
+		 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 'Add new book'.
 		 */
 		
 		JButton addBookButton = new JButton("Add new book");
 		addBookButton.setCursor(handCursor);
 		addBookButton.addActionListener(new ActionListener() {
-			// При нажатии на кнопку 'Add new book'.
+			// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 'Add new book'.
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				final AddBookDialogUI addBookDialog = new AddBookDialogUI(mainFrame, booksTable, bookService, authorService, publisherService);
@@ -715,13 +721,13 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Конфигурация правой панели с кнопками.
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 	 */
 	private void rightPanelConfiguration(final JFrame mainFrame) {
 		JPanel rightPanel = new JPanel();
 		
 		/**
-		 * Настройка кнопки 'Open readers table'.
+		 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 'Open readers table'.
 		 */
 		JButton openReadersButton = new JButton("Open readers table");
 		openReadersButton.setCursor(handCursor);
@@ -744,7 +750,7 @@ public class LibraryUI {
 		});
 		
 		/**
-		 * Настройка кнопки 'Open employees table'.
+		 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 'Open employees table'.
 		 */
 		JButton openEmployeeButton = new JButton("Open employees table");
 		openEmployeeButton.setCursor(handCursor);
@@ -774,7 +780,7 @@ public class LibraryUI {
 	}
 	
 	/**
-	 * Добавить кнопку с вызовом диалога.
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 	 */
 	private void addDialogButton(final JFrame mainFrame, final JPanel panel, final AbstractDialogUI dialog, String buttonText) {
 		JButton button = new JButton(buttonText);
