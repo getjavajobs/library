@@ -5,6 +5,7 @@ import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Genre;
 import com.getjavajobs.library.services.validators.GenreValidator;
+
 import java.util.List;
 
 public class GenreService {

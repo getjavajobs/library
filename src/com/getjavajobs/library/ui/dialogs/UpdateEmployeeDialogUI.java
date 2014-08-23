@@ -1,25 +1,21 @@
 package com.getjavajobs.library.ui.dialogs;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Employee;
 import com.getjavajobs.library.services.EmployeeService;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
- * Диалог для обновления информации о сотруднике.
+ * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  */
 public class UpdateEmployeeDialogUI extends AbstractDialogUI {
 
 	private static final String dialogTitle = "Update reader information in library database";
-	private JTextField[] textFields;	// Набор текстовых полей
+	private JTextField[] textFields;	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	
 	public UpdateEmployeeDialogUI(final JFrame parentFrame, final JTable employeesTable, final EmployeeService employeeService, final Employee employeeInfo) {
 		super(parentFrame, dialogTitle);
@@ -30,39 +26,39 @@ public class UpdateEmployeeDialogUI extends AbstractDialogUI {
 			textFields[i] = new JTextField("");
 		}
 		
-		// Заполняем уже имеющимися данными.
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 		textFields[0].setText(employeeInfo.getEmployeeName());
 		textFields[1].setText(employeeInfo.getLastName());
 		textFields[2].setText(employeeInfo.getFatherName());
 		textFields[3].setText(employeeInfo.getBirthDate());
 		textFields[4].setText(employeeInfo.getEmployeePosition());
 		
-		/* Поля для ввода */
+		/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
 		addLabeledTextField(textFields[0], "Employee name:         ");
 		addLabeledTextField(textFields[1], "Last name:                   ");
 		addLabeledTextField(textFields[2], "Father name:               ");
 		addLabeledTextField(textFields[3], "Birth date:                    ");
 		addLabeledTextField(textFields[4], "Employee position:    ");
 		
-		/* Кнопка "Обновить информацию о сотруднике" */
+		/* пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" */
 		addButton("Update employee information", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isTextFieldsFilled(textFields)) {	// Если заполнены все текстовые поля.
-					// Меняем поля на измененные.
+				if (isTextFieldsFilled(textFields)) {	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.
+					// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 					employeeInfo.setEmployeeName(textFields[0].getText());
 					employeeInfo.setLastName(textFields[1].getText());
 					employeeInfo.setFatherName(textFields[2].getText());
 					employeeInfo.setBirthDate(textFields[3].getText());
 					employeeInfo.setEmployeePosition(textFields[4].getText());
 	
-					// Пробуем изменить в базе.
+					// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ.
 					try {
 						employeeService.update(employeeInfo);
 						clearTextFields(textFields);
 						JOptionPane.showMessageDialog(dialogFrame, "Employee information succsessfully updated!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						
-						// Меняем в таблице информацию.
+						// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 						DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
 						
 						model.setValueAt(employeeInfo.getEmployeeName(), employeesTable.getSelectedRow(), 1);

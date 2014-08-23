@@ -1,12 +1,12 @@
 package com.getjavajobs.library.services.validators;
 
-import java.util.regex.Pattern;
-
 import com.getjavajobs.library.model.Employee;
+
+import java.util.regex.Pattern;
 
 public class EmployeeValidator {
 	private Employee employee;
-	private static final String COMMON_PATTERN = "[a-zA-Zà-ÿÀ-ß]{1,50}";
+	private static final String COMMON_PATTERN = "[a-zA-Zï¿½-ï¿½ï¿½-ï¿½]{1,50}";
 	private Pattern pattern;
 
 	public EmployeeValidator(Employee employee) {

@@ -44,7 +44,7 @@ public class GenreDAO implements GenericDao<Genre> {
             } catch (SQLException e) {
                 throw new DAOException(e.getMessage(), e);
             } finally {
-                connectionHolder.releaseConnection();
+                connectionHolder.releaseConnection(connection);
             }
         }
 
@@ -73,7 +73,7 @@ public class GenreDAO implements GenericDao<Genre> {
             } catch (SQLException e) {
                 throw new DAOException(e.getMessage(), e);
             } finally {
-                connectionHolder.releaseConnection();
+                connectionHolder.releaseConnection(connection);
             }
         }
     }
@@ -104,7 +104,7 @@ public class GenreDAO implements GenericDao<Genre> {
             } catch (SQLException e) {
                 throw new DAOException(e.getMessage(), e);
             } finally {
-                connectionHolder.releaseConnection();
+                connectionHolder.releaseConnection(connection);
             }
         }
     }
@@ -134,7 +134,7 @@ public class GenreDAO implements GenericDao<Genre> {
             } catch (SQLException e) {
                 throw new DAOException(e.getMessage(), e);
             } finally {
-                connectionHolder.releaseConnection();
+                connectionHolder.releaseConnection(connection);
             }
         }
         Genre returnedGenre = get(genre.getId());
@@ -169,7 +169,7 @@ public class GenreDAO implements GenericDao<Genre> {
             } catch (SQLException e) {
                 throw new DAOException(e.getMessage(), e);
             } finally {
-                connectionHolder.releaseConnection();
+                connectionHolder.releaseConnection(connection);
             }
         }
 

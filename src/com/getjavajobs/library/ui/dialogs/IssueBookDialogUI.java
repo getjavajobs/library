@@ -1,16 +1,5 @@
 package com.getjavajobs.library.ui.dialogs;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
-
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Book;
 import com.getjavajobs.library.model.Borrow;
@@ -20,22 +9,28 @@ import com.getjavajobs.library.services.BorrowService;
 import com.getjavajobs.library.services.EmployeeService;
 import com.getjavajobs.library.services.ReaderService;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+
 /**
- * Диалог для выдачи книги читателю.
+ * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  */
 public class IssueBookDialogUI extends AbstractDialogUI {
 
 	private static final String dialogTitle = "Issue book to reader";
-	private JTextField[] textFields;	// Набор текстовых полей
+	private JTextField[] textFields;	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	
 	public IssueBookDialogUI(final JFrame parentFrame, final JTable booksTable, final ReaderService readerService, 
 			final EmployeeService employeeService, final BorrowService borrowService, final Book bookInfo) {
 		super(parentFrame, dialogTitle);
 		
-		/* Информация о выдаваемой книге */
+		/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
 		addLabel(bookInfo.toString());
 		
-		/* Выпадающие списки читателей и сотрудников */
+		/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 		Object[] readersData = null;
 		Object[] employeeData = null;
 		try {
@@ -48,26 +43,26 @@ public class IssueBookDialogUI extends AbstractDialogUI {
 		final JComboBox<Object> readersList = addLabeledCombobox("Reader:                   ", readersData);
 		final JComboBox<Object> employeesList = addLabeledCombobox("Employee:              ", employeeData);
 		
-		/* Срок на который выдается книга. */
+		/* пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. */
 		textFields = new JTextField[1];
 		textFields[0] = new JTextField("");
 		addLabeledTextField(textFields[0], "Period of issuing: ");
 		
 		/**
-		 * Кнопка выдать книгу.
+		 * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
 		 */
 		addButton("Issue book", new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isTextFieldsFilled(textFields)) {	// Если заполнены все текстовые поля.
-					if ((readersList.getItemCount() != 0) && (employeesList.getItemCount() != 0)) {	// Если в выпадающих списках что-то есть.
+				if (isTextFieldsFilled(textFields)) {	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.
+					if ((readersList.getItemCount() != 0) && (employeesList.getItemCount() != 0)) {	// пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅ.
 						
-						// Из выпадающих списков вытягиваем значения читателя и сотрудника.
+						// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 						Reader reader = (Reader) readersList.getSelectedItem();
 						Employee employee = (Employee) employeesList.getSelectedItem();
 						
-						// Пытаемся добавить бронь на книгу.
+						// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
 						try {
 							Borrow borrow = new Borrow(bookInfo, reader, employee, new Date());
 							borrowService.add(borrow);
@@ -75,10 +70,10 @@ public class IssueBookDialogUI extends AbstractDialogUI {
 							JOptionPane.showMessageDialog(dialogFrame, "Book successfully issued!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 							
 							/**
-							 * Меняем статус в таблице.
+							 * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 							 */
 							DefaultTableModel model = (DefaultTableModel) booksTable.getModel();
-							model.setValueAt("Issued", booksTable.getSelectedRow(), 7);		// меняем статус на "выдана".
+							model.setValueAt("Issued", booksTable.getSelectedRow(), 7);		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅ".
 							
 						} catch (ServiceException ex) {
 							JOptionPane.showMessageDialog(dialogFrame, ex.getMessage(), "Issuing error", JOptionPane.ERROR_MESSAGE);
