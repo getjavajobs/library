@@ -79,7 +79,8 @@ public class ConnectionHolder {
 	}
 	
 	// Освободить соединение.
-	public void releaseConnection() {
+	// TODO Pool logic
+	public void releaseConnection(Connection con) {
 		commanLock.lock();
 		try {
 			firstConnectionFlag.set(false);
