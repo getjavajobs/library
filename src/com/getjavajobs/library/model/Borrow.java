@@ -12,7 +12,6 @@ public class Borrow {
     private Employee employee;
     private Reader reader;
 
-
     public int getBorrowId() {
         return borrowId;
     }

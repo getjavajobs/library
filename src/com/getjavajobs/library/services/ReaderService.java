@@ -23,8 +23,6 @@ public class ReaderService {
     private ReaderDao readerDao = new ReaderDao();
     private ReaderValidator readerValidator = new ReaderValidator();
     
-    
-    
     public Reader get(int id) throws ServiceException {
        return readerDao.get(id);
     }

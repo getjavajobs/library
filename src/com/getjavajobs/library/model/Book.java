@@ -14,7 +14,7 @@ public class Book {
     private List<Genre> genreList;
     private int year;
     private int pagesNumber;
-    private float price;
+    private double price;
 
     public int getId() {
         return id;
@@ -75,7 +75,7 @@ public class Book {
         this.pagesNumber = pagesNumber;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
