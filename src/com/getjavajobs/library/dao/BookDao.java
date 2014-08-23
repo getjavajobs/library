@@ -111,7 +111,9 @@ public class BookDao implements GenericDao<Book> {
             bookToStatement(statement, book);
             statement.setInt(7, book.getId());
             statement.execute();
+            connectionHolder.releaseConnection(connection);
             Book returnedBook = get(book.getId());
+            connection = connectionHolder.getConnection();
             if (returnedBook == null) {
                 throw new DAOException("IncorrectId");
             } else {
