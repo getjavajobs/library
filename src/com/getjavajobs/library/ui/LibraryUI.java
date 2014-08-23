@@ -20,7 +20,6 @@ import javax.swing.JTable;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import com.getjavajobs.library.exceptions.ServiceException;
@@ -87,8 +86,7 @@ public class LibraryUI {
 		
 		leftPanelConfiguration(mainFrame);		// конфигураци€ левой верхней панели.
 		rightPanelConfiguration(mainFrame);		// конфигураци€ правой верхней панели.
-		
-				
+
 		mainFrame.setVisible(true);
 	}
 	
@@ -396,7 +394,6 @@ public class LibraryUI {
 			List<Book> booksList = bookService.getAll();
 			int rowCount = booksList.size();
 			if (rowCount != 0) {
-				Object[][] dataVector = new Object[rowCount][booksTableColumnNames.length];
 				
 				// ≈сли список не пуст --> заполн€ем таблицу данными.
 				List<Borrow> borrowsList = borrowService.getAll();
