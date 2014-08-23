@@ -13,23 +13,23 @@ import java.util.List;
  */
 public class BookDao implements GenericDao<Book> {
     private ConnectionHolder connectionHolder;
-    private AuthorDAO authorDAO;
-    private PublisherDao publisherDao;
-    private GenreDao genreDao;
+    private AuthorDao authorDAO;
+    private PublisherDAO publisherDao;
+    private GenreDAO genreDao;
 
     public void setConnectionHolder(ConnectionHolder connectionHolder) {
         this.connectionHolder = connectionHolder;
     }
 
-    public void setGenreDao(GenreDao genreDao) {
+    public void setGenreDao(GenreDAO genreDao) {
         this.genreDao = genreDao;
     }
 
-    public void setAuthorDAO(AuthorDAO authorDAO) {
+    public void setAuthorDAO(AuthorDao authorDAO) {
         this.authorDAO = authorDAO;
     }
 
-    public void setPublisherDao(PublisherDao publisherDao) {
+    public void setPublisherDao(PublisherDAO publisherDao) {
         this.publisherDao = publisherDao;
     }
 
