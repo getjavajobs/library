@@ -1,4 +1,4 @@
-package com.getjavajobs.library.models;
+package com.getjavajobs.library.model;
 
 
 import java.util.Date;
@@ -6,26 +6,19 @@ import java.util.Date;
 public class Borrow {
 
     private int borrowId = 0;
-    private int bookId;
-    private int employeeId;
-    private int readerId;
+    private Book book;
     private Date dateOfBorrow;
     private Date dateOfReturn;
+    private Employee employee;
+    private Reader reader;
+
 
     public int getBorrowId() {
         return borrowId;
     }
 
-    public int getBookId() {
-        return bookId;
-    }
-
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
-    public int getReaderId() {
-        return readerId;
+    public Book getBook() {
+        return book;
     }
 
     public Date getDateOfBorrow() {
@@ -36,22 +29,20 @@ public class Borrow {
         return dateOfReturn;
     }
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public Reader getReader() {
+        return reader;
+    }
 
     public void setBorrowId(int borrowId) {
-
         this.borrowId = borrowId;
     }
 
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public void setReaderId(int readerId) {
-        this.readerId = readerId;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public void setDateOfBorrow(Date dateOfBorrow) {
@@ -61,19 +52,28 @@ public class Borrow {
     public void setDateOfReturn(Date dateOfReturn) {
         this.dateOfReturn = dateOfReturn;
     }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public void setReader(Reader reader) {
+        this.reader = reader;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Borrow)) return false;
 
         Borrow borrow = (Borrow) o;
 
-        if (bookId != borrow.bookId) return false;
         if (borrowId != borrow.borrowId) return false;
-        if (employeeId != borrow.employeeId) return false;
-        if (readerId != borrow.readerId) return false;
+        if (!book.equals(borrow.book)) return false;
         if (!dateOfBorrow.equals(borrow.dateOfBorrow)) return false;
         if (!dateOfReturn.equals(borrow.dateOfReturn)) return false;
+        if (!employee.equals(borrow.employee)) return false;
+        if (!reader.equals(borrow.reader)) return false;
 
         return true;
     }
@@ -81,12 +81,11 @@ public class Borrow {
     @Override
     public int hashCode() {
         int result = borrowId;
-        result = 31 * result + bookId;
-        result = 31 * result + employeeId;
-        result = 31 * result + readerId;
+        result = 31 * result + book.hashCode();
         result = 31 * result + dateOfBorrow.hashCode();
         result = 31 * result + dateOfReturn.hashCode();
+        result = 31 * result + employee.hashCode();
+        result = 31 * result + reader.hashCode();
         return result;
     }
-
 }
