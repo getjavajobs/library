@@ -1,5 +1,7 @@
 package com.getjavajobs.library.model;
 
+import java.util.List;
+
 /**
  * Created by Vlad on 21.08.2014.
  */
@@ -9,6 +11,7 @@ public class Book {
     private String name;
     private Author author;
     private Publisher publisher;
+    private List<Genre> genreList;
     private int year;
     private int pagesNumber;
     private float price;
@@ -29,6 +32,9 @@ public class Book {
         return publisher;
     }
 
+    public List<Genre> getGenreList() {
+        return genreList;
+    }
     public int getPagesNumber() {
         return pagesNumber;
     }
@@ -55,6 +61,10 @@ public class Book {
 
     public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
+    }
+
+    public void setGenreList(List<Genre> genreList) {
+        this.genreList = genreList;
     }
 
     public void setYear(int year) {
