@@ -105,10 +105,10 @@ public class Author {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Name: " + name + "\n");
-        sb.append("Surname: " + surname + "\n");
-        sb.append("Fathername: " + fatherName + "\n");
-        sb.append("Birthdate: " + birthDate.toString() + "\n");
+        sb.append("Name: " + name + ";\n");
+        sb.append("Surname: " + surname + ";\n");
+        sb.append("Fathername: " + fatherName + ";\n");
+        sb.append("Birthdate: " + birthDate.toString() + ";\n");
         sb.append("Birthplace: " + birthPlace + ".");
         return sb.toString();
     }

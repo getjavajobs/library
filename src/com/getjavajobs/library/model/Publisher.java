@@ -91,10 +91,10 @@ public class Publisher {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Name: " + name + "\n");
-        sb.append("City: " + city + "\n");
-        sb.append("PhoneNumber: " + phoneNumber + "\n");
-        sb.append("Email: " + email + "\n");
+        sb.append("Name: " + name + ";\n");
+        sb.append("City: " + city + ";\n");
+        sb.append("PhoneNumber: " + phoneNumber + ";\n");
+        sb.append("Email: " + email + ";\n");
         sb.append("SiteAdress: " + siteAddress + ".");
         return sb.toString();
     }
