@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Roman on 20.08.14.
  */
-public class PublisherDAO {
+public class PublisherDao {
 
     public Publisher add(Publisher publisher) throws DAOException {
         Connection con = ConnectionHolder.getInstance().getConnection();

@@ -11,7 +11,7 @@ import java.util.List;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Employee;
 
-public class EmployeeDAO {
+public class EmployeeDao {
 
 	public Employee add(Employee employee){
 
