@@ -1,7 +1,6 @@
 package com.getjavajobs.library.dao;
 
 import com.getjavajobs.library.exceptions.DAOException;
-import com.getjavajobs.library.exceptions.DaoException;
 import com.getjavajobs.library.model.Book;
 
 import java.sql.*;
