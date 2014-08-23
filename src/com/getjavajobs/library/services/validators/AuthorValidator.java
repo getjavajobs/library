@@ -15,7 +15,7 @@ public class AuthorValidator {
     public boolean validate() {
         if (author.getName() == null) return false;
         if (author.getSurname() == null) return false;
-        if (author.getFatherName() == null) return false;
+        if (author.getPatronymic() == null) return false;
         if (author.getBirthDate() == null) return false;
         if (author.getBirthPlace() == null) return false;
         return true;
