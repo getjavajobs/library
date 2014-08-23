@@ -7,20 +7,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+ * Класс - хранилище соединений.
  * 
- * пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
- * пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ. 
- * пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
- * пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+ * Это класс-синглетон.
+ * Когда я отдал соединение с базой данных - должен "запомнить" этот факт. 
+ * И если кому-то потребуется соединение, а оно уже занято - я должен ожидать,
+ * когда оно освободиться.
  * 
- * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Lock->Condition. пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
- * пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (getConnection) -> await(), пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ releaseConnection -> signal()
+ * Данную вещь я решил сделать через Lock->Condition. Мне это кажется довольно простым и логичным решением.
+ * При взятии соединения (getConnection) -> await(), при вызове метода releaseConnection -> signal()
  * 
  */
 public class ConnectionHolder {
@@ -29,6 +30,7 @@ public class ConnectionHolder {
 	private Connection connection;
 	private Lock commanLock;
 	private Condition commanCondition;
+	private AtomicBoolean firstConnectionFlag;
 	
 	private ConnectionHolder() {
 		try {
@@ -41,7 +43,9 @@ public class ConnectionHolder {
 			this.connection = DriverManager.getConnection(url, username, password);
 			this.commanLock = new ReentrantLock();
 			this.commanCondition = commanLock.newCondition();
-			this.commanCondition.signal();		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+			this.commanCondition.signal();		// соединение пока свободно.
+			this.firstConnectionFlag = new AtomicBoolean();
+			this.firstConnectionFlag.set(true);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -58,11 +62,13 @@ public class ConnectionHolder {
 		return instance;
 	} 
 	
-	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+	// Получить соединение.
 	public Connection getConnection() {
 		commanLock.lock();
 		try {
-			commanCondition.await();	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+			if (!firstConnectionFlag.get()) {
+				commanCondition.await();	// Ожидаем освобождения соединения.
+			}
 			return connection;
 		} catch (InterruptedException ex) {
 			ex.printStackTrace();
@@ -72,11 +78,12 @@ public class ConnectionHolder {
 		return null;
 	}
 	
-	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
-	public void releaseConnection(Connection con) {
+	// Освободить соединение.
+	public void releaseConnection() {
 		commanLock.lock();
 		try {
-			commanCondition.signal();	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+			firstConnectionFlag.set(false);
+			commanCondition.signal();	// Соединение вновь свободно.
 		} finally {
 			commanLock.unlock();
 		}

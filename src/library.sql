@@ -20,6 +20,16 @@ create table Author(
  country char(50) not null,
  primary key (id)
  );
+
+create table Publishing(
+ id mediumint auto_increment,
+ name char(70) not null,
+ city char(50) not null,
+ telephone char(14) not null,
+ email char(50),
+ site char(50),
+ primary key(id)
+ );
  
  create table Books(
  id mediumint auto_increment,
@@ -34,7 +44,17 @@ create table Author(
  foreign key(publishing_id) references publishing(id)
  );
  
-  create table Borrow(
+ create table Employees(
+id mediumint auto_increment,
+name char(50) not null,
+surname char(50) not null,
+patronymic char(50) not null,
+dateofbirth date not null,
+position char(50) not null,
+primary key(id)
+);
+
+create table Borrow(
  id mediumint auto_increment,
  books_id mediumint not null,
  employee_id mediumint not  null,
@@ -47,27 +67,6 @@ create table Author(
  foreign key(employee_id) references employees(id)
  );
  
- create table Employees(
-id mediumint auto_increment,
-name char(50) not null,
-surname char(50) not null,
-patronymic char(50) not null,
-dateofbirth date not null,
-position char(50) not null,
-primary key(id)
-);
- 
- 
-create table Publishing(
- id mediumint auto_increment,
- name char(70) not null,
- city char(50) not null,
- telephone char(14) not null,
- email char(50),
- site char(50),
- primary key(id)
- );
- 
  create table Genre(
  id mediumint auto_increment,
  genre_type char(50) not null,
@@ -75,28 +74,14 @@ create table Publishing(
  );
 
 create table Genre_lists(
- book_id mediumint not null;
- genre_id mediumint not null;
- foreign key(book_id) references Books(id);
- foreign key(genre_id) references Genre(id);
-)
+ book_id mediumint not null,
+ genre_id mediumint not null,
+ foreign key(book_id) references Books(id),
+ foreign key(genre_id) references Genre(id)
+);
  
   create index readersname on readers(name, surname);
    create index authorname on author(name, surname);
     create index Employeesname on Employees(name, surname);
 	
 create index booktitle on Books (title);
-
-
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 

@@ -392,10 +392,7 @@ public class LibraryUI {
 		try {
 			/*
 			 * Считываем список книг из базы данных.
-			 */
-			
-			
-			
+			 */	
 			List<Book> booksList = bookService.getAll();
 			int rowCount = booksList.size();
 			if (rowCount != 0) {
@@ -642,7 +639,7 @@ public class LibraryUI {
 				
 				if (!tm.getValueAt(selectedRowIndex, 7).equals("Free")) {	// Работаем, только если книга кому-то выдана или она просрочена.
 					try {
-						borrowService.remove(bookID);
+						borrowService.delete(bookID);
 						JOptionPane.showMessageDialog(mainFrame, "Book successfully returned!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						
 						// Меняем статус в строке с книгой.
