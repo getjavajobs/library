@@ -1,16 +1,6 @@
 package com.getjavajobs.library.ui.dialogs;
 
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Author;
 import com.getjavajobs.library.model.Book;
@@ -19,13 +9,18 @@ import com.getjavajobs.library.services.AuthorService;
 import com.getjavajobs.library.services.BookService;
 import com.getjavajobs.library.services.PublisherService;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
- * Диалог для добавления книг в библиотеку.
+ * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  */
 public class AddBookDialogUI extends AbstractDialogUI {
 
 	private static final String dialogTitle = "Add new book into library database";
-	private JTextField[] textFields;	// Набор текстовых полей
+	private JTextField[] textFields;	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	
 	public AddBookDialogUI(final JFrame parentFrame, final JTable booksTable, final BookService bookService, 
 			final AuthorService authorService, final PublisherService publisherService) {
@@ -37,10 +32,10 @@ public class AddBookDialogUI extends AbstractDialogUI {
 			textFields[i] = new JTextField("");
 		}
 		
-		/* Поля для ввода */
+		/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
 		addLabeledTextField(textFields[0], "Book name:          ");
 		
-		/* Выпадающие списки авторов и издателей */
+		/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 		Object[] authorsData = null;
 		Object[] publishersData = null;
 		try {
@@ -52,46 +47,46 @@ public class AddBookDialogUI extends AbstractDialogUI {
 		final JComboBox<Object> authorsList = addLabeledCombobox("Author:                   ", authorsData);
 		final JComboBox<Object> publishersList = addLabeledCombobox("Publisher:              ", publishersData);
 		
-		/* Поля для ввода */
+		/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
 		addLabeledTextField(textFields[1], "Publish year:        ");
 		addLabeledTextField(textFields[2], "Page count:          ");
 		addLabeledTextField(textFields[3], "Price:                     ");
 		
-		/* Кнопка "Добавить новую книгу" */
+		/* пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ" */
 		addButton("Add new book", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isTextFieldsFilled(textFields)) {	// Если заполнены все текстовые поля.
-					if ((authorsList.getItemCount() != 0) && (publishersList.getItemCount() != 0)) {	// Если в выпадающих списках что-то есть.
+				if (isTextFieldsFilled(textFields)) {	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.
+					if ((authorsList.getItemCount() != 0) && (publishersList.getItemCount() != 0)) {	// пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅ.
 						
-						// Из выпадающих списков вытягиваем значения авторов и издателей.
+						// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 						Author author = (Author) authorsList.getSelectedItem();
 						Publisher publisher = (Publisher) publishersList.getSelectedItem();
 						
-						// Создаем Book.
+						// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Book.
 						Book newBook = new Book(textFields[0].getText(), author, publisher, Integer.parseInt(textFields[1].getText()), Integer.parseInt(textFields[2].getText()), Double.parseDouble(textFields[3].getText()));
 					
-						// Пытаемся добавить его в базу.
+						// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ.
 						try {
 							bookService.add(newBook);
 							clearTextFields(textFields);
 							JOptionPane.showMessageDialog(dialogFrame, "New book succsessfully added!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 							
 							/**
-							 * Добавляем запись в таблицу, которая находится на parentFrame.
+							 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ parentFrame.
 							 */
 							DefaultTableModel model = (DefaultTableModel) booksTable.getModel();
 							model.addRow(new Object[]{ new Integer(newBook.getId()), 
 									newBook.getName(),
-									newBook.getAuthor(), // хз, что из этого получится.
+									newBook.getAuthor(), // пїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 									newBook.getPublisher(),
 									new Integer(newBook.getYear()),
 									new Integer(newBook.getPagesNumber()),
 									new Double(newBook.getPrice()),
-									"Free",			 	// статус
+									"Free",			 	// пїЅпїЅпїЅпїЅпїЅпїЅ
 									"Issue",
 									"Return",
-									"Prolong",		// кнопки.
+									"Prolong",		// пїЅпїЅпїЅпїЅпїЅпїЅ.
 									"Update",
 									"Remove"});
 							

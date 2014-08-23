@@ -7,11 +7,8 @@ package com.getjavajobs.library.dao;
 
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Reader;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
