@@ -1,20 +1,23 @@
 package com.getjavajobs.library.ui.dialogs;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Reader;
 import com.getjavajobs.library.services.ReaderService;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 /**
- * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+ * Диалог добавления читателя.
  */
 public class AddReaderDialogUI extends AbstractDialogUI {
 
 	private static final String dialogTitle = "Add new reader into library database";
-	private JTextField[] textFields;	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+	private JTextField[] textFields;	// Набор текстовых полей
 	
 	public AddReaderDialogUI(final JFrame parentFrame, final ReaderService readerService) {
 		super(parentFrame, dialogTitle);
@@ -24,20 +27,25 @@ public class AddReaderDialogUI extends AbstractDialogUI {
 			textFields[i] = new JTextField("");
 		}
 		
-		/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
+		/* Поля для ввода */
 		addLabeledTextField(textFields[0], "Last name:                ");
 		addLabeledTextField(textFields[1], "Reader name:           ");
 		addLabeledTextField(textFields[2], "Address:                    ");
 		addLabeledTextField(textFields[3], "Passport number:   ");
 		addLabeledTextField(textFields[4], "Phone number:        ");
 		
-		/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
+		/* Добавление нового автора в базу данных */
 		addButton("Add new reader", new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isTextFieldsFilled(textFields)) {	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ --> пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
-					Reader newReader = new Reader(textFields[0].getText(), textFields[1].getText(), textFields[2].getText(), 
-							textFields[3].getText(),textFields[4].getText());
+				if (isTextFieldsFilled(textFields)) {	// Если все поля заполнены --> не выдастся сообщение об ошибке.
+					
+					Reader newReader = new Reader();
+					newReader.setSecondName(textFields[0].getText());
+					newReader.setFirstName(textFields[1].getText());
+					newReader.setAddress(textFields[2].getText());
+					newReader.setPasport(textFields[3].getText());
+					newReader.setPhone(textFields[4].getText());
 					
 					try {
 						readerService.add(newReader);

@@ -1,20 +1,23 @@
 package com.getjavajobs.library.ui.dialogs;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Publisher;
 import com.getjavajobs.library.services.PublisherService;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 /**
- * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+ * Диалог для добавления нового издательства.
  */
 public class AddPublisherDialogUI extends AbstractDialogUI {
 
 	private static final String dialogTitle = "Add new publisher into library database";
-	private JTextField[] textFields;	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+	private JTextField[] textFields;	// Набор текстовых полей
 	
 	public AddPublisherDialogUI(final JFrame parentFrame, final PublisherService publisherService) {
 		super(parentFrame, dialogTitle);
@@ -24,20 +27,25 @@ public class AddPublisherDialogUI extends AbstractDialogUI {
 			textFields[i] = new JTextField("");
 		}
 		
-		/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
+		/* Поля для ввода */
 		addLabeledTextField(textFields[0], "Publisher name:          ");
 		addLabeledTextField(textFields[1], "City:                                 ");
 		addLabeledTextField(textFields[2], "Phone number:            ");
 		addLabeledTextField(textFields[3], "E-mail:                            ");
 		addLabeledTextField(textFields[4], "Web page:                    ");
 		
-		/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
+		/* Добавление нового издательства в базу данных */
 		addButton("Add new publisher", new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isTextFieldsFilled(textFields)) {	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ --> пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
-					Publisher newPublisher = new Publisher(textFields[0].getText(), textFields[1].getText(), textFields[2].getText(), 
-							textFields[3].getText(),textFields[4].getText());
+				if (isTextFieldsFilled(textFields)) {	// Если все поля заполнены --> не выдастся сообщение об ошибке.
+					Publisher newPublisher = new Publisher();
+					newPublisher.setName(textFields[0].getText());
+					newPublisher.setCity(textFields[1].getText());
+					newPublisher.setPhoneNumber(textFields[2].getText());
+					newPublisher.setEmail(textFields[3].getText());
+					newPublisher.setSiteAddress(textFields[4].getText());
+					
 					try {
 						publisherService.add(newPublisher);
 						clearTextFields(textFields);

@@ -1,25 +1,32 @@
 package com.getjavajobs.library.ui.dialogs;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Author;
 import com.getjavajobs.library.model.Book;
+import com.getjavajobs.library.model.Genre;
 import com.getjavajobs.library.model.Publisher;
 import com.getjavajobs.library.services.AuthorService;
 import com.getjavajobs.library.services.BookService;
 import com.getjavajobs.library.services.PublisherService;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 /**
- * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ.
+ * Диалог для обновления данных о книге.
  */
 public class UpdateBookDialogUI extends AbstractDialogUI {
 
 	private static final String dialogTitle = "Update book information in library database";
-	private JTextField[] textFields;	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+	private JTextField[] textFields;	// Набор текстовых полей
 	
 	public UpdateBookDialogUI(final JFrame parentFrame, final JTable booksTable, final BookService bookService, 
 			final AuthorService authorService, final PublisherService publisherService, final Book bookInfo) {
@@ -31,16 +38,16 @@ public class UpdateBookDialogUI extends AbstractDialogUI {
 			textFields[i] = new JTextField("");
 		}
 		
-		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+		// Заполняем уже имеющимися данными.
 		textFields[0].setText(bookInfo.getName());
 		textFields[1].setText(new Integer(bookInfo.getYear()).toString());
 		textFields[2].setText(new Integer(bookInfo.getPagesNumber()).toString());
 		textFields[3].setText(new Double(bookInfo.getPrice()).toString());
 		
-		/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
+		/* Поля для ввода */
 		addLabeledTextField(textFields[0], "Book name:          ");
 		
-		/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
+		/* Выпадающие списки авторов и издателей */
 		Object[] authorsData = null;
 		Object[] publishersData = null;
 		try {
@@ -52,7 +59,7 @@ public class UpdateBookDialogUI extends AbstractDialogUI {
 		final JComboBox<Object> authorsList = addLabeledCombobox("Author:                   ", authorsData);
 		final JComboBox<Object> publishersList = addLabeledCombobox("Publisher:              ", publishersData);
 		
-		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅ ComboBox-пїЅпїЅ.
+		// Устанавливаем то, что есть и в ComboBox-ах.
 		for (int i = 0; i < authorsData.length; ++i) {
 			if (bookInfo.getAuthor().equals((Author) authorsData[i])) {
 				authorsList.setSelectedIndex(i);
@@ -67,42 +74,44 @@ public class UpdateBookDialogUI extends AbstractDialogUI {
 			}
 		}
 		
-		/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
+		/* Поля для ввода */
 		addLabeledTextField(textFields[1], "Publish year:        ");
 		addLabeledTextField(textFields[2], "Page count:          ");
 		addLabeledTextField(textFields[3], "Price:                     ");
 		
-		/* пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ" */
+		/* Кнопка "Обновить информацию о книге" */
 		addButton("Update book information", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isTextFieldsFilled(textFields)) {	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.
-					// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+				if (isTextFieldsFilled(textFields)) {	// Если заполнены все текстовые поля.
+					// Из выпадающих списков вытягиваем значения авторов и издателей.
 					Author author = (Author) authorsList.getSelectedItem();
 					Publisher publisher = (Publisher) publishersList.getSelectedItem();
 
-					// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+					// Меняем поля на измененные.
 					bookInfo.setName(textFields[0].getText());
+					bookInfo.setGenreList(new ArrayList<Genre>());	// TODO 
 					bookInfo.setAuthor(author);
 					bookInfo.setPublisher(publisher);
 					bookInfo.setYear(Integer.parseInt(textFields[1].getText()));
 					bookInfo.setPagesNumber(Integer.parseInt(textFields[2].getText()));
 					bookInfo.setPrice(Double.parseDouble(textFields[3].getText()));
 					
-					// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ.
+					// Пробуем изменить в базе.
 					try {
 						bookService.update(bookInfo);
 						clearTextFields(textFields);
 						JOptionPane.showMessageDialog(dialogFrame, "Book information succsessfully updated!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						
-						// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+						// Меняем в таблице информацию.
 						DefaultTableModel model = (DefaultTableModel) booksTable.getModel();
 						model.setValueAt(bookInfo.getName(), booksTable.getSelectedRow(), 1);
-						model.setValueAt(bookInfo.getAuthor(), booksTable.getSelectedRow(), 2);
-						model.setValueAt(bookInfo.getPublisher(), booksTable.getSelectedRow(), 3);
-						model.setValueAt(new Integer(bookInfo.getYear()), booksTable.getSelectedRow(), 4);
-						model.setValueAt(new Integer(bookInfo.getPagesNumber()), booksTable.getSelectedRow(), 5);
-						model.setValueAt(new Double(bookInfo.getPrice()), booksTable.getSelectedRow(), 6);
+						model.setValueAt(bookInfo.getGenreList(), booksTable.getSelectedRow(), 2);
+						model.setValueAt(bookInfo.getAuthor(), booksTable.getSelectedRow(), 3);
+						model.setValueAt(bookInfo.getPublisher(), booksTable.getSelectedRow(), 4);
+						model.setValueAt(new Integer(bookInfo.getYear()), booksTable.getSelectedRow(), 5);
+						model.setValueAt(new Integer(bookInfo.getPagesNumber()), booksTable.getSelectedRow(), 6);
+						model.setValueAt(new Double(bookInfo.getPrice()), booksTable.getSelectedRow(), 7);
 						
 						dialogFrame.dispose();
 						parentFrame.setEnabled(true);
