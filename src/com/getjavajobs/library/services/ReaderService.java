@@ -6,64 +6,52 @@
 package com.getjavajobs.library.services;
 
 import com.getjavajobs.library.dao.ReaderDao;
-import com.getjavajobs.library.exceptions.DAOException;
+
+import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Reader;
 import com.getjavajobs.library.services.validators.ReaderValidator;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  *
  * @author Виталий
  */
 public class ReaderService {
-
-    public Reader get(int id) throws SQLException {
-        Reader tempReader = new Reader();
-        tempReader = new ReaderDao().get(id);
-        if (new ReaderValidator(tempReader).readerValidate()) {
-            return tempReader;
-        } else {
-            //throw new DAOException("ReaderValidateFall");
-        }
-        return tempReader;   // remove after getting DAOException class  
+    private ReaderDao readerDao = new ReaderDao();
+    private ReaderValidator readerValidator = new ReaderValidator();
+    
+    
+    
+    public Reader get(int id) throws ServiceException {
+       return readerDao.get(id);
     }
 
-    public List<Reader> getAll() throws SQLException {
+    public List<Reader> getAll() throws ServiceException {
         List<Reader> tempListReader = new ArrayList<>();
-
-        return tempListReader = new ReaderDao().getAll();
-
+        return tempListReader = readerDao.getAll();
     }
 
-    public Reader add(Reader r) throws SQLException {
-        if (new ReaderValidator(r).readerValidate()) {
-
-            return new ReaderDao().add(r);
-
+    public Reader add(Reader reader) throws ServiceException {
+        if (readerValidator.readerValidate(reader)) {
+            return readerDao.add(reader);
         } else {
-            throw new DAOException("ReaderValidateFall");
+            throw new ServiceException("ReaderValidateFall at add");
         }
-
     }
 
-    public Reader update(Reader r) throws SQLException {
-        if (new ReaderValidator(r).readerValidate()) {
-
-            return new ReaderDao().update(r);
-
+    public Reader update(Reader reader) throws ServiceException {
+        if (readerValidator.readerValidate(reader)) {
+            return readerDao.update(reader);
         } else {
-            throw new DAOException("ReaderValidateFall");
+           throw new ServiceException("ReaderValidateFall at update");
         }
-
     }
 
-    public void delete(int id) throws SQLException {
-
-        new ReaderDao().delete(id);
+    public void delete(int id) throws ServiceException {
+        readerDao.delete(id);
         System.out.println("Reader with id " + id + "successfully deleted");
-
     }
 }
