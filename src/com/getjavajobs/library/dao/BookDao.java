@@ -60,8 +60,6 @@ public class BookDao {
         return book;
     }
 
-
-
     public Book get(int id) throws DAOException {
         Connection connection = connectionHolder.getConnection();
         boolean success = true;
