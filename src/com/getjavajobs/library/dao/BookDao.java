@@ -2,29 +2,19 @@ package com.getjavajobs.library.dao;
 
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Book;
+import com.getjavajobs.library.model.Genre;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Vlad on 21.08.2014.
  */
-//захват, освобождение коннекшена.
 public class BookDao {
-    private ConnectionHolder connectionHolder;
-    private AuthorDao authorDao;
-    private PublisherDao publisherDao;
 
-    public void setConnectionHolder(ConnectionHolder connectionHolder) {
-        this.connectionHolder = connectionHolder;
-    }
-    public void setAuthorDao(AuthorDao authorDao) {
-        this.authorDao = authorDao;
-    }
-    public void setPublisherDao(PublisherDao publisherDao) {
-        this.publisherDao = publisherDao;
-    }
+	private ConnectionHolder connectionHolder = ConnectionHolder.getInstance();
 
     public Book add(Book book) throws DAOException {
         Connection connection = connectionHolder.getConnection();
@@ -176,7 +166,6 @@ public class BookDao {
                 connectionHolder.releaseConnection(connection);
             }
         }
-        connectionHolder.releaseConnection(connection);
         return books;
     }
     private int getLastId(Connection connection) throws SQLException {
@@ -192,11 +181,12 @@ public class BookDao {
         Book book = new Book();
         book.setId(resultSet.getInt("id"));
         book.setName(resultSet.getString("title"));
-        book.setAuthor(authorDao.get(resultSet.getInt("author_id")));
-        book.setPublisher(publisherDao.get(resultSet.getInt("publishing_id")));
+        book.setAuthor(DaoFactory.getAuthorDao().get(resultSet.getInt("author_id")));
+        book.setPublisher(DaoFactory.getPublisherDao().get(resultSet.getInt("publishing_id")));
         book.setYear(resultSet.getShort("year"));
         book.setPagesNumber(resultSet.getInt("pagenumber"));
         book.setPrice(resultSet.getFloat("price"));
+        book.setGenreList(Collections.<Genre>emptyList());
         return book;
     }
     private void bookToStatement(PreparedStatement statement, Book book) throws SQLException {
