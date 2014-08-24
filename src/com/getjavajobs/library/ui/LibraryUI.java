@@ -86,6 +86,11 @@ public class LibraryUI {
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         BookDao bookDao = new BookDao();
+        AuthorDao authorDao = new AuthorDao();
+        PublisherDao publisherDao = new PublisherDao();
+        bookDao.setAuthorDao(authorDao);
+        
+        bookDao.setPublisherDao(publisherDao);
         bookDao.setConnectionHolder(ConnectionHolder.getInstance());
         bookService.setBookDao(bookDao);
 

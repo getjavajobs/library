@@ -20,6 +20,7 @@ public class ConnectionHolder {
 	private static ConnectionHolder instance;
 	private Lock commanLock;
 	private Condition commanCondition;
+	private Connection connection;
 	private AtomicReference<Connection> connectionStore;
 	
 	private ConnectionHolder() {
@@ -30,7 +31,7 @@ public class ConnectionHolder {
 			String username = props.getProperty("jdbc.username");
 			String password = props.getProperty("jdbc.password");
 			
-			Connection connection = DriverManager.getConnection(url, username, password);
+			this.connection = DriverManager.getConnection(url, username, password);
 			this.commanLock = new ReentrantLock();
 			this.commanCondition = commanLock.newCondition();
 			this.connectionStore = new AtomicReference<>(connection);	// Хранилище соединения.
@@ -55,7 +56,7 @@ public class ConnectionHolder {
 	// Получить соединение, если возможно. Если соединение занято - обратившийся поток будет ожидать
 	// освобождения соединения.
 	public Connection getConnection() {
-		commanLock.lock();
+	/*	commanLock.lock();
 		try {
 			Connection storedConnection = connectionStore.getAndSet(null);	// Забираем из хранилища то, что там лежит и устанавливаем null.
 			if (storedConnection == null) {
@@ -63,12 +64,16 @@ public class ConnectionHolder {
 				storedConnection = connectionStore.getAndSet(null);
 			}
 			return storedConnection;
+	
+			return connection;
 		} catch (InterruptedException ex) {
 			ex.printStackTrace();
 		} finally {
 			commanLock.unlock();
 		}
 		return null;
+	*/
+		return connection;
 	}
 	
 	// Освободить соединение.

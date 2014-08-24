@@ -112,7 +112,7 @@ public class EmployeeDao {
 	public Employee update(Employee employee){
 		Connection con = ConnectionHolder.getInstance().getConnection();
 		boolean commit = false;
-		String query = "UPDATE Employee SET " +
+		String query = "UPDATE Employees SET " +
                 "name = ?, surname = ?, patronymic = ?,"
                 + " dateofbirth = ?, position = ?" +
                 "WHERE id = ?";
