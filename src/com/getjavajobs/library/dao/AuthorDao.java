@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by Roman on 23.08.14.
  */
-public class AuthorDao {
+public class AuthorDao implements GenericDao<Author> {
 
     public Author add(Author author) throws DAOException {
         Connection con = ConnectionHolder.getInstance().getConnection();
@@ -28,9 +28,10 @@ public class AuthorDao {
             ps.setDate(4, new java.sql.Date(author.getBirthDate().getTime()));
             ps.setString(5,author.getBirthPlace());
             ps.executeUpdate();
-            ResultSet resultSet = ps.executeQuery("SELECT last_insert_id()");
-            resultSet.next();
-            author.setId(resultSet.getInt("id"));
+            ResultSet rs = ps.executeQuery("Select last_insert_id()");
+            rs.next();
+            int lastInsertedId = Integer.parseInt(rs.getString("last_insert_id()"));
+            author.setId(lastInsertedId);
             if (!con.getAutoCommit()){
                 con.commit();
             }
@@ -157,7 +158,7 @@ public class AuthorDao {
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 Author author = new Author();
-                author.setId(resultSet.getInt("id"));
+                author.setId(resultSet.getInt("Id"));
                 author.setName(resultSet.getString("name"));
                 author.setSurname(resultSet.getString("surname"));
                 author.setPatronymic(resultSet.getString("patronymic"));
