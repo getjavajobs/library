@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,10 +14,10 @@ import com.getjavajobs.library.model.Employee;
 
 public class EmployeeDao {
 
-	public Employee add(Employee employee){
+	public Employee add(Employee employee) throws DAOException{
 
 		Connection con = ConnectionHolder.getInstance().getConnection();
-		boolean success = true;
+		boolean commit = false;
 		String query = "INSERT INTO Employees"
 				+ " (name,surname,patronymic,dateofbirth,position)"
 				+ " VALUES (?,?,?,?,?)";
@@ -24,91 +25,93 @@ public class EmployeeDao {
 		try (PreparedStatement prep = con.prepareStatement(query)) {
 			prep.setString(1, employee.getName());
 			prep.setString(2, employee.getSurname());
-			prep.setString(3, employee.getSurname());
+			prep.setString(3, employee.getPatronymic());
 			prep.setDate(4, new java.sql.Date(employee.getDateOfBirth()
 					.getTime()));
 			prep.setString(5, employee.getPosition());
 			prep.executeUpdate();
+			Statement stat = con.createStatement();
+			ResultSet result = stat.executeQuery("Select last_insert_id()");
+            result.next();
+            int lastInsertedId = Integer.parseInt(result.getString("last_insert_id()"));
+            employee.setId(lastInsertedId);
+            if (!con.getAutoCommit()) {
+                con.commit();
+            }
+            commit = true;
+            return employee;
+
 		} catch (SQLException e) {
-			success = false;
 			throw new DAOException(e);
 		} finally {
-			try {
-				if (success) {
-					con.commit();
-				} else {
-					con.rollback();
-				}
-			} catch (SQLException e) {
-				throw new DAOException(e);
-			}
-		}
-		return employee;
+            try {
+                if (!commit && !con.getAutoCommit()) {
+                    con.rollback();
+                }
+            } catch (SQLException e) {
+                throw new DAOException(e);
+            } finally {
+                ConnectionHolder.getInstance().releaseConnection(con);
+            }
+        }
 	}
 
 	public void delete(int id) {
 		Connection con = ConnectionHolder.getInstance().getConnection();
-		boolean success = true;
+		boolean commit = false;
 		String query = "DELETE FROM Employees WHERE id = ?";
 
 		try (PreparedStatement prep = con.prepareStatement(query)) {
 			prep.setInt(1, id);
 			prep.executeUpdate();
+			if (!con.getAutoCommit()) {
+                con.commit();
+            }
+            commit = true;
 		} catch (SQLException e) {
-			success = false;
 			throw new DAOException(e);
 		} finally {
-			try {
-				if (success) {
-					con.commit();
-				} else {
-					con.rollback();
-				}
-			} catch (SQLException e) {
-
-			}
-		}
+            try {
+                if (!commit && !con.getAutoCommit()) {
+                    con.rollback();
+                }
+            } catch (SQLException e) {
+                throw new DAOException(e);
+            } finally {
+                ConnectionHolder.getInstance().releaseConnection(con);
+            }
+        }
 	}
 
 	public Employee get(int id) {
 		Connection con = ConnectionHolder.getInstance().getConnection();
-		boolean success = true;
+		boolean commit = false;
 		String query = "SELECT * FROM Employees WHERE id = ?";
 
 		Employee employee = new Employee();
 		try (PreparedStatement prep = con.prepareStatement(query)) {
 			prep.setInt(1, id);
 			ResultSet result = prep.executeQuery();
-			result.next();
+			
+			if(result.next()){
 			employee.setId(result.getInt("id"));
 			employee.setName(result.getString("name"));
 			employee.setSurname(result.getString("surname"));
 			employee.setPatronymic(result.getString("patronymic"));
 			employee.setDateOfBirth(new Date(result.getDate("dateofbirth").getTime()));
 			employee.setPosition(result.getString("position"));
-
+			}	
+			return employee;
 		} catch (SQLException e) {
-			success = false;
 			throw new DAOException(e);
 		} finally {
-			try {
-				if (success) {
-					con.commit();
-				} else {
-					con.rollback();
-				}
-			} catch (SQLException e) {
-				throw new DAOException(e);
-			}
-
-		}
-
-		return employee;
+            ConnectionHolder.getInstance().releaseConnection(con);
+        }
 	}
 
 	public Employee update(Employee employee){
 		Connection con = ConnectionHolder.getInstance().getConnection();
-		boolean success = true;
+		boolean commit = false;
 		String query = "UPDATE Employee SET " +
                 "name = ?, surname = ?, patronymic = ?,"
                 + " dateofbirth = ?, position = ?" +
@@ -122,29 +125,30 @@ public class EmployeeDao {
 			prep.setString(5, employee.getPosition());
 			prep.setInt(6, employee.getId());
 			prep.executeUpdate();
+			if (!con.getAutoCommit()) {
+                con.commit();
+            }
+			commit = true;
+            return employee;
 		}catch(SQLException e){
-			success = false;
 			throw new DAOException(e);
-		}finally{
-			try{
-				if(success){
-					con.commit();
-				}else{
-					con.rollback();
-				}
-			}catch(SQLException e){
-				throw new DAOException(e);
-			}
-		}
-		return employee;
+		}finally {
+            try {
+                if (!commit && !con.getAutoCommit()) {
+                    con.rollback();
+                }
+            } catch (SQLException e) {
+                throw new DAOException(e);
+            } finally {
+                ConnectionHolder.getInstance().releaseConnection(con);
+            }
+        }      
 		
 	}
 	
 	public List<Employee> getAll() {
 
 		Connection con = ConnectionHolder.getInstance().getConnection();
-		boolean success = true;
-
 		List<Employee> employees = new ArrayList<>();
 		String query = "SELECT * FROM Employees";
 		try (PreparedStatement prep = con.prepareStatement(query)) {
@@ -160,22 +164,12 @@ public class EmployeeDao {
 
 				employees.add(employee);
 			}
-
+			return employees;
 		} catch (SQLException e) {
-			success = false;
 			throw new DAOException(e);
 		} finally {
-			try {
-				if (success) {
-					con.commit();
-				} else {
-					con.rollback();
-				}
-			} catch (SQLException e) {
-				throw new DAOException(e);
-			}
+			ConnectionHolder.getInstance().releaseConnection(con);
 		}
-		return employees;
 
 	}
 
