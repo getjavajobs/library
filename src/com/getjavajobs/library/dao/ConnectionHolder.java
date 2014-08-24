@@ -7,30 +7,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * ����� - ��������� ����������.
- * 
- * ��� �����-���������.
- * ����� � ����� ���������� � ����� ������ - ������ "���������" ���� ����. 
- * � ���� ����-�� ����������� ����������, � ��� ��� ������ - � ������ �������,
- * ����� ��� ������������.
- * 
- * ������ ���� � ����� ������� ����� Lock->Condition. ��� ��� ������� �������� ������� � �������� ��������.
- * ��� ������ ���������� (getConnection) -> await(), ��� ������ ������ releaseConnection -> signal()
- * 
+ * Класс - хранилище соединений.
  */
 public class ConnectionHolder {
-
+	
 	private static ConnectionHolder instance;
-	private Connection connection;
 	private Lock commanLock;
 	private Condition commanCondition;
-	private AtomicBoolean firstConnectionFlag;
+	private AtomicReference<Connection> connectionStore;
 	
 	private ConnectionHolder() {
 		try {
@@ -40,12 +30,11 @@ public class ConnectionHolder {
 			String username = props.getProperty("jdbc.username");
 			String password = props.getProperty("jdbc.password");
 			
-			this.connection = DriverManager.getConnection(url, username, password);
+			Connection connection = DriverManager.getConnection(url, username, password);
 			this.commanLock = new ReentrantLock();
 			this.commanCondition = commanLock.newCondition();
-		//	this.commanCondition.signal();		// ���������� ���� ��������.
-			this.firstConnectionFlag = new AtomicBoolean();
-			this.firstConnectionFlag.set(true);
+			this.connectionStore = new AtomicReference<>(connection);	// Хранилище соединения.
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -55,6 +44,7 @@ public class ConnectionHolder {
 		}
 	}
 	
+	// Получить экземпляр класса ConnectionHolder.
 	public static ConnectionHolder getInstance() {
 		if (instance == null) {
 			instance = new ConnectionHolder();
@@ -62,14 +52,17 @@ public class ConnectionHolder {
 		return instance;
 	} 
 	
-	// �������� ����������.
+	// Получить соединение, если возможно. Если соединение занято - обратившийся поток будет ожидать
+	// освобождения соединения.
 	public Connection getConnection() {
 		commanLock.lock();
 		try {
-			if (!firstConnectionFlag.get()) {
-				commanCondition.await();	// ������� ������������ ����������.
+			Connection storedConnection = connectionStore.getAndSet(null);	// Забираем из хранилища то, что там лежит и устанавливаем null.
+			if (storedConnection == null) {
+				commanCondition.await(); // Ожидаем, когда вернут соединение обратно.
+				storedConnection = connectionStore.getAndSet(null);
 			}
-			return connection;
+			return storedConnection;
 		} catch (InterruptedException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -78,13 +71,12 @@ public class ConnectionHolder {
 		return null;
 	}
 	
-	// ���������� ����������.
-	// TODO Pool logic
+	// Освободить соединение.
 	public void releaseConnection(Connection con) {
 		commanLock.lock();
 		try {
-			firstConnectionFlag.set(false);
-			commanCondition.signal();	// ���������� ����� ��������.
+			connectionStore.set(con);	// Кладем соединение обратно в хранилище.
+			commanCondition.signal();	
 		} finally {
 			commanLock.unlock();
 		}
