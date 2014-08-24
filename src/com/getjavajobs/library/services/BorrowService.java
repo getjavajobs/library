@@ -18,6 +18,11 @@ public class BorrowService  {
 
     public Borrow get(int id) throws ServiceException {
         try {
+            Borrow borrow = bd.get(id);
+            if(!new BorrowValidator(borrow).validate()){
+                return null;
+            }
+
             return bd.get(id);
         }catch (DAOException e){
             throw new ServiceException(e.getMessage(),e);
