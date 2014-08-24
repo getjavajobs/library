@@ -15,7 +15,7 @@ public class PublisherService {
 
     private PublisherDao publisherDao;
     private PublisherValidator validator = new PublisherValidator();
-    public void PublisherService(PublisherDao publisherDao) {
+    public PublisherService(PublisherDao publisherDao) {
         this.publisherDao = publisherDao;
     }
 
