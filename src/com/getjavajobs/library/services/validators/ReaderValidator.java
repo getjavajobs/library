@@ -86,7 +86,7 @@ public class ReaderValidator {
 
     private boolean readerPassportValidate(Reader r) {
         String s = r.getPassport();
-        String expr = "[a-zA-Z0-9]{5,11}";
+        String expr = "[a-zA-Z0-9]{5,10}";
         return s.matches(expr);
     }
 
