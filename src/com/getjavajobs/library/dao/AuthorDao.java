@@ -154,7 +154,7 @@ public class AuthorDao implements GenericDao<Author> {
         Connection con = ConnectionHolder.getInstance().getConnection();
         List<Author> authors = new ArrayList<>();
         boolean success = false;
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Publishing")){
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Author")){
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 Author author = new Author();
