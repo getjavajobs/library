@@ -14,14 +14,12 @@ import java.util.List;
 /**
  * Created by Roman on 20.08.14.
  */
-public class PublisherDao {
+public class PublisherDao implements GenericDao<Publisher>{
 
     public Publisher add(Publisher publisher) throws DAOException {
         Connection con = ConnectionHolder.getInstance().getConnection();
         boolean success = false;
-        String script = "INSERT INTO Publisher " +
-                "(name,city,telephone,email,site) VALUES " +
-                "(?,?,?,?,?)";
+        String script = "INSERT INTO Publishing (name,city,telephone,email,site) VALUES(?,?,?,?,?) ;";
         try (PreparedStatement ps = con.prepareStatement(script)) {
             ps.setString(1,publisher.getName());
             ps.setString(2,publisher.getCity());
@@ -29,13 +27,15 @@ public class PublisherDao {
             ps.setString(4,publisher.getEmail());
             ps.setString(5,publisher.getSiteAddress());
             ps.executeUpdate();
-            ResultSet resultSet = ps.executeQuery("SELECT last_insert_id()");
-            resultSet.next();
-            publisher.setId(resultSet.getInt("id"));
+            ResultSet rs = ps.executeQuery("Select last_insert_id()");
+            rs.next();
+            int lastInsertedId = Integer.parseInt(rs.getString("last_insert_id()"));
+            publisher.setId(lastInsertedId);
             if (!con.getAutoCommit()){
                 con.commit();
             }
             success = true;
+            return publisher;
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(),e);
         } finally {
@@ -49,13 +49,12 @@ public class PublisherDao {
                 ConnectionHolder.getInstance().releaseConnection(con);
             }
         }
-        return publisher;
     }
 
     public void delete(int id) throws DAOException {
         Connection con = ConnectionHolder.getInstance().getConnection();
         boolean success = false;
-        String script = "DELETE FROM Publishing WHERE id = ?";
+        String script = "DELETE FROM Publishing WHERE id = ?;";
         try (PreparedStatement ps = con.prepareStatement(script)){
             ps.setInt(1,id);
             ps.executeUpdate();
@@ -81,7 +80,7 @@ public class PublisherDao {
     public Publisher get(int id) throws DAOException {
         Connection con = ConnectionHolder.getInstance().getConnection();
         boolean success = false;
-        String script = "SELECT * FROM Publishing WHERE id = ?";
+        String script = "SELECT * FROM Publishing WHERE id = ?;";
         Publisher publisher = new Publisher();
         try(PreparedStatement ps = con.prepareStatement(script)){
             ps.setInt(1, id);
@@ -119,9 +118,7 @@ public class PublisherDao {
     public Publisher update(Publisher publisher) throws DAOException {
         Connection con = ConnectionHolder.getInstance().getConnection();
         boolean success = false;
-        String script = "UPDATE Publisher SET " +
-                "name = ?, city = ?, telephone = ?, email = ?, site = ?" +
-                "WHERE id = ?";
+        String script = "UPDATE Publishing SET name = ?, city = ?, telephone = ?, email = ?, site = ? WHERE id = ?;";
         try(PreparedStatement ps = con.prepareStatement(script)){
             ps.setString(1, publisher.getName());
             ps.setString(2, publisher.getCity());
@@ -154,7 +151,7 @@ public class PublisherDao {
         Connection con = ConnectionHolder.getInstance().getConnection();
         List<Publisher> publishers = new ArrayList<>();
         boolean success = false;
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Publishing")){
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Publishing;")){
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 Publisher publisher = new Publisher();
