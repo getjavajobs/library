@@ -19,7 +19,7 @@ public class PublisherDao {
     public Publisher add(Publisher publisher) throws DAOException {
         Connection con = ConnectionHolder.getInstance().getConnection();
         boolean success = false;
-        String script = "INSERT INTO Publisher " +
+        String script = "INSERT INTO Publishing " +
                 "(name,city,telephone,email,site) VALUES " +
                 "(?,?,?,?,?)";
         try (PreparedStatement ps = con.prepareStatement(script)) {
@@ -119,7 +119,7 @@ public class PublisherDao {
     public Publisher update(Publisher publisher) throws DAOException {
         Connection con = ConnectionHolder.getInstance().getConnection();
         boolean success = false;
-        String script = "UPDATE Publisher SET " +
+        String script = "UPDATE Publishing SET " +
                 "name = ?, city = ?, telephone = ?, email = ?, site = ?" +
                 "WHERE id = ?";
         try(PreparedStatement ps = con.prepareStatement(script)){
