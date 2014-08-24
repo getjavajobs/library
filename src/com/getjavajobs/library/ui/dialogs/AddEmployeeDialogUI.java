@@ -16,12 +16,12 @@ import com.getjavajobs.library.model.Employee;
 import com.getjavajobs.library.services.EmployeeService;
 
 /**
- * Диалог добавления сотрудника.
+ * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  */
 public class AddEmployeeDialogUI extends AbstractDialogUI {
 
 	private static final String dialogTitle = "Add new employee into library database";
-	private JTextField[] textFields;	// Набор текстовых полей
+	private JTextField[] textFields;	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	
 	public AddEmployeeDialogUI(final JFrame parentFrame, final EmployeeService employeeService) {
 		super(parentFrame, dialogTitle);
@@ -31,23 +31,23 @@ public class AddEmployeeDialogUI extends AbstractDialogUI {
 			textFields[i] = new JTextField("");
 		}
 		
-		/* Поля для ввода */
+		/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
 		addLabeledTextField(textFields[0], "Employee name:         ");
 		addLabeledTextField(textFields[1], "Last name:                   ");
 		addLabeledTextField(textFields[2], "Father name:               ");
 		addLabeledTextField(textFields[3], "Birth date:                    ");
 		addLabeledTextField(textFields[4], "Employee position:    ");
 		
-		/* Добавление нового автора в базу данных */
+		/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ */
 		addButton("Add new employee", new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isTextFieldsFilled(textFields)) {	// Если все поля заполнены --> не выдастся сообщение об ошибке.
+				if (isTextFieldsFilled(textFields)) {	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ --> пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 					Employee newEmployee = new Employee();
 					newEmployee.setName(textFields[0].getText());
 					newEmployee.setSurname(textFields[1].getText());
 					newEmployee.setPatronymic(textFields[2].getText());
-					DateFormat formatter = new SimpleDateFormat("d MMM yyyy");
+					DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 					Date date = null;
 					try {
 						date = formatter.parse(textFields[3].getText());
