@@ -18,6 +18,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
@@ -30,33 +31,60 @@ import static org.junit.Assert.assertNull;
 
 
 
+class FakeConnectionHolder extends ConnectionHolder{
+    static ConnectionHolder instance;
+    private Connection connection;
+    public FakeConnectionHolder(int i){
+        super(i);
+        try {
+           connection = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "384233");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static ConnectionHolder getInstance() {
+        if (instance==null){
+            instance=new FakeConnectionHolder(0);
+        }
+        return instance;
+    }
+
+    @Override
+    public Connection getConnection() {
+        return connection;
+    }
+
+    @Override
+    public void releaseConnection(Connection con) {
+
+    }
+}
 
 public class BookDaoTest {
 
     static ConnectionHolder connectionHolder;
     AuthorDao authorDao = new FakeAuthorDao();
     PublisherDao publisherDao = new FakePublisherDao();
-    GenreDao genreDao = new GenreDao();
+    GenreDao genreDao = new FakeGenreDao();
     BookDao bookDao = new BookDao();
     @BeforeClass
     public static void setUpBeforeClass() throws Throwable {
-        try {
-            connectionHolder = ConnectionHolder.getInstance();
-        }catch (Exception e){
 
-        }
+        connectionHolder = FakeConnectionHolder.getInstance();
+        /*
         Queue<Connection> connectionQueue = new ArrayDeque<>();
         connectionQueue.add(DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "384233"));
         Field field =connectionHolder.getClass().getDeclaredField("connectionStore");
         field.setAccessible(true);
         field.set(connectionHolder, connectionQueue);
+        */
     }
     @Before
     public void setUp() throws Throwable {
         Connection connection = connectionHolder.getConnection();
         Statement statement = connection.createStatement();
-        executeDBScripts("test\\fakedb.sql", statement);
+        executeDBScripts("src//test//fakedb.sql", statement);
         statement.close();
         connectionHolder.releaseConnection(connection);
         bookDao.setConnectionHolder(connectionHolder);

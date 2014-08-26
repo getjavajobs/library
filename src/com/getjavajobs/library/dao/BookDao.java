@@ -146,8 +146,8 @@ public class BookDao implements GenericDao<Book> {
         boolean success = true;
         try (PreparedStatement statement = connection.prepareStatement("delete from books where id=?;");) {
             statement.setInt(1, id);
-            statement.execute();
             deleteGenreList(id,connection);
+            statement.execute();
         } catch (SQLException e) {
             success = false;
             throw new DAOException(e.getMessage(), e);
@@ -223,7 +223,7 @@ public class BookDao implements GenericDao<Book> {
     }
     private void addGenreList(int bookId, Connection connection, List<Genre> genreList)throws SQLException{
         for(Genre genre: genreList){
-            try(PreparedStatement add = connection.prepareStatement("insert into Genre_lists(bool_id, genre_id) values (?, ?);")){
+            try(PreparedStatement add = connection.prepareStatement("insert into Genre_lists(book_id, genre_id) values (?, ?);")){
                 add.setInt(1,bookId);
                 add.setInt(2,genre.getId());
                 add.execute();
