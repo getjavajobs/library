@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * Created by Vlad on 21.08.2014.
  */
+
 public class BookDao implements GenericDao<Book> {
     private ConnectionHolder connectionHolder;
     private AuthorDao authorDAO;
