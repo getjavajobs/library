@@ -6,7 +6,6 @@ import com.getjavajobs.library.model.Genre;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,7 +14,7 @@ import java.util.List;
 
 public class BookDao implements GenericDao<Book> {
     private ConnectionHolder connectionHolder;
-    private AuthorDao authorDAO;
+    private AuthorDao authorDao;
     private PublisherDao publisherDao;
     private GenreDao genreDao;
 
@@ -27,8 +26,8 @@ public class BookDao implements GenericDao<Book> {
         this.genreDao = genreDao;
     }
 
-    public void setAuthorDAO(AuthorDao authorDAO) {
-        this.authorDAO = authorDAO;
+    public void setAuthorDao(AuthorDao authorDAO) {
+        this.authorDao = authorDAO;
     }
 
     public void setPublisherDao(PublisherDao publisherDao) {
@@ -246,7 +245,7 @@ public class BookDao implements GenericDao<Book> {
         Book book = new Book();
         book.setId(resultSet.getInt("id"));
         book.setName(resultSet.getString("title"));
-        book.setAuthor(authorDAO.get(resultSet.getInt("author_id")));
+        book.setAuthor(authorDao.get(resultSet.getInt("author_id")));
         book.setPublisher(publisherDao.get(resultSet.getInt("publishing_id")));
         book.setYear(resultSet.getShort("year"));
         book.setPagesNumber(resultSet.getInt("pagenumber"));
