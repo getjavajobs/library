@@ -9,10 +9,7 @@ import com.getjavajobs.library.model.Author;
 import com.getjavajobs.library.model.Book;
 import com.getjavajobs.library.model.Genre;
 import com.getjavajobs.library.model.Publisher;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -108,32 +105,36 @@ public class BookDaoTest {
         book1.setName("book1");
         book1.setAuthor(authorDao.get(1));
         book1.setPublisher(publisherDao.get(1));
-        List<Genre> genreList = new ArrayList<>();
-        genreList.add(genreDao.get(1));
-        book1.setGenreList(genreList);
+        List<Genre> genreList1 = new ArrayList<>();
+        genreList1.add(genreDao.get(1));
+        book1.setGenreList(genreList1);
+
         Book book2 = new Book();
         book2.setName("book2");
         book2.setAuthor(authorDao.get(1));
         book2.setPublisher(publisherDao.get(1));
-        genreList.add(genreDao.get(2));
-        book2.setGenreList(genreList);
+        List<Genre> genreList2 = new ArrayList<>();
+        genreList2.add(genreDao.get(1));
+        genreList2.add(genreDao.get(2));
+        book2.setGenreList(genreList2);
+
         book1 = bookDao.add(book1);
         book2 = bookDao.add(book2);
-        assertEquals(book1.getId(), 1);
-        assertEquals(book2.getId(),2);
+        assertEquals(1, book1.getId());
+        assertEquals(2, book2.getId());
 
         book2 = bookDao.get(2);
-        assertEquals(book2.getName(),"book2");
-        assertEquals(book2.getGenreList().size(),2);
-        for(Genre genre: book2.getGenreList()){
-            System.out.println(genre.getGenreType());
-        }
-
+        assertEquals("book2", book2.getName());
+        assertEquals(2, book2.getGenreList().size());
 
         book1 = bookDao.get(1);
         book1.setName("newnameofbook1");
+        book1.getGenreList().add(genreDao.get(2));
         book1=bookDao.update(book1);
-        assertEquals(book1.getName().toLowerCase(),"newnameofbook1");
+
+        assertEquals("newnameofbook1", book1.getName().toLowerCase());
+        assertEquals(2, book1.getGenreList().size());
+
 
         bookDao.delete(1);
         Book emptyBook = bookDao.get(1);
@@ -141,8 +142,9 @@ public class BookDaoTest {
 
         bookDao.add(book1);
         Collection<Book> books = bookDao.getAll();
-        assertEquals(books.size(),2);
+        assertEquals(2, books.size());
     }
+
     @Test(expected = DAOException.class)
     public void incorrectAdd() throws DAOException {
         Book book = new Book();
@@ -154,13 +156,17 @@ public class BookDaoTest {
         bookDao.add(book);
 
     }
+
     @Test(expected = DAOException.class)
     public void incorrectUpdate() throws DAOException{
         Book book = new Book();
         book.setName("book1");
         book.setAuthor(authorDao.get(1));
         book.setPublisher(publisherDao.get(1));
-        book.setId(1);
+        List<Genre> genreList = new ArrayList<>();
+        genreList.add(genreDao.get(1));
+        book.setGenreList(genreList);
+        book.setId(10);
         book = bookDao.update(book);
     }
 
