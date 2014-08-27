@@ -1,4 +1,4 @@
-package test.com.getjavajobs.library;
+package com.getjavajobs.library;
 
 import com.getjavajobs.library.dao.BorrowDao;
 import com.getjavajobs.library.exceptions.DAOException;

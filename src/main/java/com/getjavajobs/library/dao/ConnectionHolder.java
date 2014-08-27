@@ -33,7 +33,7 @@ public class ConnectionHolder {
 	private ConnectionHolder() {
 		try {
 			Properties props = new Properties();
-			props.load(new FileInputStream("jdbc.properties"));
+			props.load(this.getClass().getClassLoader().getResourceAsStream("jdbc.properties"));
 			this.url = props.getProperty("jdbc.url");
 			this.username = props.getProperty("jdbc.username");
 			this.password = props.getProperty("jdbc.password");
