@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Reader;
@@ -27,7 +28,11 @@ public class ReaderServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("test");
 		PrintWriter pw = resp.getWriter();
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html");
+		resp.setStatus(200);
 		try {
 			List<Reader> readers = readerService.getAll();
 			pw.write("<html><head><title>Readers</title></head><body>READERS<br/><table>");

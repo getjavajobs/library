@@ -32,6 +32,7 @@ public class ConnectionHolder {
 
 	private ConnectionHolder() {
 		try {
+			Class.forName("com.mysql.jdbc.Driver");
 			Properties props = new Properties();
 			props.load(this.getClass().getClassLoader().getResourceAsStream("jdbc.properties"));
 			this.url = props.getProperty("jdbc.url");
