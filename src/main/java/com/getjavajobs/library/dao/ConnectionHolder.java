@@ -19,17 +19,20 @@ public class ConnectionHolder {
 
 	private static ConnectionHolder instance;
 
+
 	private String url;
 	private String username;
 	private String password;
 	private Queue<Connection> connectionStore;
 	private Lock commonLock;
+
 	private Condition commonCondition;
 	private ThreadLocal<ConnectionRef> busyConnections;
 
 	private ConnectionHolder() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+
+            Class.forName("com.mysql.jdbc.Driver");
 			Properties props = new Properties();
 			props.load(this.getClass().getClassLoader().getResourceAsStream("jdbc.properties"));
 			this.url = props.getProperty("jdbc.url");
