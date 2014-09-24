@@ -38,7 +38,7 @@
         Borrow list<br/>
 
 
-             <input type="button" value="Добавить" onClick="document.location='url'">
+             <input type="button" value="ADD" onClick="document.location='url'">
 
         </table>
 
