@@ -28,7 +28,6 @@ public class BookService {
         if (!validator.validate()) {
             return null;
         }
-
         try {
             return bookDao.add(book);
         } catch (DAOException e) {

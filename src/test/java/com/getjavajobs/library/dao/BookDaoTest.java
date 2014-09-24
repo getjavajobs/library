@@ -1,23 +1,22 @@
 package com.getjavajobs.library.dao;
 
-import com.getjavajobs.library.dao.AuthorDao;
-import com.getjavajobs.library.dao.BookDao;
-import com.getjavajobs.library.dao.ConnectionHolder;
-import com.getjavajobs.library.dao.PublisherDao;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Author;
 import com.getjavajobs.library.model.Book;
 import com.getjavajobs.library.model.Genre;
 import com.getjavajobs.library.model.Publisher;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import java.io.*;
-import java.lang.reflect.Field;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -28,37 +27,11 @@ import static org.junit.Assert.assertNull;
 
 
 
-class FakeConnectionHolder extends ConnectionHolder{
-    static ConnectionHolder instance;
-    private Connection connection;
-    public FakeConnectionHolder(int i){
-        super(i);
-        try {
-           connection = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "384233");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public static ConnectionHolder getInstance() {
-        if (instance==null){
-            instance=new FakeConnectionHolder(0);
-        }
-        return instance;
-    }
-
-    @Override
-    public Connection getConnection() {
-        return connection;
-    }
-
-    @Override
-    public void releaseConnection(Connection con) {
-
-    }
-}
 
 public class BookDaoTest {
+
+
 
     static ConnectionHolder connectionHolder;
     AuthorDao authorDao = new FakeAuthorDao();
@@ -68,7 +41,7 @@ public class BookDaoTest {
     @BeforeClass
     public static void setUpBeforeClass() throws Throwable {
 
-        connectionHolder = FakeConnectionHolder.getInstance();
+        connectionHolder = ConnectionHolder.getInstance();
         /*
         Queue<Connection> connectionQueue = new ArrayDeque<>();
         connectionQueue.add(DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "384233"));
@@ -79,12 +52,11 @@ public class BookDaoTest {
     }
     @Before
     public void setUp() throws Throwable {
-        Connection connection = connectionHolder.getConnection();
+        Connection connection = connectionHolder.getInstance().getConnection();
         Statement statement = connection.createStatement();
         executeDBScripts("src//test//fakedb.sql", statement);
         statement.close();
         connectionHolder.releaseConnection(connection);
-        bookDao.setConnectionHolder(connectionHolder);
         bookDao.setAuthorDao(authorDao);
         bookDao.setPublisherDao(publisherDao);
         bookDao.setGenreDao(genreDao);
