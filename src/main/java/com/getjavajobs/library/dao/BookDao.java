@@ -13,11 +13,11 @@ import java.util.List;
  */
 
 public class BookDao implements GenericDao<Book> {
-    private ConnectionHolder connectionHolder;
-    private AuthorDao authorDao;
-    private PublisherDao publisherDao;
-    private GenreDao genreDao;
-
+    private ConnectionHolder connectionHolder = ConnectionHolder.getInstance();
+   // private AuthorDao authorDao = DaoFactory.getAuthorDao();
+    //private PublisherDao publisherDao = DaoFactory.getPublisherDao();
+    //private GenreDao genreDao = DaoFactory.getGenreDao();
+    /*
     public void setConnectionHolder(ConnectionHolder connectionHolder) {
         this.connectionHolder = connectionHolder;
     }
@@ -33,7 +33,7 @@ public class BookDao implements GenericDao<Book> {
     public void setPublisherDao(PublisherDao publisherDao) {
         this.publisherDao = publisherDao;
     }
-
+    */
     public Book add(Book book) throws DAOException {
         Connection connection = connectionHolder.getConnection();
         boolean success = true;
@@ -80,7 +80,7 @@ public class BookDao implements GenericDao<Book> {
             connectionHolder.releaseConnection(connection);
             Book book = resultsSetToBook(resultSet);
             connection = connectionHolder.getConnection();
-            book.setGenreList(getGenreList(book.getId(),connection));
+            book.setGenreList(getGenreList(book.getId()));
             return book;
         } catch (SQLException e) {
             success = false;
@@ -175,13 +175,13 @@ public class BookDao implements GenericDao<Book> {
         List<Book> books = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM books;");
+            connectionHolder.releaseConnection(connection);
             while (resultSet.next()) {
-                connectionHolder.releaseConnection(connection);
                 Book book = resultsSetToBook(resultSet);
-                connection = connectionHolder.getConnection();
-                book.setGenreList(getGenreList(book.getId(),connection));
+                book.setGenreList(getGenreList(book.getId()));
                 books.add(book);
             }
+            connectionHolder.getConnection();
         } catch (SQLException e) {
             success = false;
             throw new DAOException(e.getMessage(), e);
@@ -204,11 +204,14 @@ public class BookDao implements GenericDao<Book> {
         return books;
     }
 
-    private List<Genre> getGenreList(int bookId, Connection connection) throws SQLException{
+    private List<Genre> getGenreList(int bookId) throws SQLException{
         List<Genre> genreList = new ArrayList<>();
+        Connection connection = connectionHolder.getConnection();
         try(PreparedStatement statement = connection.prepareStatement("select genre_id from Genre_lists where book_id=?;")) {
             statement.setInt(1, bookId);
             ResultSet resultSet = statement.executeQuery();
+            connectionHolder.releaseConnection(connection);
+            GenreDao genreDao = DaoFactory.getGenreDao();
             while (resultSet.next()) {
                 genreList.add(genreDao.get(resultSet.getInt("genre_id")));
             }
@@ -245,8 +248,8 @@ public class BookDao implements GenericDao<Book> {
         Book book = new Book();
         book.setId(resultSet.getInt("id"));
         book.setName(resultSet.getString("title"));
-        book.setAuthor(authorDao.get(resultSet.getInt("author_id")));
-        book.setPublisher(publisherDao.get(resultSet.getInt("publishing_id")));
+        book.setAuthor(DaoFactory.getAuthorDao().get(resultSet.getInt("author_id")));
+        book.setPublisher(DaoFactory.getPublisherDao().get(resultSet.getInt("publishing_id")));
         book.setYear(resultSet.getShort("year"));
         book.setPagesNumber(resultSet.getInt("pagenumber"));
         book.setPrice(resultSet.getFloat("price"));

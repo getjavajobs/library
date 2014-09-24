@@ -1,6 +1,7 @@
 package com.getjavajobs.library.services;
 
 import com.getjavajobs.library.dao.BookDao;
+import com.getjavajobs.library.dao.DaoFactory;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Book;
@@ -12,7 +13,7 @@ import java.util.List;
  * Created by Vlad on 21.08.2014.
  */
 public class BookService {
-    private BookDao bookDao;
+    private BookDao bookDao = DaoFactory.getBookDao();
     public void setBookDao(BookDao bookDao) {
         this.bookDao = bookDao;
     }
