@@ -9,7 +9,7 @@ import java.util.List;
 
 public class GenreDao implements GenericDao<Genre> {
 
-    private ConnectionHolder connectionHolder;
+    private ConnectionHolder connectionHolder = ConnectionHolder.getInstance();
 
     public void setConnectionHolder(ConnectionHolder connectionHolder) {
         this.connectionHolder = connectionHolder;
@@ -147,7 +147,7 @@ public class GenreDao implements GenericDao<Genre> {
         boolean success = true;
         List<Genre> genres = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM books;");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Genre;");
             while (resultSet.next()) {
                 genres.add(resultsSetToGenre(resultSet));
             }
