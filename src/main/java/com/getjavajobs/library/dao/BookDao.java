@@ -13,14 +13,12 @@ import java.util.List;
  */
 
 public class BookDao implements GenericDao<Book> {
-    private ConnectionHolder connectionHolder;
+
     private AuthorDao authorDao;
     private PublisherDao publisherDao;
     private GenreDao genreDao;
 
-    public void setConnectionHolder(ConnectionHolder connectionHolder) {
-        this.connectionHolder = connectionHolder;
-    }
+
 
     public void setGenreDao(GenreDao genreDao) {
         this.genreDao = genreDao;
@@ -35,7 +33,7 @@ public class BookDao implements GenericDao<Book> {
     }
 
     public Book add(Book book) throws DAOException {
-        Connection connection = connectionHolder.getConnection();
+        Connection connection = ConnectionHolder.getInstance().getConnection();
         boolean success = true;
         String command =
                 "INSERT INTO " +
@@ -62,14 +60,14 @@ public class BookDao implements GenericDao<Book> {
             } catch (SQLException e) {
                 throw new DAOException(e.getMessage(), e);
             } finally {
-                connectionHolder.releaseConnection(connection);
+                ConnectionHolder.getInstance().releaseConnection(connection);
             }
         }
         return book;
     }
 
     public Book get(int id) throws DAOException {
-        Connection connection = connectionHolder.getConnection();
+        Connection connection = ConnectionHolder.getInstance().getConnection();
         boolean success = true;
         try (PreparedStatement statement = connection.prepareStatement("select * from books where id=?;");) {
             statement.setInt(1, id);
@@ -77,9 +75,9 @@ public class BookDao implements GenericDao<Book> {
             if (!resultSet.next()) {
                 return null;
             }
-            connectionHolder.releaseConnection(connection);
+            ConnectionHolder.getInstance().releaseConnection(connection);
             Book book = resultsSetToBook(resultSet);
-            connection = connectionHolder.getConnection();
+            connection = ConnectionHolder.getInstance().getConnection();
             book.setGenreList(getGenreList(book.getId(),connection));
             return book;
         } catch (SQLException e) {
@@ -97,13 +95,13 @@ public class BookDao implements GenericDao<Book> {
             } catch (SQLException e) {
                 throw new DAOException(e.getMessage(), e);
             } finally {
-                connectionHolder.releaseConnection(connection);
+                ConnectionHolder.getInstance().releaseConnection(connection);
             }
         }
     }
 
     public Book update(Book book) throws DAOException {
-        Connection connection = connectionHolder.getConnection();
+        Connection connection = ConnectionHolder.getInstance().getConnection();
         boolean success = true;
         String command = "UPDATE books SET " +
                 "title=?, author_id=?, publishing_id=?, year=?, pagenumber=?, price=?" +
@@ -114,9 +112,9 @@ public class BookDao implements GenericDao<Book> {
             deleteGenreList(book.getId(),connection);
             statement.execute();
             addGenreList(book.getId(),connection,book.getGenreList());
-            connectionHolder.releaseConnection(connection);
+            ConnectionHolder.getInstance().releaseConnection(connection);
             Book returnedBook = get(book.getId());
-            connection = connectionHolder.getConnection();
+            connection = ConnectionHolder.getInstance().getConnection();
             if (returnedBook == null) {
                 throw new DAOException("IncorrectId");
             }
@@ -136,13 +134,13 @@ public class BookDao implements GenericDao<Book> {
             } catch (SQLException e) {
                 throw new DAOException(e.getMessage(), e);
             } finally {
-                connectionHolder.releaseConnection(connection);
+                ConnectionHolder.getInstance().releaseConnection(connection);
             }
         }
     }
 
     public void delete(int id) throws DAOException {
-        Connection connection = connectionHolder.getConnection();
+        Connection connection = ConnectionHolder.getInstance().getConnection();
         boolean success = true;
         try (PreparedStatement statement = connection.prepareStatement("delete from books where id=?;");) {
             statement.setInt(1, id);
@@ -163,22 +161,22 @@ public class BookDao implements GenericDao<Book> {
             } catch (SQLException e) {
                 throw new DAOException(e.getMessage(), e);
             } finally {
-                connectionHolder.releaseConnection(connection);
+                ConnectionHolder.getInstance().releaseConnection(connection);
             }
         }
 
     }
 
     public List<Book> getAll() throws DAOException {
-        Connection connection = connectionHolder.getConnection();
+        Connection connection = ConnectionHolder.getInstance().getConnection();
         boolean success = true;
         List<Book> books = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM books;");
             while (resultSet.next()) {
-                connectionHolder.releaseConnection(connection);
+                ConnectionHolder.getInstance().releaseConnection(connection);
                 Book book = resultsSetToBook(resultSet);
-                connection = connectionHolder.getConnection();
+                connection = ConnectionHolder.getInstance().getConnection();
                 book.setGenreList(getGenreList(book.getId(),connection));
                 books.add(book);
             }
@@ -197,7 +195,7 @@ public class BookDao implements GenericDao<Book> {
             } catch (SQLException e) {
                 throw new DAOException(e.getMessage(), e);
             } finally {
-                connectionHolder.releaseConnection(connection);
+                ConnectionHolder.getInstance().releaseConnection(connection);
             }
         }
 

@@ -1,8 +1,7 @@
 package com.getjavajobs.library.dao;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import com.getjavajobs.library.exceptions.DAOException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,8 +11,6 @@ import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import com.getjavajobs.library.exceptions.DAOException;
 
 /**
  * Класс - хранилище соединений.
@@ -67,7 +64,8 @@ public class ConnectionHolder {
 	// поток будет ожидать
 	// освобождения соединения.
 	public Connection getConnection() {
-		ConnectionRef connectionRef = this.busyConnections.get();
+
+        ConnectionRef connectionRef = this.busyConnections.get();
 		if (connectionRef != null) {
 			connectionRef.count++;
 			return connectionRef.connection;
