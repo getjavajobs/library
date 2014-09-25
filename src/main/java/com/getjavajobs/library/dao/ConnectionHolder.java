@@ -104,10 +104,8 @@ public class ConnectionHolder {
         }
     }
     private static class ConnectionRef {
-
         private Connection connection;
         private int count;
-
         public ConnectionRef(Connection connection) {
             this.connection = connection;
             this.count = 1;
