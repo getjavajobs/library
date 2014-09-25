@@ -90,23 +90,25 @@
                         <option selected value=<%=author.getId()%>>
                             <%=author.getName()+" "+author.getSurname()%>
                         </option>
-                    <%} else %>
+                    <%} else {%>
                         <option value=<%=author.getId()%>>
                             <%=author.getName()+" "+author.getSurname()%>
                         </option>
+                    <%}%>
                 <%}%>
             </select>
         <P>Издательство:
             <select name="publisher" required>
                 <% for(Publisher publisher: publishers) {
                     if(publisher.getId()==book.getPublisher().getId()) {%>
-                <option selected value=<%=publisher.getId()%>>
-                    <%=publisher.getName()%>
-                </option>
-                <%} else %>
-                <option value=<%=publisher.getId()%>>
-                    <%=publisher.getName()%>
-                </option>
+                        <option selected value=<%=publisher.getId()%>>
+                            <%=publisher.getName()%>
+                        </option>
+                    <%} else {%>
+                        <option value=<%=publisher.getId()%>>
+                            <%=publisher.getName()%>
+                        </option>
+                    <%}%>
                 <%}%>
             </select>
         <P>Жанры:

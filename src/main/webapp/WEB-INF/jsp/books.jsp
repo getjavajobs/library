@@ -48,8 +48,7 @@
                             List<Genre> genres = book.getGenreList();
                             for (int i=0;i<genres.size();i++){
                         %>
-                            <%=genres.get(i).getGenreType()%>
-                            <% if (i!=genres.size()-1){%> <%=", "%> <%}%>
+                            <%=genres.get(i).getGenreType()+((i!=genres.size()-1)?", ":"")%>
                         <%}%>
                     </td>
                     <td><%=book.getYear()%></td>
