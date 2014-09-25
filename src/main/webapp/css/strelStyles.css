@@ -1,0 +1,157 @@
+html,body, iframe, div {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 18px;
+    font-family: 'Philosopher', sans-serif;
+    background-color: #FFFADD;
+}
+
+.layout-center-wrapper {
+    width: 960px;
+    padding: 0 10px;
+    margin: 0 auto;
+}
+
+.layout-center-wrapper:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+/* --------------- HEADER --------------- */
+
+.header {
+    color: white;
+    background: #4C3126;
+}
+
+.header a:link,
+.header a:visited,
+.header a:hover,
+.header a:active {
+    color: white;
+}
+
+.header .logo {
+    float: left;
+    font-size: 36px;
+    font-family: 'Lobster', cursive;
+    margin-top: 15px;
+}
+
+/* ----- TOP MENU ----- */
+
+.header .top-menu {
+    float: right;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+}
+
+.header .top-menu li {
+    display: inline-block;
+}
+
+.header .top-menu a {
+    display: block;
+    padding: 30px 15px;
+    margin-right: -3px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.header .top-menu a:hover {
+    background: #AF8A7C;
+}
+
+.header .top-menu a.active {
+    padding-bottom: 25px;
+    border-bottom: 5px solid white;
+    opacity: 1.0;
+}
+
+.header .top-menu a.active:hover {
+    background: #4C3126;
+}
+
+/* --- FOOTER STYLES --- */
+
+.footer {
+    padding: 30px 0;
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #85994E;
+    color: #F2F1EC;
+}
+
+.footer .textblock {
+    text-align: center;
+    margin-bottom: 15px;
+    font-family: 'Lobster', cursive;
+}
+
+.footer .textblock.Emin {
+    text-align: center;
+    margin-bottom: 15px;
+    font-family: 'Philosopher', sans-serif;
+}
+
+.footer .photo-block {
+    float: left;
+    margin-right: 44px;
+}
+
+.footer .photo-block:last-child {
+    margin-right: 0px;
+}
+
+.footer .photos-icons-container {
+    padding: 10px 0;
+    margin: 0 auto;
+}
+
+.footer .photos-icons-container:after,
+.footer .Emin-block {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.footer .Emin-block {
+    margin: 0 auto;
+}
+
+.footer .photo {
+    display: inline-block;
+    text-align: center;
+    background: url('../images/sprite-photos.png') no-repeat 0 0;
+    width: 120px;
+    height: 120px;
+    opacity: 0.5;
+    border-radius: 50%;
+}
+
+.footer .photo-block div {
+    padding: 5px 0;
+    text-align: center;
+}
+
+.footer .photo:hover {
+    opacity: 1.0;
+}
+
+
+.photo-Emin{ background-position: 0 0; width: 120px; height: 120px; }
+.footer .photo.photo-Gleb{ background-position: 0 -125px; width: 120px; height: 120px; }
+.footer .photo.photo-Masha{ background-position: 0 -250px; width: 120px; height: 120px; }
+.footer .photo.photo-Pasha{ background-position: 0 -375px; width: 120px; height: 120px; }
+.footer .photo.photo-Roma{ background-position: 0 -500px; width: 120px; height: 120px; }
+.footer .photo.photo-Vital{ background-position: 0 -625px; width: 120px; height: 120px; }
+.footer .photo.photo-Vlad{ background-position: 0 -750px; width: 120px; height: 120px; }
+

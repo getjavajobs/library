@@ -5,12 +5,24 @@
 	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
 
-	<servlet>
-		<servlet-name>readers.jsp</servlet-name>
-		<jsp-file>/WEB-INF/jsp/readers.jsp</jsp-file>
-	</servlet>
+    <!-- for 'Publisher' -->
+    <servlet>
+        <servlet-name>publishers.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/publishers.jsp</jsp-file>
+    </servlet>
 
-	<servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>publishers.jsp</servlet-name>
+        <url-pattern>/publishers</url-pattern>
+    </servlet-mapping>
+    <!-- end of 'Publishers' -->
+
+    <servlet>
+        <servlet-name>readers.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/readers.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
 		<servlet-name>readers.jsp</servlet-name>
 		<url-pattern>/readers</url-pattern>
 	</servlet-mapping>
