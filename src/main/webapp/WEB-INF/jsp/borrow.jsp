@@ -42,6 +42,7 @@
         <td>
             <form action="return" method="post">
                 <input type="hidden" name="borrowID" value= <% borrow.getBorrowId(); %>/>
+                <input type="submit" value="Вернуть"/>
             </form>
         </td>
         <td>
