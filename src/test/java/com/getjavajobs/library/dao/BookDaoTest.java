@@ -57,9 +57,7 @@ public class BookDaoTest {
         executeDBScripts("src//test//fakedb.sql", statement);
         statement.close();
         connectionHolder.releaseConnection(connection);
-        bookDao.setAuthorDao(authorDao);
-        bookDao.setPublisherDao(publisherDao);
-        bookDao.setGenreDao(genreDao);
+
 
     }
     @After
