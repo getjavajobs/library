@@ -61,6 +61,13 @@
                             <input type="submit" value="Изменить">
                         </form>
                     </td>
+                    <td>
+                        <form action="changebookresult" method="post">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="bookid" value=<%=book.getId()%>>
+                            <input type="submit" value="Удалить">
+                        </form>
+                    </td>
                 </tr>
             <%}%>
         </tbody>

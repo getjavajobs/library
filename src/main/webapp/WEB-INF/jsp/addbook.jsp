@@ -7,6 +7,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.getjavajobs.library.model.Genre" %>
 <%@ page import="com.getjavajobs.library.exceptions.ServiceException" %>
+<%@ page import="com.getjavajobs.library.services.BookService" %>
+<%@ page import="com.getjavajobs.library.model.Book" %>
 <%--
   Created by IntelliJ IDEA.
   User: Vlad
@@ -41,40 +43,91 @@
         }
     %>
     <% if (bookId==null) {%>
-    private int id;
-    private String name;
-    private Author author;
-    private Publisher publisher;
-    private List<Genre> genreList;
-        private int year;
-        private int pagesNumber;
-        private double price;
-        <form method="post">
-            Название: <input name="name">
-
-            <select name="author" size="4">
+        <form method="post" action="changebookresult">
+            <input type="hidden" name="action" value="add">
+            <P>Название: <input name="name" required>
+            <P>Автор:
+            <select name="author" required>
                 <% for(Author author: authors) {%>
-                    <option value="<%=author.getName()+author.getSurname()%>"></option>
+                    <option value=<%=author.getId()%>>
+                        <%=author.getName()+" "+author.getSurname()%>
+                    </option>
                 <%}%>
             </select>
-
-            <select name="publisher" size="4">
+            <P>Издательство:
+            <select name="publisher" required>
                 <% for(Publisher publisher: publishers) {%>
-                    <option value="<%=publisher.getName()%>"></option>
+                    <option value=<%=publisher.getId()%>>
+                                    <%=publisher.getName()%>
+                    </option>
                 <%}%>
             </select>
-
-            <ul>
+            <P>Жанры:
+            <p><select multiple name="genres[]" required>
                 <% for(Genre genre:genres) {%>
-                    <li>
-                        <input type="checkbox" name="genres" value="<%=genre.getGenreType()%>">
-                    </li>
+                <option value=<%=genre.getId()%>>
+                    <%=genre.getGenreType()%>
+                </option>
                 <%}%>
-            </ul>
-            Год: <input name="year" type="text" pattern="^[ 0-9]+$">
-            Количество страниц: <input name="pagesNumber" type="text" pattern="^[ 0-9]+$">
-            Цена: <input name="price" type="text" pattern="\d+(\.\d{2})?">
+            </select>
+            <P>Год: <input name="year" type="text" pattern="^[ 0-9]+$" required>
+            <P>Количество страниц: <input name="pagesNumber" type="text" pattern="^[ 0-9]+$" required>
+            <P>Цена: <input name="price" type="text" pattern="\d+(\.\d{2})?" required>
+            <P><input type="submit" value="Добавить"><input type="reset">
         </form>
+    <%} else {
+        BookService bookService = new BookService();
+        Book book = bookService.get(bookId);
+    %>
+    <form method="post" action="changebookresult">
+        <input type="hidden" name="action" value="update">
+        <input type="hidden" name="bookid" value=<%=bookId%>>
+        <P>Название: <input name="name" value=<%=book.getName()%> required>
+        <P>Автор:
+            <select name="author" required>
+                <% for(Author author: authors) {
+                    if(author.getId()==book.getAuthor().getId()) {%>
+                        <option selected value=<%=author.getId()%>>
+                            <%=author.getName()+" "+author.getSurname()%>
+                        </option>
+                    <%} else %>
+                        <option value=<%=author.getId()%>>
+                            <%=author.getName()+" "+author.getSurname()%>
+                        </option>
+                <%}%>
+            </select>
+        <P>Издательство:
+            <select name="publisher" required>
+                <% for(Publisher publisher: publishers) {
+                    if(publisher.getId()==book.getPublisher().getId()) {%>
+                <option selected value=<%=publisher.getId()%>>
+                    <%=publisher.getName()%>
+                </option>
+                <%} else %>
+                <option value=<%=publisher.getId()%>>
+                    <%=publisher.getName()%>
+                </option>
+                <%}%>
+            </select>
+        <P>Жанры:
+        <p><select multiple name="genres[]" required>
+            <% for(Genre genre:genres) {
+                if(book.getGenreList().contains(genre)) {%>
+                    <option selected value=<%=genre.getId()%>>
+                        <%=genre.getGenreType()%>
+                    </option>
+                <%} else {%>
+                    <option value=<%=genre.getId()%>>
+                        <%=genre.getGenreType()%>
+                    </option>
+                <%}%>
+            <%}%>
+        </select>
+        <P>Год: <input value=<%=book.getYear()%> name="year" type="text" pattern="^[ 0-9]+$" required>
+        <P>Количество страниц: <input value=<%=book.getPagesNumber()%> name="pagesNumber" type="text" pattern="^[ 0-9]+$" required>
+        <P>Цена: <input value=<%=book.getPrice()%> name="price" type="text" pattern="\d+(\.\d{2})?" required>
+        <P><input type="submit" value="Изменить"><input type="reset">
+    </form>
     <%}%>
 </body>
 </html>
