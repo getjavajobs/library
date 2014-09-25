@@ -19,6 +19,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <%@ include file="head_content.jsp"%>
     <title>
         <% Integer bookId = request.getParameter("bookid")==null? null:new Integer(request.getParameter("bookid"));
         if (bookId!=null) {%>
@@ -29,6 +30,7 @@
     </title>
 </head>
 <body>
+    <%@ include file="strelHeader.jsp"%>
     <%
         List<Genre> genres = null;
         List<Author> authors = null;
@@ -43,7 +45,7 @@
         }
     %>
     <% if (bookId==null) {%>
-        <form method="post" action="changebookresult">
+        <form method="post" action="changebook">
             <input type="hidden" name="action" value="add">
             <P>Название: <input name="name" required>
             <P>Автор:
@@ -72,14 +74,14 @@
             </select>
             <P>Год: <input name="year" type="text" pattern="^[ 0-9]+$" required>
             <P>Количество страниц: <input name="pagesNumber" type="text" pattern="^[ 0-9]+$" required>
-            <P>Цена: <input name="price" type="text" pattern="\d+(\.\d{2})?" required>
+            <P>Цена: <input name="price" type="text" pattern="(^[0-9]*[1-9]+[0-9]*\.[0-9]*$)|(^[0-9]*\.[0-9]*[1-9]+[0-9]*$)|(^[0-9]*[1-9]+[0-9]*$)" required>
             <P><input type="submit" value="Добавить"><input type="reset">
         </form>
     <%} else {
         BookService bookService = new BookService();
         Book book = bookService.get(bookId);
     %>
-    <form method="post" action="changebookresult">
+    <form method="post" action="changebook">
         <input type="hidden" name="action" value="update">
         <input type="hidden" name="bookid" value=<%=bookId%>>
         <P>Название: <input name="name" value=<%=book.getName()%> required>
@@ -127,9 +129,10 @@
         </select>
         <P>Год: <input value=<%=book.getYear()%> name="year" type="text" pattern="^[ 0-9]+$" required>
         <P>Количество страниц: <input value=<%=book.getPagesNumber()%> name="pagesNumber" type="text" pattern="^[ 0-9]+$" required>
-        <P>Цена: <input value=<%=book.getPrice()%> name="price" type="text" pattern="\d+(\.\d{2})?" required>
+        <P>Цена: <input value=<%=book.getPrice()%> name="price" type="text" pattern="(^[0-9]*[1-9]+[0-9]*\.[0-9]*$)|(^[0-9]*\.[0-9]*[1-9]+[0-9]*$)|(^[0-9]*[1-9]+[0-9]*$)?" required>
         <P><input type="submit" value="Изменить"><input type="reset">
     </form>
     <%}%>
+    <%@ include file="strelFooter.jsp"%>
 </body>
 </html>
