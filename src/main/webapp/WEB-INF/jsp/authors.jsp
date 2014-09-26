@@ -2,6 +2,7 @@
 <%@page import="java.util.List" %>
 <%@page import="com.getjavajobs.library.services.AuthorService" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%-- --%>
 <html>
     <head>
         <title>Author</title>
