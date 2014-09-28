@@ -1,6 +1,7 @@
 package com.getjavajobs.library.services;
 
 import com.getjavajobs.library.dao.BorrowDao;
+import com.getjavajobs.library.dao.DaoFactory;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Borrow;
@@ -12,9 +13,7 @@ import java.util.List;
  * Created by Глеб on 23.08.2014.
  */
 public class BorrowService  {
-    private BorrowDao bd = new BorrowDao();
-
-
+    private BorrowDao bd = DaoFactory.getBorrowDao();
 
     public Borrow get(int id) throws ServiceException {
         try {
@@ -33,9 +32,7 @@ public class BorrowService  {
             return null;
         }
             try {
-
                 return bd.add(borrow);
-
             } catch (DAOException e) {
                 throw new ServiceException(e.getMessage(), e);
             }
@@ -51,12 +48,11 @@ public class BorrowService  {
     }
 
     public Borrow update(Borrow borrow) throws ServiceException {
-        if(new BorrowValidator(borrow).validate()) {
+        if(!new BorrowValidator(borrow).validate()) {
             return null;
         }
         try {
                 return bd.update(borrow);
-
         } catch (DAOException e){
             throw new ServiceException(e.getMessage(),e);
         }

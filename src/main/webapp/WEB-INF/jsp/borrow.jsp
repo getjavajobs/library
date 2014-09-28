@@ -8,7 +8,6 @@
 <head>
     <title> Borrow </title>
 </head>
-
 <body>
 <table>
     <tr>
@@ -20,12 +19,10 @@
         <th>Employee</th>
     </tr>
 
-
     <% BorrowService bs = new BorrowService();
         List<Borrow> listOfBorrow = bs.getAll();
         for (Borrow borrow : listOfBorrow) { %>
     <tbody>
-
     <tr>
         <td><%= borrow.getBorrowId() %>
         </td>
@@ -41,13 +38,13 @@
         </td>
         <td>
             <form action="return" method="post">
-                <input type="hidden" name="borrowID" value= <% borrow.getBorrowId(); %>/>
+                <input type="hidden" name="borrowID" value= <%= borrow.getBorrowId() %>>
                 <input type="submit" value="Вернуть"/>
             </form>
         </td>
         <td>
             <form action="prolong" method="post">
-                <input type="hidden" name="borrowID" value= <% borrow.getBorrowId(); %>/>
+                <input type="hidden" name="borrowID" value= <%= borrow.getBorrowId() %>>
                 <input type="submit" value="Продлить"/>
             </form>
         </td>

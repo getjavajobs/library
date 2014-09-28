@@ -59,7 +59,7 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
 
         try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM borrow WHERE Id = ?")) {
             ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery(); //ЗАЛЕЗТЬ В BOOK_DAO  И ВЫЗВАТЬ get ПО ID
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 borrow.setBorrowId(Integer.parseInt(rs.getString("id")));
                 borrow.setBook(bookDao.get(rs.getInt("books_id")));
@@ -106,8 +106,9 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
         Connection conn = ConnectionHolder.getInstance().getConnection();
         boolean commit = false;
         Borrow updated = null;
-        try (PreparedStatement ps = conn.prepareStatement("UPDATE Borrow SET date_of_return = ?")) {
-            ps.setDate(1, ((Date) borrow.getDateOfReturn()));
+        try (PreparedStatement ps = conn.prepareStatement("UPDATE borrow SET date_of_return = ? WHERE id = ?")) {
+            ps.setDate(1, new java.sql.Date(borrow.getDateOfReturn().getTime()));
+            ps.setInt(2, borrow.getBorrowId());
             ps.executeUpdate();
             updated = get(borrow.getBorrowId());
             if(!conn.getAutoCommit()) {
