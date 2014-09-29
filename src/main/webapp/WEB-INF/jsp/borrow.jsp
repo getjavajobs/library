@@ -1,7 +1,6 @@
 <!doctype html/>
 <%@ page import="com.getjavajobs.library.model.Borrow" %>
 <%@ page import="com.getjavajobs.library.services.BorrowService" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -9,7 +8,12 @@
     <title> Borrow </title>
 </head>
 <body>
-<table>
+    <form action="addborrow" method="post" align = "center">
+        <input type="submit" value="Добавить"/>
+    </form>
+    
+
+<table align = "center">
     <tr>
         <th>BorrowID</th>
         <th>Book</th>
@@ -37,7 +41,8 @@
         <td><%= borrow.getEmployee().getSurname()%>
         </td>
         <td>
-            <form action="return" method="post">
+            <form action="updateborrow" method="post">
+                <input type="hidden" name = "toDel" value="del">
                 <input type="hidden" name="borrowID" value= <%= borrow.getBorrowId() %>>
                 <input type="submit" value="Вернуть"/>
             </form>
@@ -53,10 +58,9 @@
     <%}%>
 
 
-    Borrow list<br/>
+   
 
 
-    <input type="button" value="ADD" onClick="document.location='url'">
 
 </table>
 
