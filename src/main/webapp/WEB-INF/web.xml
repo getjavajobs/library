@@ -15,4 +15,15 @@
 		<url-pattern>/readers</url-pattern>
 	</servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>authors.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/authors.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>authors.jsp</servlet-name>
+        <url-pattern>/WEB-INF/jsp/authors.jsp</url-pattern>
+    </servlet-mapping>
+
 </web-app>
