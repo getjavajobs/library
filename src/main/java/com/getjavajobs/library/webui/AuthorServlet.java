@@ -1,5 +1,6 @@
 package com.getjavajobs.library.webui;
 
+import com.getjavajobs.library.dao.AuthorDao;
 import com.getjavajobs.library.dao.DaoFactory;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Author;
@@ -11,12 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Виталий on 29.09.2014.
  */
 public class AuthorServlet extends HttpServlet {
 
+    public final AuthorService authorService = new AuthorService(new AuthorDao());
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
@@ -47,5 +51,25 @@ public class AuthorServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doPost(req, resp);
+    }
+
+    public List<Author> getAll() {
+        List<Author> authors= new ArrayList<>();
+        try {
+            authors= authorService.getAll();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+        return authors;
+    }
+
+    public Author getById(int id){
+        Author author=null;
+        try {
+          author = authorService.get(id);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+        return author;
     }
 }
