@@ -4,7 +4,16 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
-
+    <servlet>
+        <servlet-name>borrow.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/borrow.jsp</jsp-file>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>borrow.jsp</servlet-name>
+        <url-pattern>/borrows/*</url-pattern>
+    </servlet-mapping>
+    
 	<servlet>
 		<servlet-name>readers.jsp</servlet-name>
 		<jsp-file>/WEB-INF/jsp/readers.jsp</jsp-file>
@@ -15,15 +24,34 @@
 		<url-pattern>/readers</url-pattern>
 	</servlet-mapping>
 
-
     <servlet>
-        <servlet-name>authors.jsp</servlet-name>
-        <jsp-file>/WEB-INF/jsp/authors.jsp</jsp-file>
+        <servlet-name>books.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/books.jsp</jsp-file>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>authors.jsp</servlet-name>
-        <url-pattern>/WEB-INF/jsp/authors.jsp</url-pattern>
+        <servlet-name>books.jsp</servlet-name>
+        <url-pattern>/library/books</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addbook.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/addbook.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>addbook.jsp</servlet-name>
+        <url-pattern>/library/addbook</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>changebooksevlet</servlet-name>
+        <servlet-class>com.getjavajobs.library.webui.ChangeBookServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>changebooksevlet</servlet-name>
+        <url-pattern>/library/changebook</url-pattern>
     </servlet-mapping>
 
 </web-app>

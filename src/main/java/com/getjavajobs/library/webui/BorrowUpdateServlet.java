@@ -21,6 +21,17 @@ public class BorrowUpdateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws  ServletException, IOException {
         BorrowService borrowService = new BorrowService();
         int borrowID = Integer.parseInt(req.getParameter("borrowID"));
+
+        if(req.getParameter("toDel").equals("del")){
+            try {
+                borrowService.delete(borrowID);
+                System.out.println(req.getParameter("Удалена выдача с ID = "+ borrowID));
+            } catch (ServiceException e) {
+                e.printStackTrace();
+            }
+            resp.sendRedirect("borrows");
+            return;
+        }
         Date newDate = null;
         try {
             newDate = new SimpleDateFormat("yyyy-MM-dd").parse(req.getParameter("dateOfBorrow"));

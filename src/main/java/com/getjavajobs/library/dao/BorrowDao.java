@@ -15,16 +15,17 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
 
     public Borrow add(Borrow borrow) throws DAOException {
         Connection conn = ConnectionHolder.getInstance().getConnection();
-        Borrow added = null;
+        Borrow added = borrow;
         boolean commit = false;
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO BORROW(books_id, date_of_borrow," +
                 " date_of_return, readers_id, employee_id) VALUES (?,?,?,?,?)")) {
             ps.setInt(1, borrow.getBook().getId());
-            ps.setDate(2, (Date) borrow.getDateOfBorrow());
-            ps.setDate(3, (Date) borrow.getDateOfReturn());
+            ps.setDate(2, new Date(borrow.getDateOfBorrow().getTime()));
+            ps.setDate(3, new Date(borrow.getDateOfReturn().getTime()));
             ps.setInt(4, borrow.getReader().getReaderId());
             ps.setInt(5, borrow.getEmployee().getId());
             ps.executeUpdate();
+            System.out.println("HFIFHOIFHOIFH");
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery("SELECT last_insert_id()");
             rs.next();
@@ -35,11 +36,8 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
             }
             commit = true;
         } catch (SQLException e) {
-
             throw new DAOException(e.getMessage(), e);
-
         } finally {
-
             try {
                 if (!commit && !conn.getAutoCommit()) {
                     conn.rollback();

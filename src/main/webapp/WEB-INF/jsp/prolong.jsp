@@ -11,14 +11,12 @@
 <body>
 <% BorrowService borrowService = new BorrowService();
     Borrow borrow = borrowService.get(Integer.valueOf(request.getParameter("borrowID")));
-    Date oldDate = borrow.getDateOfReturn();
-
 %>
 
 <form action = "updateborrow" method = "post">
+    <input type = "hidden" name = "toDel" value = "prol">
     <input type = "hidden" name = "borrowID" value = <%=borrow.getBorrowId()%>>
     <input type ="date" name = "dateOfBorrow" value="<%=borrow.getDateOfReturn()%>" min = "<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date())%>" />
-
     <input type = "submit" value="Обновить">
 
 </form>
