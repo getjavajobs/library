@@ -8,9 +8,9 @@
     </head>
     <body>
         <table>
-            <jsp:useBean id="authorService" class="com.getjavajobs.library.services.AuthorService" scope="session" />
+            <jsp:useBean id="authorServlet" class="com.getjavajobs.library.webui.AuthorServlet" scope="session" />
             <c:set var="authorId" scope ="page" value="${Integer.parseInt(requestScope.authorId)}"/>
-            <c:set var="author" value="${authorService.get(authorId)}" scope ="page" />
+            <c:set var="author" value="${authorServlet.get(authorId)}" scope ="page" />
             <tr>
                 <th>
                     NAME
