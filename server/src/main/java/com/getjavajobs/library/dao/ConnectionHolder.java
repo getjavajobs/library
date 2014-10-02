@@ -1,16 +1,20 @@
 package com.getjavajobs.library.dao;
 
-import com.getjavajobs.library.exceptions.DAOException;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayDeque;
-import java.util.Properties;
 import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import com.getjavajobs.library.exceptions.DAOException;
 
 /**
  * Класс - хранилище соединений.
@@ -18,9 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionHolder {
 
     private static ConnectionHolder instance;
-    private String url;
-    private String username;
-    private String password;
+
     private Queue<Connection> connectionStore;
     private Lock commonLock;
     private Condition commonCondition;
@@ -28,12 +30,6 @@ public class ConnectionHolder {
 
     private ConnectionHolder() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Properties props = new Properties();
-            props.load(this.getClass().getClassLoader().getResourceAsStream("jdbc.properties"));
-            this.url = props.getProperty("jdbc.url");
-            this.username = props.getProperty("jdbc.username");
-            this.password = props.getProperty("jdbc.password");
             this.commonLock = new ReentrantLock();
             this.commonCondition = this.commonLock.newCondition();
             this.busyConnections = new ThreadLocal<>();
@@ -46,8 +42,12 @@ public class ConnectionHolder {
         }
     }
 
-    private Connection createConnection() throws SQLException {
-        return DriverManager.getConnection(url, username, password);
+    private Connection createConnection() throws SQLException, NamingException {
+//    	Context initContext = new InitialContext();
+//    	Context envContext  = (Context)initContext.lookup("java:/comp/env");
+//    	DataSource ds = (DataSource)envContext.lookup("jdbc/library");
+//    	return ds.getConnection();
+    	return DriverManager.getConnection("jdbc:mysql://localhost:3306/Library", "root", "root");
     }
 
     // Получить экземпляр класса ConnectionHolder.
