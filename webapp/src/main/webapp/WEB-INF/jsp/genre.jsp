@@ -1,59 +1,50 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="com.getjavajobs.library.model.Genre"%>
-<%@page import="java.util.List" %>
-<%@page import="com.getjavajobs.library.services.GenreService" %>
-<!DOCTYPE html>
+<%@ page import="java.util.List" %>
+<%@ page import="com.getjavajobs.library.model.Genre" %>
+<%@ page import="com.getjavajobs.library.services.GenreService" %>
+<%@ page import="com.getjavajobs.library.exceptions.ServiceException" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        
-        <!-- copied and changed from publishers.jsp !--> 
-             <%
-            List<Genre> genreList = genreServlet.getAllGenre(); 
-            int num = 0;
-        %>
-         <h1>Genre table</h1>
+<head>
+    <%@ include file="head_content.jsp"%>
+    <title>Жанры</title>
+</head>
+<body>
+    <%@ include file="strelHeader.jsp"%>
 
-        <table>
+    <%
+        GenreService genreService = new GenreService();
+        List<Genre> genres = null;
+        try {
+            genres = genreService.getAll();
+        } catch (ServiceException e) {}
+    %>
+    <table border="1px" frame="1px" width="100%">
+        <thead>
             <tr>
-                <th>ID</th>
-                <th>Genre name</th>                  
+                <td>Название</td>                
             </tr>
-
-            <%
-                if (genreList != null) {
-                    for (Genre anotherGenre : genreList) { %>
-
-            <tr>
-                <td><%=++num%></td>
-                <td><%=anotherGenre.getGenreType()%></td>               
-
-                <%-- Buttons for 'update' and 'delete' --%>
-                <td>
-                    <form action="publishersChangingPage.jsp" method="POST">
-                        <input type="hidden" name="id" value="<%=anotherGenre.getId()%>">
-                        <input type="hidden" name="commandType" value="update">
-                        <input type="submit" value="Update">
-                    </form>
-                </td>
-                <td>
-                    <form action="publishersChangingPage.jsp" method="POST">
-                        <input type="hidden" name="id" value="<%=anotherGenre.getId()%>">
-                        <input type="hidden" name="commandType" value="delete">
-                        <input type="submit" value="Delete">
-                    </form>
-                </td>
-            </tr>
-
-            <%        }
-                }
-            %>
-
-        </table>
-
-        
-    </body>
+        </thead>
+        <tbody>
+            <%for (Genre genre : genres){%>
+                <tr>
+                    <td><%=genre.getGenreType()%></td>                    
+                    <td>
+                        <input type="button" value="Изменить" onClick="document.location='changegenre.jsp?genreid=<%=genre.getId() %>'">                        
+                    </td>
+                    <td>
+                        <form action="genresevlet" method="post">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="genreid" value=<%=genre.getId()%>>
+                            <input type="submit" value="Удалить">
+                        </form>
+                    </td>
+                </tr>
+            <%}%>
+        </tbody>
+    </table>
+    <input type="button" value="Добавить" onClick="document.location='changegenre.jsp'">
+    <%@ include file="strelFooter.jsp"%>
+</body>
 </html>
