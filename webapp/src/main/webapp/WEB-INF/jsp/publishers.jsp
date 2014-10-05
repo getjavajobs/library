@@ -1,37 +1,32 @@
 <%@ page import="com.getjavajobs.library.model.Publisher" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.getjavajobs.library.exceptions.ServiceException" %>
+<%@ page import="com.getjavajobs.library.services.PublisherService" %>
+<%@ page import="com.getjavajobs.library.dao.PublisherDao" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
         <title>Publishers page</title>
+        <%@ include file="head_content.jsp"%>
     </head>
     <body>
 
-        <jsp:useBean id="publishersServlet" class="com.getjavajobs.library.webui.PublisherServlet" scope="session" />
-
-        <script type="text/javascript">
-
-            function deletePublisher(idValue) {
-                <%
-
-                    request.setAttribute("commandType", "delete");
-                    publishersServlet.service(request,response);
-                %>
-            }
-
-        </script>
-
+        <%@ include file="strelHeader.jsp"%>
 
         <%
-            List<Publisher> publishersList = publishersServlet.getAllPublishers();
+            PublisherService publisherService = new PublisherService(new PublisherDao());
+            List<Publisher> publishersList = null;
             int num = 0;
+            try {
+                publishersList = publisherService.getAll();
+            } catch (ServiceException e) {
+                // redirect to 'error' page?..
+            }
         %>
-    
-        <%@ include file="/html/strelHeader.html"%>
 
         <h1>Publishers table</h1>
 
-        <table>
+        <table border="1px solid black">
             <tr>
                 <th>ID</th>
                 <th>Publisher name</th>
@@ -41,11 +36,8 @@
                 <th>Site address</th>
                 <th colspan="2">Actions</th>
             </tr>
-
-            <%
-                if (publishersList != null) {
-                    for (Publisher anotherPublisher : publishersList) { %>
-
+            <% if (publishersList != null) {
+                for (Publisher anotherPublisher: publishersList) { %>
             <tr>
                 <td><%=++num%></td>
                 <td><%=anotherPublisher.getName()%></td>
@@ -56,37 +48,30 @@
 
                 <%-- Buttons for 'update' and 'delete' --%>
                 <td>
-                    <form action="publishersChangingPage.jsp" method="POST">
-                        <input type="hidden" name="id" value="<%=anotherPublisher.getId()%>">
-                        <input type="hidden" name="commandType" value="update">
+                    <form action="changePublishers" method="post">
+                        <input type="hidden" name="publisherId" value=<%=anotherPublisher.getId()%>>
                         <input type="submit" value="Update">
                     </form>
                 </td>
                 <td>
-                    <form action="publishersChangingPage.jsp" method="POST">
-                        <input type="hidden" name="id" value="<%=anotherPublisher.getId()%>">
+                    <form action="publisherChange" method="post">
                         <input type="hidden" name="commandType" value="delete">
+                        <input type="hidden" name="publisherId" value=<%=anotherPublisher.getId()%>>
                         <input type="submit" value="Delete">
                     </form>
                 </td>
             </tr>
-
-            <%        }
-                }
+            <%    }
+            }
             %>
-
         </table>
 
         <br>
 
-        <form action="publishersChangingPage.jsp">
-            <input type="hidden" name="id" value="<%=0%>">
-            <input type="hidden" name="commandType" value="add">
-            <input type="submit" value="Add publisher">
-        </form>
+        <input type="button" value="Add new publishing" onClick="document.location='changePublishers'">
 
 
-        <%@ include file="/html/strelFooter.html"%>
+        <%@ include file="strelFooter.jsp"%>
 
     </body>
 </html>

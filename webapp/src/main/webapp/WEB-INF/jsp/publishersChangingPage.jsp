@@ -1,36 +1,55 @@
 <%@ page import="com.getjavajobs.library.model.Publisher" %>
+<%@ page import="com.getjavajobs.library.services.PublisherService" %>
+<%@ page import="com.getjavajobs.library.dao.PublisherDao" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title>Publishers changing page</title>
+        <%@ include file="head_content.jsp"%>
+        <title>
+            <%
+                String publisherIdString = request.getParameter("publisherId");
+                Integer publisherId = (publisherIdString == null? null: new Integer(publisherIdString));
+                if (publisherId != null) {%>
+                    Update publishing
+            <%} else {%>
+                    Add new publishing
+            <%}%>
+        </title>
     </head>
     <body>
 
-        <jsp:useBean id="publishersServlet" class="com.getjavajobs.library.webui.PublisherServlet" scope="session" />
-
-        <!-- вот тут надо получить переменную Publisher из сервлета - но мне кажется, я неправ -->
         <%
-            int id = Integer.parseInt(request.getParameter("id"));
-            Publisher publisher = publishersServlet.getById(id);
+            PublisherService publisherService = new PublisherService(new PublisherDao());
+            Publisher publisher = (publisherId == null)? null: publisherService.get(publisherId);
         %>
 
-        <form>
+        <%@ include file="strelHeader.jsp"%>
 
-            <!-- а тут в каждом - надо проверять переданный извне id-шник -->
-            Publisher name <input type="text" value="<%=(id == 0)? publisher.getName()%>"> <br>
-            City <input type="text" value="<%=(id == 0)? publisher.getCity()%>"> <br>
-            Phone number <input type="text" value="<%= (id == 0)? publisher.getPhoneNumber()%>"> <br>
-            Email <input type="text" value="<%=(id == 0)? publisher.getEmail()%>"> <br>
-            Site address <input type="text" value="<%=(id == 0)? publisher.getSiteAddress()%>"> <br>
-
-            <%-- В зависимости от ID-шника -> разная кнопка --%>
-            <% if (id == 0) {%>
-                <input type="button" value="Add">
-            <% } else {%>
-                <input type="button" value="Update information">
-            <%} %>
-
+        <form method="post" action="publisherChange">
+            <input type="hidden" name="commandType" value="<%=(publisherId == null)? "add": "update"%>">
+            <input type="hidden" name="publisherId" value="<%=publisherId%>">
+            <p>
+                Publisher name: <input type="text" name="publisherName" required value="<%=(publisherId == null)? "": publisher.getName()%>">
+            </p>
+            <p>
+                City: <input type="text" name="publisherCity" required value="<%=(publisherId == null)? "": publisher.getCity()%>">
+            </p>
+            <p>
+                Phone number: <input type="text" name="publisherPhoneNumber" required value="<%=(publisherId == null)? "": publisher.getPhoneNumber()%>">
+            </p>
+            <p>
+                Email: <input type="text" name="publisherEmail" required value="<%=(publisherId == null)? "": publisher.getEmail()%>">
+            </p>
+            <p>
+                Site address: <input type="text" name="publisherSiteAddress" required value="<%=(publisherId == null)? "": publisher.getSiteAddress()%>">
+            </p>
+            <p>
+                <input type="submit" value="<%=(publisherId == null)? "Add": "Update"%>">
+                <input type="reset">
+            </p>
         </form>
+
+        <%@ include file="strelFooter.jsp"%>
 
     </body>
 </html>

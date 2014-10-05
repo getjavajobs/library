@@ -96,4 +96,37 @@
         <url-pattern>/genresevlet</url-pattern>
     </servlet-mapping>
 
+    <!-- Publishers servlets -->
+    <servlet>
+        <servlet-name>publishers.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/publishers.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>publishersChangingPage.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/publishersChangingPage.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>PushlisherServlet</servlet-name>
+        <servlet-class>com.getjavajobs.library.webui.PublisherServlet</servlet-class>
+    </servlet>
+
+    <!-- Publishers mapping -->
+    <servlet-mapping>
+        <servlet-name>publishers.jsp</servlet-name>
+        <url-pattern>/publishers</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>publishersChangingPage.jsp</servlet-name>
+        <url-pattern>/changePublishers</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PushlisherServlet</servlet-name>
+        <url-pattern>/publisherChange</url-pattern>
+    </servlet-mapping>
+
+
 </web-app>
