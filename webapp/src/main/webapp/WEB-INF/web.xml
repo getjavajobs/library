@@ -4,6 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
+
     <servlet>
         <servlet-name>borrow.jsp</servlet-name>
         <jsp-file>/WEB-INF/jsp/borrow.jsp</jsp-file>
@@ -23,17 +24,6 @@
 		<servlet-name>readers.jsp</servlet-name>
 		<url-pattern>/readers</url-pattern>
 	</servlet-mapping>
-
-    <servlet>
-        <servlet-name>authors.jsp</servlet-name>
-        <jsp-file>/WEB-INF/jsp/authors.jsp</jsp-file>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>authors.jsp</servlet-name>
-        <url-pattern>/authors</url-pattern>
-    </servlet-mapping>
-
 
     <servlet>
         <servlet-name>books.jsp</servlet-name>
@@ -126,6 +116,40 @@
     <servlet-mapping>
         <servlet-name>PushlisherServlet</servlet-name>
         <url-pattern>/publisherChange</url-pattern>
+    </servlet-mapping>
+
+
+
+
+    <servlet>
+        <servlet-name>authors.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/authors.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>authorAdd.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/authorAdd.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AuthorServlet</servlet-name>
+        <servlet-class>com.getjavajobs.library.webui.AuthorServlet</servlet-class>
+    </servlet>
+
+    <!-- Publishers mapping -->
+    <servlet-mapping>
+        <servlet-name>authors.jsp</servlet-name>
+        <url-pattern>/authors</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>authorAdd.jsp</servlet-name>
+        <url-pattern>/authorAdd</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AuthorServlet</servlet-name>
+        <url-pattern>/authorServlet</url-pattern>
     </servlet-mapping>
 
 
