@@ -25,6 +25,17 @@
 	</servlet-mapping>
 
     <servlet>
+        <servlet-name>authors.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/authors.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>authors.jsp</servlet-name>
+        <url-pattern>/authors</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
         <servlet-name>books.jsp</servlet-name>
         <jsp-file>/WEB-INF/jsp/books.jsp</jsp-file>
     </servlet>
@@ -52,6 +63,37 @@
     <servlet-mapping>
         <servlet-name>changebooksevlet</servlet-name>
         <url-pattern>/library/changebook</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>genre.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/genre.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>genre.jsp</servlet-name>
+        <url-pattern>/genre</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>changegenre.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/changegenre.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>changegenre.jsp</servlet-name>
+        <url-pattern>/changegenre.jsp</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>genresevlet</servlet-name>
+        <servlet-class>com.getjavajobs.library.webui.GenreServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>genresevlet</servlet-name>
+        <url-pattern>/genresevlet</url-pattern>
     </servlet-mapping>
 
 </web-app>

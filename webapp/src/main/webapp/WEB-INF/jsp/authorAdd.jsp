@@ -1,17 +1,16 @@
-<%@page import="com.getjavajobs.library.model.Author"%>
-<%@page import="java.util.List" %>
-<%@page import="com.getjavajobs.library.services.AuthorService" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import = "com.getjavajobs.library.model.Author" %>
+<%@ page import ="java.util.List" %>
+<%@ page import ="com.getjavajobs.library.services.AuthorService" %>
+
 <html>
     <head>
         <title>Author</title>
     </head>
     <body>
-        AUTHORS<br/>
         <table>
-            <jsp:useBean id="authorService" class="com.getjavajobs.library.services.AuthorService" scope="page" />
+            <jsp:useBean id="authorServlet" class="com.getjavajobs.library.webui.AuthorServlet" scope="session" />
             <c:set var="authorId" scope ="page" value="${Integer.parseInt(requestScope.authorId)}"/>
-            <c:set var="author" value="${authorService.get(authorId)}" scope ="page" />
+            <c:set var="author" value="${authorServlet.get(authorId)}" scope ="page" />
             <tr>
                 <th>
                     NAME
@@ -38,7 +37,7 @@
                           <input type="text" name="authorSurname" value="${(authorId>0)? author.getSurname():""}"/> 
                         </td>
                         <td>
-                            <input type="text" name="authorPatronimic" value="${(authorId>0)? author.getPatronimic():""}"/> 
+                            <input type="text" name="authorPatronimic" value="${(authorId>0)? author.getPatronymic():""}"/>
                         </td>
                         <td>
                             <input type="text" name="authorBirthDay" value="${(authorId>0)? author.getBirthDate():""}"/> 
@@ -48,12 +47,7 @@
                         </td>
                     </tr>
                 </table>
-                <c:if test="$authorId <1 ">
-                    <input type="submit" value="????????" >
-                    <c:if/>
-                    <c:if test="$authorId > 0">
-                        <input type="text" value="${author.getname()}"> 
-                        <c:if/>
-
-                    </body>
-                </html>
+                    <input type="submit" value="${(authorId>0)?"update":"add"}" >
+                </c:if>
+            </body>
+        </html>

@@ -1,17 +1,16 @@
-<%@page import="com.getjavajobs.library.model.Author"%>
-<%@page import="java.util.List" %>
-<%@page import="com.getjavajobs.library.services.AuthorService" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%--       --%>
+<%@ page import="com.getjavajobs.library.services.AuthorService" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <html>
     <head>
         <title>Author</title>
     </head>
     <body>
-        AUTHORS<br/>
+
+       <jsp:useBean id="authorService" class="com.getjavajobs.library.services.AuthorService" scope="session"/>
+        <c:set var="authors" value="${authorService.getAll()}" />
+
         <table>
-            <jsp:useBean id="authorService" class="com.getjavajobs.library.services.AuthorService" scope="page" />
-            <c:set var="authors" value="${authorService.getAll()}" />
             <tr>
                 <th>
                     NAME
@@ -49,14 +48,16 @@
                         ${author.getBirthPlace()}
                     </td>
                     <td>
-                        <form method="post" action="'main.webapp.WEB-INF.jsp.authorsADD'"/>
+                        <form method="post" action="authorsAdd.jsp"/>
                         <input type="hidden" name ="authorId" value="${author.getId()}" />
-                        <input type="submit" value="change" />
+                        <input type="hidden" name ="action" value="update" />
+                        <input type="submit" value="update" />
                         </form>
                     </td>
                     <td>
-                        <form/>
+                        <form method="post" action="authorsAdd.jsp"/>
                         <input type="hidden" name ="authorId" value="${authorService.delete(author.getId())}" />
+                        <input type="hidden" name ="action" value="delete" />
                         <input type="submit" value="delete" />
                         
                         </form>
@@ -64,8 +65,9 @@
                 </tr>
             </c:forEach>
         </table>
-        <form method="post" action="'main.webapp.WEB-INF.jsp.authorsAdd'"/>
+        <form method="post" action="authorsAdd.jsp"/>
         <input type="hidden" name ="authorId" value="0" />
+        <input type="hidden" name ="action" value="add" />
         <input type="button" value="add" />
     </form>
 </body>
