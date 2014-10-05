@@ -1,53 +1,50 @@
-<%@ page import = "com.getjavajobs.library.model.Author" %>
-<%@ page import ="java.util.List" %>
-<%@ page import ="com.getjavajobs.library.services.AuthorService" %>
+<%@ page import="com.getjavajobs.library.model.Author" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.getjavajobs.library.services.AuthorService" %>
 
 <html>
-    <head>
-        <title>Author</title>
-    </head>
-    <body>
-        <table>
-            <jsp:useBean id="authorServlet" class="com.getjavajobs.library.webui.AuthorServlet" scope="session" />
-            <c:set var="authorId" scope ="page" value="${Integer.parseInt(requestScope.authorId)}"/>
-            <c:set var="author" value="${authorServlet.get(authorId)}" scope ="page" />
-            <tr>
-                <th>
-                    NAME
-                <th>
-                <th>
-                    SURNAME
-                <th>
-                <th>
-                    PATRONIMIC
-                <th>
-                <th>
-                    BIRTH_DATE
-                <th>
-                <th>
-                    BIRTH_PLACE
-                <th>
+<head>
+    <%@ include file="head_content.jsp" %>
+</head>
+<body>
+<table>
+    <jsp:useBean id="authorServlet" class="com.getjavajobs.library.webui.AuthorServlet" scope="session"/>
+    <c:set var="authorId" scope="page" value="${Integer.parseInt(requestScope.authorId)}"/>
+    <c:set var="author" value="${authorServlet.get(authorId)}" scope="page"/>
 
-            <tr>
-            <tr>
-                <td>
-                            <input type="text" name="authorName" value="${(authorId>0)? author.getName():""}"/> 
-                        </td>
-                        <td>
-                          <input type="text" name="authorSurname" value="${(authorId>0)? author.getSurname():""}"/> 
-                        </td>
-                        <td>
-                            <input type="text" name="authorPatronimic" value="${(authorId>0)? author.getPatronymic():""}"/>
-                        </td>
-                        <td>
-                            <input type="text" name="authorBirthDay" value="${(authorId>0)? author.getBirthDate():""}"/> 
-                        </td>
-                        <td>
-                            <input type="text" name="authorBirthDay" value="${(authorId>0)? author.getBirthPlace():""}"/> 
-                        </td>
-                    </tr>
-                </table>
-                    <input type="submit" value="${(authorId>0)?"update":"add"}" >
-                </c:if>
-            </body>
-        </html>
+    <%@ include file="strelHeader.jsp" %>
+
+    <form method="post" action="AuthorChange">
+        <input type="hidden" name="commandType" value="${(authorId==null)? "add": "update"}">
+        <input type="hidden" name="authorId" value="${authorId}">
+
+        <p>
+            <input type="text" name="authorName" required value="${(authorId>0)? author.getName():""}"/>
+        </p>
+
+        <p>
+            <input type="text" name="authorSurname" required value="${(authorId>0)? author.getSurname():""}"/>
+        </p>
+
+        <p>
+            <input type="text" name="authorPatronimic" required value="${(authorId>0)? author.getPatronymic():""}"/>
+        </p>
+
+        <p>
+            <input type="text" name="authorBirthDay" required value="${(authorId>0)? author.getBirthDate():""}"/>
+        </p>
+
+        <p>
+            <input type="text" name="authorBirthDay" required value="${(authorId>0)? author.getBirthPlace():""}"/>
+        </p>
+
+        <p>
+            <input type="submit" value="${(authorId== null)? "Add": "Update"}>">
+            <input type="reset">
+        </p>
+    </form>
+
+    <%@ include file="strelFooter.jsp" %>
+
+</body>
+</html>

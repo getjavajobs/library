@@ -21,52 +21,64 @@ import java.util.List;
 public class AuthorServlet extends HttpServlet {
 
     public final AuthorService authorService = new AuthorService(new AuthorDao());
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String action = req.getParameter("action");
-            AuthorService authorService= new AuthorService(DaoFactory.getAuthorDao());
-            if ("add".equals(action) || "update".equals(action)) {
-                Author author = new Author();
-                author.setName(req.getParameter("authorName"));
-                author.setSurname(req.getParameter("authorSurname"));
-                author.setPatronymic(req.getParameter("authorPatronimic"));
-                author.setBirthDate(Date.valueOf(req.getParameter("birthDate")));
-                author.setBirthPlace(req.getParameter("birthPlace"));
-                if ("add".equals(action)) {
-                    authorService.add(author);
-                } else {
-                   author.setId(Integer.parseInt(req.getParameter("authorId")));
-                   authorService.update(author);
+            String commandType = request.getParameter("commandType");
+            switch (commandType) {
+                case "add":
+                case "update": {
+                    Author author = new Author();
+                    author.setName(request.getParameter("authorName"));
+                    author.setSurname(request.getParameter("authorSurname"));
+                    author.setPatronymic(request.getParameter("authorPatronimic"));
+                    author.setBirthDate(Date.valueOf(request.getParameter("birthDate")));
+                    author.setBirthPlace(request.getParameter("birthPlace"));
+
+                    if (commandType.equals("add")) {
+                        authorService.add(author);
+                    } else {
+                        int authorId = Integer.valueOf(request.getParameter("authorId"));
+                        author.setId(authorId);
+                        authorService.update(author);
+                    }
+                    response.sendRedirect("authors");
                 }
-            } else if ("delete".equals(action)) {
-                authorService.delete(Integer.valueOf(req.getParameter("authorId")));
+                break;
+                default: {
+                    int authorId = Integer.valueOf(request.getParameter("authorId"));
+                    authorService.delete(authorId);
+                    response.sendRedirect("authors");
+                    break;
+                }
             }
-            resp.sendRedirect("author");
-        } catch (ServiceException e) {
-            resp.sendRedirect("error");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.sendRedirect("error");
         }
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+            ServletException, IOException {
+        doPost(request, response);
     }
 
     public List<Author> getAll() {
-        List<Author> authors= new ArrayList<>();
+        List<Author> authors = new ArrayList<>();
         try {
-            authors= authorService.getAll();
+            authors = authorService.getAll();
         } catch (ServiceException e) {
             e.printStackTrace();
         }
         return authors;
     }
 
-    public Author getById(int id){
-        Author author=null;
+    public Author getById(int id) {
+        Author author = null;
         try {
-          author = authorService.get(id);
+            author = authorService.get(id);
         } catch (ServiceException e) {
             e.printStackTrace();
         }
