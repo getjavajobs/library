@@ -1,11 +1,11 @@
 package com.getjavajobs.library.dao;
 
 import com.getjavajobs.library.exceptions.DAOException;
-import com.getjavajobs.library.model.*;
+import com.getjavajobs.library.model.Borrow;
 
 import java.sql.*;
-import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут будут объявлены все методы).
     //private dao
@@ -25,7 +25,7 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
             ps.setInt(4, borrow.getReader().getReaderId());
             ps.setInt(5, borrow.getEmployee().getId());
             ps.executeUpdate();
-            System.out.println("HFIFHOIFHOIFH");
+
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery("SELECT last_insert_id()");
             rs.next();
