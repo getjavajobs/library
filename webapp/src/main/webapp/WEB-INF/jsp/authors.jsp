@@ -1,5 +1,5 @@
 <%@ page import="com.getjavajobs.library.services.AuthorService" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
     <head>
@@ -10,12 +10,12 @@
 
         <%@ include file="strelHeader.jsp"%>
 
-        <jsp:useBean id="authorService" class="com.getjavajobs.library.services.AuthorService" scope="session"/>
-        <c:set var="authors" value="${authorService.getAll()}" />
+        <jsp:useBean id="authorServlet" class="com.getjavajobs.library.webui.AuthorServlet" scope="session"/>
+        <c:set var="authors" value="${authorServlet.getAll()}" />
 
-        <h1>Publishers table</h1>
+        <h1>Author table</h1>
 
-        <table>
+        <table border="1px solid black">
             <tr>
                 <th>NAME</th>
                 <th>SURNAME</th>

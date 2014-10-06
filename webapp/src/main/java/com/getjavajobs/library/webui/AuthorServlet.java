@@ -1,7 +1,6 @@
 package com.getjavajobs.library.webui;
 
 import com.getjavajobs.library.dao.AuthorDao;
-import com.getjavajobs.library.dao.DaoFactory;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Author;
 import com.getjavajobs.library.services.AuthorService;
@@ -75,7 +74,7 @@ public class AuthorServlet extends HttpServlet {
         return authors;
     }
 
-    public Author getById(int id) {
+    public Author get(int id) {
         Author author = null;
         try {
             author = authorService.get(id);
