@@ -31,7 +31,7 @@ public class AuthorServlet extends HttpServlet {
                     Author author = new Author();
                     author.setName(request.getParameter("authorName"));
                     author.setSurname(request.getParameter("authorSurname"));
-                    author.setPatronymic(request.getParameter("authorPatronimic"));
+                    author.setPatronymic(request.getParameter("authorPatronymic"));
                     author.setBirthDate(Date.valueOf(request.getParameter("birthDate")));
                     author.setBirthPlace(request.getParameter("birthPlace"));
 
