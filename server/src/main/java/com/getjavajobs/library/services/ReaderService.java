@@ -6,7 +6,6 @@
 package com.getjavajobs.library.services;
 
 import com.getjavajobs.library.dao.ReaderDao;
-
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Reader;
 import com.getjavajobs.library.services.validators.ReaderValidator;
@@ -14,16 +13,31 @@ import com.getjavajobs.library.services.validators.ReaderValidator;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Виталий
  */
+@Service
 public class ReaderService {
-    private ReaderDao readerDao = new ReaderDao();
-    private ReaderValidator readerValidator = new ReaderValidator();
-    
-    public Reader get(int id) throws ServiceException {
+
+	private ReaderDao readerDao;
+    private ReaderValidator readerValidator;
+
+    @Autowired
+	public void setReaderDao(ReaderDao readerDao) {
+		this.readerDao = readerDao;
+	}
+
+    @Autowired
+	public void setReaderValidator(ReaderValidator readerValidator) {
+		this.readerValidator = readerValidator;
+	}
+
+	public Reader get(int id) throws ServiceException {
        return readerDao.get(id);
     }
 

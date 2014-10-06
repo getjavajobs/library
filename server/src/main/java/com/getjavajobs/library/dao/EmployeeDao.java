@@ -9,13 +9,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Employee;
 
+@Repository
 public class EmployeeDao {
 
 	public Employee add(Employee employee) throws DAOException{
-
 		Connection con = ConnectionHolder.getInstance().getConnection();
 		boolean commit = false;
 		String query = "INSERT INTO Employees"

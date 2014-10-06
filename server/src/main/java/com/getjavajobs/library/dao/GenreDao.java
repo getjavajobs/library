@@ -7,6 +7,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class GenreDao implements GenericDao<Genre> {
 
     private ConnectionHolder connectionHolder = ConnectionHolder.getInstance();
