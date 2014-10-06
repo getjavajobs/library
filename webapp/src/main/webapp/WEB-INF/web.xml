@@ -136,7 +136,6 @@
         <servlet-class>com.getjavajobs.library.webui.AuthorServlet</servlet-class>
     </servlet>
 
-    <!-- Publishers mapping -->
     <servlet-mapping>
         <servlet-name>authors.jsp</servlet-name>
         <url-pattern>/authors</url-pattern>
