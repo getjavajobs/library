@@ -8,10 +8,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 /**
  * Created by Vlad on 21.08.2014.
  */
-
+@Repository
 public class BookDao implements GenericDao<Book> {
     private ConnectionHolder connectionHolder = ConnectionHolder.getInstance();
    // private AuthorDao authorDao = DaoFactory.getAuthorDao();

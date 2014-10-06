@@ -10,10 +10,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 
 /**
  * Created by Roman on 20.08.14.
  */
+@Repository
 public class PublisherDao implements GenericDao<Publisher>{
 
     public Publisher add(Publisher publisher) throws DAOException {

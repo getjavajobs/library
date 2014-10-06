@@ -5,56 +5,16 @@
  */
 package com.getjavajobs.library.services.validators;
 
+import org.springframework.stereotype.Component;
+
 import com.getjavajobs.library.model.Reader;
 
 /**
  *
  * @author Виталий
  */
+@Component
 public class ReaderValidator {
-
-    private Reader r;
-
-    public ReaderValidator(Reader r) {
-        this.r = r;
-    }
-
-    public ReaderValidator() {
-    }
-
-    public boolean readerValidate() {
-         return readerNameValidate() && readerSurNameValidate() && readerAddressValidate() && readerPassportValidate() && readerPhoneValidate();
-    }
-
-    private boolean readerNameValidate() {
-        String s = r.getFirstName();
-        String expr = "[a-zA-Z]+";
-        return s.matches(expr);
-    }
-
-    private boolean readerSurNameValidate() {
-        String s = r.getSecondName();
-        String expr = "[a-zA-Z]+";
-        return s.matches(expr);
-    }
-
-    private boolean readerAddressValidate() {
-        String s = r.getAddress();
-        String expr = "[a-zA-Z0-9]+";
-        return s.matches(expr);
-    }
-
-    private boolean readerPhoneValidate() {
-        String s = String.valueOf(r.getPhone());
-        String expr = "[0-9]{11}";
-        return s.matches(expr);
-    }
-
-    private boolean readerPassportValidate() {
-        String s = r.getPassport();
-        String expr = "[a-zA-Z0-9]{5,11}";
-        return s.matches(expr);
-    }
 
     public boolean readerValidate(Reader r) {
         return readerNameValidate(r) && readerSurNameValidate(r) && readerAddressValidate(r) && readerPassportValidate(r) && readerPhoneValidate(r);

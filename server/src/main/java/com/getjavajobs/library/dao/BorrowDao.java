@@ -7,11 +7,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут будут объявлены все методы).
-    //private dao
-    private EmployeeDao employeeDAO = new EmployeeDao();
-    private BookDao bookDao = new BookDao();
-    private ReaderDao readerDao = new ReaderDao();
+
+	@Autowired
+    private EmployeeDao employeeDAO;
+	@Autowired
+    private BookDao bookDao;
+	@Autowired
+    private ReaderDao readerDao;
 
     public Borrow add(Borrow borrow) throws DAOException {
         Connection conn = ConnectionHolder.getInstance().getConnection();

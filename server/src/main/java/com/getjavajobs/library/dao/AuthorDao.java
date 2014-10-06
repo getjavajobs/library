@@ -10,9 +10,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
 /**
  * Created by Roman on 23.08.14.
  */
+@Repository
 public class AuthorDao implements GenericDao<Author> {
 
     public Author add(Author author) throws DAOException {
