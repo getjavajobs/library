@@ -35,17 +35,6 @@
 	</servlet-mapping>
 
     <servlet>
-        <servlet-name>authors.jsp</servlet-name>
-        <jsp-file>/WEB-INF/jsp/authors.jsp</jsp-file>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>authors.jsp</servlet-name>
-        <url-pattern>/authors</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
         <servlet-name>books.jsp</servlet-name>
         <jsp-file>/WEB-INF/jsp/books.jsp</jsp-file>
     </servlet>
@@ -95,7 +84,6 @@
         <url-pattern>/changegenre.jsp</url-pattern>
     </servlet-mapping>
     
-    
     <servlet>
         <servlet-name>genresevlet</servlet-name>
         <servlet-class>com.getjavajobs.library.webui.GenreServlet</servlet-class>
@@ -104,6 +92,69 @@
     <servlet-mapping>
         <servlet-name>genresevlet</servlet-name>
         <url-pattern>/genresevlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- Publishers servlets -->
+    <servlet>
+        <servlet-name>publishers.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/publishers.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>publishersChangingPage.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/publishersChangingPage.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>PushlisherServlet</servlet-name>
+        <servlet-class>com.getjavajobs.library.webui.PublisherServlet</servlet-class>
+    </servlet>
+
+    <!-- Publishers mapping -->
+    <servlet-mapping>
+        <servlet-name>publishers.jsp</servlet-name>
+        <url-pattern>/publishers</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>publishersChangingPage.jsp</servlet-name>
+        <url-pattern>/changePublishers</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PushlisherServlet</servlet-name>
+        <url-pattern>/publisherChange</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>authors.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/authors.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>authorAdd.jsp</servlet-name>
+        <jsp-file>/WEB-INF/jsp/authorAdd.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AuthorServlet</servlet-name>
+        <servlet-class>com.getjavajobs.library.webui.AuthorServlet</servlet-class>
+    </servlet>
+
+    <!-- Publishers mapping -->
+    <servlet-mapping>
+        <servlet-name>authors.jsp</servlet-name>
+        <url-pattern>/authors</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>authorAdd.jsp</servlet-name>
+        <url-pattern>/authorAdd</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AuthorServlet</servlet-name>
+        <url-pattern>/authorServlet</url-pattern>
     </servlet-mapping>
 
 </web-app>

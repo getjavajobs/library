@@ -1,82 +1,68 @@
 package com.getjavajobs.library.webui;
 
 import com.getjavajobs.library.dao.PublisherDao;
-import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Publisher;
 import com.getjavajobs.library.services.PublisherService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.io.IOException;
 
 public class PublisherServlet extends HttpServlet {
 
-    public final PublisherService publisherService = new PublisherService(new PublisherDao());
+    public PublisherService publisherService = null;
 
     @Override
-    public void service(HttpServletRequest request, HttpServletResponse response) {
+    public void init() {
+        this.publisherService = new PublisherService(new PublisherDao());
+    }
 
-        String commandType = (String) request.getAttribute("commandType");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String commandType = request.getParameter("commandType");
+            switch (commandType) {
+                case "add":
+                case "update": {
 
-        switch (commandType) {
-            case "add":
-            case "update": {
-                Publisher publisher = new Publisher();
-                publisher.setName(request.getParameter("publisherName"));
-                publisher.setCity(request.getParameter("publisherCity"));
-                publisher.setPhoneNumber(request.getParameter("publisherPhoneNumber"));
-                publisher.setEmail(request.getParameter("publisherEmail"));
-                publisher.setSiteAddress(request.getParameter("publisherSiteAddress"));
+                    String publisherName = request.getParameter("publisherName");
+                    String publisherCity = request.getParameter("publisherCity");
+                    String publisherPhoneNumber = request.getParameter("publisherPhoneNumber");
+                    String publisherEmail = request.getParameter("publisherEmail");
+                    String publisherSiteAddress = request.getParameter("publisherSiteAddress");
 
-                if (commandType.equals("update")) {
-                    int id = Integer.parseInt(request.getParameter("publisherId"));
-                    try {
-                        publisherService.update(publisher);
-                    } catch (ServiceException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
+                    Publisher publisher = new Publisher();
+                    publisher.setName(publisherName);
+                    publisher.setCity(publisherCity);
+                    publisher.setPhoneNumber(publisherPhoneNumber);
+                    publisher.setEmail(publisherEmail);
+                    publisher.setSiteAddress(publisherSiteAddress);
+
+                    if (commandType.equals("add")) {
                         publisherService.add(publisher);
-                    } catch (ServiceException ex) {
-                        ex.printStackTrace();
+                    } else {
+                        String publisherIdString = request.getParameter("publisherId");
+                        int publisherId = Integer.valueOf(publisherIdString);
+                        publisher.setId(publisherId);
+                        publisherService.update(publisher);
                     }
+                    response.sendRedirect("publishers");
+                }
+                break;
+
+                default: {
+                    String publisherIdString = request.getParameter("publisherId");
+                    int publisherId = Integer.valueOf(publisherIdString);
+                    publisherService.delete(publisherId);
+                    response.sendRedirect("publishers");
                 }
             }
-            break;
-
-            case "delete": {
-                int id = Integer.parseInt(request.getParameter("publisherId"));
-
-                try {
-                    publisherService.delete(id);
-                } catch (ServiceException e) {
-                    e.printStackTrace();
-                }
-            }
-            break;
-        }
-    }
-
-    public Publisher getById(int id) {
-        Publisher publisher = null;
-        try {
-            publisher = publisherService.get(id);
-        } catch (ServiceException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
+            response.sendRedirect("error");
         }
-        return publisher;
-    }
-
-    public List<Publisher> getAllPublishers() {
-        List<Publisher> publisherList = null;
-        try {
-            publisherList = publisherService.getAll();
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
-        return publisherList;
     }
 
 }
