@@ -3,6 +3,8 @@
 <%@ page import="com.getjavajobs.library.exceptions.ServiceException" %>
 <%@ page import="com.getjavajobs.library.services.PublisherService" %>
 <%@ page import="com.getjavajobs.library.dao.PublisherDao" %>
+<%@ page import="org.springframework.context.ApplicationContext" %>
+<%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
@@ -14,7 +16,8 @@
         <%@ include file="strelHeader.jsp"%>
 
         <%
-            PublisherService publisherService = new PublisherService(new PublisherDao());
+            ApplicationContext context =  WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+            PublisherService publisherService = context.getBean(PublisherService.class);
             List<Publisher> publishersList = null;
             int num = 0;
             try {

@@ -15,32 +15,32 @@
 
     <%@ include file="strelHeader.jsp" %>
 
-    <form method="post" action="AuthorChange">
+    <form method="post" action="authorServlet">
         <input type="hidden" name="commandType" value="${(authorId==null)? "add": "update"}">
         <input type="hidden" name="authorId" value="${authorId}">
 
         <p>
-            <input type="text" name="authorName" required value="${(authorId>0)? author.getName():""}"/>
+            Name: <input type="text" name="authorName" required value="${(authorId!=null)? author.getName():""}"/>
         </p>
 
         <p>
-            <input type="text" name="authorSurname" required value="${(authorId>0)? author.getSurname():""}"/>
+           Surname: <input type="text" name="authorSurname" required value="${(authorId!=null)? author.getSurname():""}"/>
         </p>
 
         <p>
-            <input type="text" name="authorPatronimic" required value="${(authorId>0)? author.getPatronymic():""}"/>
+            Patronymic: <input type="text" name="authorPatronimic" required value="${(authorId!=null)? author.getPatronymic():""}"/>
         </p>
 
         <p>
-            <input type="text" name="authorBirthDay" required value="${(authorId>0)? author.getBirthDate():""}"/>
+            BirthDay: <input type="text" name="authorBirthDay" required value="${(authorId!=null)? author.getBirthDate():""}"/>
         </p>
 
         <p>
-            <input type="text" name="authorBirthDay" required value="${(authorId>0)? author.getBirthPlace():""}"/>
+            BirthPlace: <input type="text" name="authorBirthPlace" required value="${(authorId!=null)? author.getBirthPlace():""}"/>
         </p>
 
         <p>
-            <input type="submit" value="${(authorId== null)? "Add": "Update"}>">
+            <input type="submit" value="${(authorId== null)? "Add": "Update"}">
             <input type="reset">
         </p>
     </form>
