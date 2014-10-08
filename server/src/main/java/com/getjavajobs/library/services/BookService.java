@@ -67,5 +67,12 @@ public class BookService {
             throw new ServiceException(e);
         }
     }
+    public List<Book> getFree() throws ServiceException{
+        try{
+            return bookDao.getFree();
+        }catch (DAOException e){
+            throw new ServiceException(e);
+        }
+    }
 
 }

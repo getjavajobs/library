@@ -12,6 +12,7 @@ public class Book {
     private Author author;
     private Publisher publisher;
     private List<Genre> genreList;
+    private boolean isFree = true; //This is flag, talking about book's status (busy or free);
     private int year;
     private int pagesNumber;
     private double price;
@@ -77,6 +78,14 @@ public class Book {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public boolean isFree() {
+        return isFree;
+    }
+
+    public void setFree(boolean isFree) {
+        this.isFree = isFree;
     }
 
     @Override
