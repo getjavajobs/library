@@ -2,13 +2,13 @@ package com.getjavajobs.library.dao;
 
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Borrow;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 @Repository
 public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут будут объявлены все методы).
@@ -19,9 +19,16 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
     private BookDao bookDao;
 	@Autowired
     private ReaderDao readerDao;
+    @Autowired
+    private DataSource dataSource;
 
     public Borrow add(Borrow borrow) throws DAOException {
-        Connection conn = ConnectionHolder.getInstance().getConnection();
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         Borrow added = borrow;
         boolean commit = false;
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO BORROW(books_id, date_of_borrow," +
@@ -59,7 +66,12 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
     }
 
     public Borrow get(int id) {
-        Connection conn = ConnectionHolder.getInstance().getConnection();
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         Borrow borrow = new Borrow();
 
         try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM borrow WHERE Id = ?")) {
@@ -83,7 +95,12 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
     }
 
     public void delete(int id) {
-        Connection conn = ConnectionHolder.getInstance().getConnection();
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         boolean commit = false;
         try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Borrow WHERE id = ?")) {
             ps.setInt(1, id);
@@ -108,7 +125,12 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
     }
 
     public Borrow update(Borrow borrow) {
-        Connection conn = ConnectionHolder.getInstance().getConnection();
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         boolean commit = false;
         Borrow updated = null;
         try (PreparedStatement ps = conn.prepareStatement("UPDATE borrow SET date_of_return = ? WHERE id = ?")) {
@@ -137,7 +159,12 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
     }
 
     public List<Borrow> getAll(){
-        Connection conn = ConnectionHolder.getInstance().getConnection();
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         List<Borrow> borrowList = new ArrayList<>();
         try(Statement st = conn.createStatement()){
             ResultSet rs = st.executeQuery("SELECT * FROM BORROW");
