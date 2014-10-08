@@ -58,7 +58,7 @@ public class BookDao implements GenericDao<Book> {
         String command =
                 "INSERT INTO " +
                         "books(title, author_id, publishing_id, year, pagenumber, price) " +
-                        "values(?,?,?,?,?,?,?);";
+                        "values(?,?,?,?,?,?);";
 
         try (PreparedStatement addStatement = connection.prepareStatement(command);) {
             bookToStatement(addStatement, book);
@@ -132,11 +132,11 @@ public class BookDao implements GenericDao<Book> {
         }
         boolean success = true;
         String command = "UPDATE books SET " +
-                "title=?, author_id=?, publishing_id=?, year=?, pagenumber=?, price=?, is_free =?" +
+                "title=?, author_id=?, publishing_id=?, year=?, pagenumber=?, price=?, " +
                 "where id=?";
         try (PreparedStatement statement = connection.prepareStatement(command)) {
             bookToStatement(statement, book);
-            statement.setInt(8, book.getId());
+            statement.setInt(7, book.getId());
             deleteGenreList(book.getId(), connection);
             statement.execute();
             addGenreList(book.getId(), connection, book.getGenreList());
@@ -233,7 +233,7 @@ public class BookDao implements GenericDao<Book> {
             e.printStackTrace();
         }
         try (Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("SELECT * FROM books WHERE is_free = TRUE");
+            ResultSet rs = statement.executeQuery("SELECT * FROM books WHERE id NOT IN (SELECT books_id FROM borrow);");
             while (rs.next()) {
                 Book book = resultsSetToBook(rs);
                 book.setGenreList(getGenreList(book.getId()));
@@ -312,6 +312,6 @@ public class BookDao implements GenericDao<Book> {
         statement.setInt(4, book.getYear());
         statement.setInt(5, book.getPagesNumber());
         statement.setDouble(6, book.getPrice());
-        statement.setBoolean(7, book.isFree());
+
     }
 }
