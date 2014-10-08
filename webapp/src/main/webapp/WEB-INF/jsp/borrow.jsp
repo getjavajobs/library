@@ -1,6 +1,8 @@
 <!doctype html/>
 <%@ page import="com.getjavajobs.library.model.Borrow" %>
 <%@ page import="com.getjavajobs.library.services.BorrowService" %>
+<%@ page import="org.springframework.context.ApplicationContext" %>
+<%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -23,7 +25,8 @@
         <th>Employee</th>
     </tr>
 
-    <% BorrowService bs = new BorrowService();
+    <% ApplicationContext context =  WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        BorrowService bs = context.getBean(BorrowService.class);
         List<Borrow> listOfBorrow = bs.getAll();
         for (Borrow borrow : listOfBorrow) { %>
     <tbody>
