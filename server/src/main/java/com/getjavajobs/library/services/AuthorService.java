@@ -4,15 +4,20 @@ import com.getjavajobs.library.dao.AuthorDao;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Author;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by Roman on 23.08.14.
  */
+@Service
 public class AuthorService {
-
+    @Autowired
     private AuthorDao authorDao;
+
+    public AuthorService(){};
 
     public AuthorService(AuthorDao authorDao) {
         this.authorDao = authorDao;

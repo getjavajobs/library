@@ -2,6 +2,9 @@ package com.getjavajobs.library.dao;
 
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Author;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,9 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 
 /**
  * Created by Roman on 23.08.14.
@@ -19,8 +20,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AuthorDao implements GenericDao<Author> {
 
+    @Autowired
+    @Qualifier("dbDataSource")
+    private DataSource dataSource;
+
+
     public Author add(Author author) throws DAOException {
-        Connection con = ConnectionHolder.getInstance().getConnection();
+        Connection con = null;
+        try {
+            con = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         boolean success = false;
         String script = "INSERT INTO Author " +
                 "(name,surname,patronymic,dateofbirth,country) VALUES " +
@@ -57,7 +68,12 @@ public class AuthorDao implements GenericDao<Author> {
     }
 
     public void delete(int id) throws DAOException {
-        Connection con = ConnectionHolder.getInstance().getConnection();
+        Connection con = null;
+        try {
+            con = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         boolean success = false;
         String script = "DELETE FROM Author WHERE id = ?";
         try (PreparedStatement ps = con.prepareStatement(script)){
@@ -83,7 +99,12 @@ public class AuthorDao implements GenericDao<Author> {
     }
 
     public Author get(int id) throws DAOException {
-        Connection con = ConnectionHolder.getInstance().getConnection();
+        Connection con = null;
+        try {
+            con = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         boolean success = false;
         String script = "SELECT * FROM Author WHERE id = ?";
         Author author = new Author();
@@ -121,7 +142,12 @@ public class AuthorDao implements GenericDao<Author> {
     }
 
     public Author update(Author author) throws DAOException {
-        Connection con = ConnectionHolder.getInstance().getConnection();
+        Connection con = null;
+        try {
+            con = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         boolean success = false;
         String script = "UPDATE Author SET " +
                 "name = ?, surname = ?, patronymic = ?, dateofbirth = ?, country = ?" +
@@ -155,7 +181,12 @@ public class AuthorDao implements GenericDao<Author> {
     }
 
     public List<Author> getAll() throws DAOException {
-        Connection con = ConnectionHolder.getInstance().getConnection();
+        Connection con = null;
+        try {
+            con = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         List<Author> authors = new ArrayList<>();
         boolean success = false;
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Author")){

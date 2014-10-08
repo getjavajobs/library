@@ -9,7 +9,6 @@
     <body>
 
         <%@ include file="strelHeader.jsp"%>
-
         <jsp:useBean id="authorServlet" class="com.getjavajobs.library.webui.AuthorServlet" scope="session"/>
         <c:set var="authors" value="${authorServlet.getAll()}" />
 

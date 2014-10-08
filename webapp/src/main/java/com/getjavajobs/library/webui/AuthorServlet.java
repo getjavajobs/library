@@ -1,6 +1,7 @@
 package com.getjavajobs.library.webui;
 
 import com.getjavajobs.library.dao.AuthorDao;
+import com.getjavajobs.library.dao.DaoFactory;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Author;
 import com.getjavajobs.library.services.AuthorService;
@@ -19,7 +20,21 @@ import java.util.List;
  */
 public class AuthorServlet extends HttpServlet {
 
-    public final AuthorService authorService = new AuthorService(new AuthorDao());
+    private  AuthorService authorService;
+
+    public AuthorServlet() {
+        try {
+            init();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void init() throws ServletException {
+        AuthorService authorService = new AuthorService(DaoFactory.getAuthorDao());
+        this.authorService=authorService;
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -67,6 +82,7 @@ public class AuthorServlet extends HttpServlet {
     public List<Author> getAll() {
         List<Author> authors = new ArrayList<>();
         try {
+            System.out.println((authorService == null)? "\n\nNULLLLLLL!!!!": "NOT NULL");
             authors = authorService.getAll();
         } catch (ServiceException e) {
             e.printStackTrace();
@@ -75,7 +91,7 @@ public class AuthorServlet extends HttpServlet {
     }
 
     public Author get(int id) {
-        Author author = null;
+        Author author = new Author();
         try {
             author = authorService.get(id);
         } catch (ServiceException e) {
