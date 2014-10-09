@@ -32,16 +32,16 @@
                  Name: <input type="text" name="authorName" required value="<%=(authorId == null)? "": author.getName()%>">
              </p>
              <p>
-                 Surname: <input type="text" name="publisherCity" required value="<%=(authorId == null)? "": author.getSurname()%>">
+                 Surname: <input type="text" name="authorSurname" required value="<%=(authorId == null)? "": author.getSurname()%>">
              </p>
              <p>
-                 Patronymic: <input type="text" name="publisherPhoneNumber" required value="<%=(authorId == null)? "": author.getPatronymic()%>">
+                 Patronymic: <input type="text" name="autorPatronymic" required value="<%=(authorId == null)? "": author.getPatronymic()%>">
              </p>
              <p>
-                 BirthDay: <input type="text" name="publisherEmail" required value="<%=(authorId == null)? "": author.getBirthDate()%>">
+                 BirthDay: <input type="text" name="authorBirthDay" required value="<%=(authorId == null)? "": author.getBirthDate()%>">
              </p>
              <p>
-                 BirthPlace: <input type="text" name="publisherSiteAddress" required value="<%=(authorId == null)? "": author.getBirthPlace()%>">
+                 BirthPlace: <input type="text" name="autorBirthPlace" required value="<%=(authorId == null)? "": author.getBirthPlace()%>">
              </p>
              <p>
                  <input type="submit" value="<%=(authorId == null)? "Add": "Update"%>">
