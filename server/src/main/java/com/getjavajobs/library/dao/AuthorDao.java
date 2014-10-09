@@ -3,16 +3,15 @@ package com.getjavajobs.library.dao;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Author;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.sql.DataSource;
 
 /**
  * Created by Roman on 23.08.14.
@@ -21,7 +20,6 @@ import javax.sql.DataSource;
 public class AuthorDao implements GenericDao<Author> {
 
     @Autowired
-    @Qualifier("dbDataSource")
     private DataSource dataSource;
 
 

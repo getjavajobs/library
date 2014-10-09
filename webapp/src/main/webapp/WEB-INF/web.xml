@@ -25,6 +25,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>addborrow</servlet-name>
+        <jsp-file>/WEB-INF/jsp/addBorrow.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addborrow</servlet-name>
+        <url-pattern>/addborrow</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>readers.jsp</servlet-name>
         <jsp-file>/WEB-INF/jsp/readers.jsp</jsp-file>
     </servlet>
@@ -155,5 +164,6 @@
         <servlet-name>AuthorServlet</servlet-name>
         <url-pattern>/authorServlet</url-pattern>
     </servlet-mapping>
+
 
 </web-app>
