@@ -162,7 +162,7 @@
 
     <servlet-mapping>
         <servlet-name>AuthorServlet</servlet-name>
-        <url-pattern>/authorServlet</url-pattern>
+        <url-pattern>/AuthorServlet</url-pattern>
     </servlet-mapping>
 
 
