@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Виталий on 29.09.2014.
@@ -41,33 +42,26 @@ public class AuthorServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            System.out.println("1");
             String commandType = request.getParameter("commandType");
-            System.out.println("2");
             switch (commandType) {
                 case "add":
                 case "update": {
-                    System.out.println("3");
                     Author author = new Author();
-                    System.out.println("3.1");
                     author.setName(request.getParameter("authorName"));
-                    System.out.println("3.2");
                     author.setSurname(request.getParameter("authorSurname"));
-                    System.out.println("3.3");
                     author.setPatronymic(request.getParameter("authorPatronymic"));
-                    System.out.println("3.4");
                     java.util.Date birthDay = null;
                     try {
-                        birthDay = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birthDate"));
+                        String parse=request.getParameter("authorBirthDay");
+                        SimpleDateFormat simpleDateFormat= new SimpleDateFormat("yyyy.MM.dd");
+                        birthDay = simpleDateFormat.parse(parse);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                     author.setBirthDate(birthDay);
-                    System.out.println("3.5");
-                    author.setBirthPlace(request.getParameter("birthPlace"));
-                    System.out.println("4");
+                    author.setBirthPlace(request.getParameter("autorBirthPlace"));
                     if (commandType.equals("add")) {
-                        System.out.println("5");
+                        System.out.println("1");
                         authorService.add(author);
                         System.out.println("6");
                     } else {
