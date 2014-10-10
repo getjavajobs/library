@@ -12,7 +12,7 @@
 
 
     <import resource="classpath:library-context.xml" />
-    <jee:jndi-lookup id="dbDataSource"
+    <jee:jndi-lookup id="dataSource"
                      jndi-name="jdbc/library"
                      expected-type="javax.sql.DataSource" />
 
