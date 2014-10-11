@@ -5,18 +5,26 @@ import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Publisher;
 import com.getjavajobs.library.services.validators.PublisherValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by Roman on 22.08.14.
  */
+@Service
 public class PublisherService {
 
+    @Autowired
     private PublisherDao publisherDao;
     private PublisherValidator validator = new PublisherValidator();
     public PublisherService(PublisherDao publisherDao) {
         this.publisherDao = publisherDao;
+    }
+
+    public PublisherService() {
+
     }
 
     public Publisher add(Publisher publisher) throws ServiceException {

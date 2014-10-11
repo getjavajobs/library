@@ -1,7 +1,7 @@
 package com.getjavajobs.library.exceptions;
 
 /**
- * Класс-исключение при работе с DAO.
+
  */
 public class DAOException extends RuntimeException {
 

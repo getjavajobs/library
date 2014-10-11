@@ -25,6 +25,7 @@ public class ConnectionHolder {
         	DataSource ds = (DataSource)envContext.lookup("jdbc/library");
 			return ds.getConnection();
 		} catch (Exception e) {
+            e.printStackTrace();
 			return null;
 		}
     }

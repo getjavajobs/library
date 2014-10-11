@@ -2,13 +2,15 @@ package com.getjavajobs.library.dao;
 
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Borrow;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут будут объявлены все методы).
@@ -20,145 +22,56 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
 	@Autowired
     private ReaderDao readerDao;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private IntegerRowMapper integerRowMapper;
+    @Autowired
+    private BorrowRowMapper borrowRowMapper;
+    @Transactional
     public Borrow add(Borrow borrow) throws DAOException {
-        Connection conn = ConnectionHolder.getInstance().getConnection();
         Borrow added = borrow;
-        boolean commit = false;
-        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO BORROW(books_id, date_of_borrow," +
-                " date_of_return, readers_id, employee_id) VALUES (?,?,?,?,?)")) {
-            ps.setInt(1, borrow.getBook().getId());
-            ps.setDate(2, new Date(borrow.getDateOfBorrow().getTime()));
-            ps.setDate(3, new Date(borrow.getDateOfReturn().getTime()));
-            ps.setInt(4, borrow.getReader().getReaderId());
-            ps.setInt(5, borrow.getEmployee().getId());
-            ps.executeUpdate();
+        String sql = "INSERT INTO BORROW(books_id, date_of_borrow," +
+                " date_of_return, readers_id, employee_id) VALUES (?,?,?,?,?)";
 
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT last_insert_id()");
-            rs.next();
-            int i = Integer.parseInt(rs.getString("last_insert_id()"));
-            added = get(i);
-            if (!conn.getAutoCommit()) {
-                conn.commit();
-            }
-            commit = true;
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(), e);
-        } finally {
-            try {
-                if (!commit && !conn.getAutoCommit()) {
-                    conn.rollback();
-                }
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage(), e);
-            } finally {
-                ConnectionHolder.getInstance().releaseConnection(conn);
-            }
-        }
+        jdbcTemplate.update(sql, new Object[]{borrow.getBook().getId(),borrow.getDateOfBorrow().getTime(),borrow.getDateOfReturn().getTime(),
+                borrow.getReader().getReaderId(),borrow.getEmployee().getId()});
+        int id = (Integer)jdbcTemplate.queryForObject("SELECT last_insert_id()",integerRowMapper);
+        added.setBorrowId(id);
         return added;
     }
 
     public Borrow get(int id) {
-        Connection conn = ConnectionHolder.getInstance().getConnection();
-        Borrow borrow = new Borrow();
-
-        try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM borrow WHERE Id = ?")) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                borrow.setBorrowId(Integer.parseInt(rs.getString("id")));
-                borrow.setBook(bookDao.get(rs.getInt("books_id")));
-                borrow.setReader(readerDao.get(rs.getInt("readers_id")));
-                borrow.setDateOfBorrow(rs.getDate("date_of_borrow"));
-                borrow.setDateOfReturn(rs.getDate("date_of_return"));
-                borrow.setEmployee(employeeDAO.get(rs.getInt("employee_id")));
-            }
-
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(), e);
-        } finally {
-            ConnectionHolder.getInstance().releaseConnection(conn);
-        }
+        Borrow borrow = (Borrow)jdbcTemplate.queryForObject("SELECT * FROM borrow WHERE Id = " + id, borrowRowMapper);
         return borrow;
     }
-
+    @Transactional
     public void delete(int id) {
-        Connection conn = ConnectionHolder.getInstance().getConnection();
-        boolean commit = false;
-        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Borrow WHERE id = ?")) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-            if(!conn.getAutoCommit()) {
-                conn.commit();
-            }
-            commit = true;
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(), e);
-        } finally {
-            try {
-                if (!commit && !conn.getAutoCommit()) {
-                    conn.rollback();
-                }
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage(), e);
-            } finally {
-                ConnectionHolder.getInstance().releaseConnection(conn);
-            }
-        }
+        jdbcTemplate.update("DELETE FROM Borrow WHERE id = ?");
     }
-
+    @Transactional
     public Borrow update(Borrow borrow) {
-        Connection conn = ConnectionHolder.getInstance().getConnection();
-        boolean commit = false;
-        Borrow updated = null;
-        try (PreparedStatement ps = conn.prepareStatement("UPDATE borrow SET date_of_return = ? WHERE id = ?")) {
-            ps.setDate(1, new java.sql.Date(borrow.getDateOfReturn().getTime()));
-            ps.setInt(2, borrow.getBorrowId());
-            ps.executeUpdate();
-            updated = get(borrow.getBorrowId());
-            if(!conn.getAutoCommit()) {
-                conn.commit();
-            }
-            commit = true;
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(), e);
-        } finally {
-            try {
-                if (!commit && !conn.getAutoCommit()) {
-                    conn.rollback();
-                }
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage(), e);
-            } finally {
-                ConnectionHolder.getInstance().releaseConnection(conn);
-            }
-        }
+        jdbcTemplate.update("UPDATE borrow SET date_of_return = ? WHERE id = ?",new Object[]{borrow.getDateOfReturn(),borrow.getBorrowId()});
+        Borrow updated = (Borrow)jdbcTemplate.queryForObject("SELECT * FROM borrow WHERE Id = " + borrow.getBorrowId(), borrowRowMapper);
         return updated;
     }
 
-    public List<Borrow> getAll(){
-        Connection conn = ConnectionHolder.getInstance().getConnection();
+    public List<Borrow> getAll() {
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM BORROW");
         List<Borrow> borrowList = new ArrayList<>();
-        try(Statement st = conn.createStatement()){
-            ResultSet rs = st.executeQuery("SELECT * FROM BORROW");
-            while(rs.next()){
-                Borrow borrow = new Borrow();
-                borrow.setBorrowId(Integer.parseInt(rs.getString("id")));
-                borrow.setBook(bookDao.get(rs.getInt("books_id")));
-                borrow.setReader(readerDao.get(rs.getInt("readers_id")));
-                borrow.setDateOfBorrow(rs.getDate("date_of_borrow"));
-                borrow.setDateOfReturn(rs.getDate("date_of_return"));
-                borrow.setEmployee(employeeDAO.get(rs.getInt("employee_id")));
-                borrowList.add(borrow);
-            }
-        }catch (SQLException e){
-            throw new DAOException(e.getMessage(),e);
-        }finally {
-            ConnectionHolder.getInstance().releaseConnection(conn);
+        for (Map row : rows) {
+            Borrow borrow = new Borrow();
+            borrow.setBorrowId((Integer) (row.get("id")));
+            borrow.setEmployee(employeeDAO.get((Integer) row.get("employee_id")));
+            borrow.setDateOfReturn((Date) row.get("date_of_return"));
+            borrow.setDateOfBorrow((Date) row.get("date_of_borrow"));
+            borrow.setBook(bookDao.get((Integer) row.get("books_id")));
+            borrow.setReader(readerDao.get((Integer) row.get("readers_id")));
         }
-
         return borrowList;
     }
+
+
 
 
 }

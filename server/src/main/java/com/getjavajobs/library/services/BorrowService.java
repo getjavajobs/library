@@ -6,13 +6,17 @@ import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Borrow;
 import com.getjavajobs.library.services.validators.BorrowValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by Глеб on 23.08.2014.
  */
+@Service
 public class BorrowService  {
+    @Autowired
     private BorrowDao bd = DaoFactory.getBorrowDao();
 
     public Borrow get(int id) throws ServiceException {
