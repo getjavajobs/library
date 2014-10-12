@@ -1,10 +1,11 @@
 package com.getjavajobs.library.model;
 
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
-
+@Component
 public class Borrow {
-
     private int borrowId = 0;
     private Book book;
     private Date dateOfBorrow;

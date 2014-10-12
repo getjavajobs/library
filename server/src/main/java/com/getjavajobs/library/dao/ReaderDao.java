@@ -7,6 +7,7 @@ package com.getjavajobs.library.dao;
 
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Reader;
+import com.getjavajobs.library.services.ReaderService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,8 +17,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -26,10 +31,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ReaderDao implements GenericDao<Reader> {
 
+	@Autowired
+	private DataSource dataSource;
+
     @Override
     public Reader get(int id) throws DAOException {
-        Connection con = ConnectionHolder.getInstance().getConnection();
-
+        Connection con = null;
+        try {
+			con = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
         boolean commit = false;
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM readers WHERE Id = ?")) {
             Reader r = new Reader();
@@ -53,7 +65,12 @@ public class ReaderDao implements GenericDao<Reader> {
 
     @Override
     public List<Reader> getAll() throws DAOException {
-        Connection con = ConnectionHolder.getInstance().getConnection();
+        Connection con = null;
+        try {
+			con = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
         List<Reader> readerBase = new ArrayList<>();
         try (Statement ps = con.createStatement()) {
             ResultSet rs = ps.executeQuery("SELECT * FROM readers ");
@@ -76,8 +93,89 @@ public class ReaderDao implements GenericDao<Reader> {
     }
 
     @Override
+    public Reader update(Reader reader) throws DAOException {
+        Connection con = null;
+        try {
+			con = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        boolean commit = false;
+        try (PreparedStatement ps = con.prepareStatement("update readers set surname= ?,Name= ? ,Address= ? ,Passport= ? ,telephone=? where Id = ?;")) {
+            ps.setString(1, reader.getSecondName());
+            ps.setString(2, reader.getFirstName());
+            ps.setString(3, reader.getAddress());
+            ps.setString(4, reader.getPassport());
+            ps.setString(5, reader.getPhone());
+            ps.setInt(6, reader.getReaderId());
+            ps.executeUpdate();
+
+            if (!con.getAutoCommit()) {
+                con.commit();
+            }
+            commit = true;
+            return reader;
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            try {
+                if (!commit && !con.getAutoCommit()) {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException(ex);
+            } finally {
+                ConnectionHolder.getInstance().releaseConnection(con);
+            }
+        }
+    }
+
+    @Override
+    public void delete(int id) throws DAOException {
+        Connection con = null;
+        try {
+			con = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        boolean commit = false;
+        try (PreparedStatement ps = con.prepareStatement("delete from readers where ID =?;")) {
+            ps.setString(1, String.valueOf(id));
+            ps.executeUpdate();
+
+            if (!con.getAutoCommit()) {
+                con.commit();
+            }
+            commit = true;
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            try {
+                if (!commit && !con.getAutoCommit()) {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException(ex);
+            } finally {
+                ConnectionHolder.getInstance().releaseConnection(con);
+            }
+        }
+    }
+    
+    public void addReaders(List<Reader> readers) {
+    	for (Reader reader : readers) {
+    		add(reader);
+    	}
+    }
+
+    @Override
     public Reader add(Reader reader) throws DAOException {
-        Connection con = ConnectionHolder.getInstance().getConnection();
+        Connection con = null;
+        try {
+			con = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
         boolean commit = false;
         try (PreparedStatement ps = con.prepareStatement("Insert into readers (surname, name, address,passport,telephone) values( ? , ? ,?, ?, ? ) ;")) {
 
@@ -114,64 +212,4 @@ public class ReaderDao implements GenericDao<Reader> {
         }
     }
 
-    @Override
-    public Reader update(Reader reader) throws DAOException {
-        Connection con = ConnectionHolder.getInstance().getConnection();
-
-        boolean commit = false;
-        try (PreparedStatement ps = con.prepareStatement("update readers set surname= ?,Name= ? ,Address= ? ,Passport= ? ,telephone=? where Id = ?;")) {
-            ps.setString(1, reader.getSecondName());
-            ps.setString(2, reader.getFirstName());
-            ps.setString(3, reader.getAddress());
-            ps.setString(4, reader.getPassport());
-            ps.setString(5, reader.getPhone());
-            ps.setInt(6, reader.getReaderId());
-            ps.executeUpdate();
-
-            if (!con.getAutoCommit()) {
-                con.commit();
-            }
-            commit = true;
-            return reader;
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        } finally {
-            try {
-                if (!commit && !con.getAutoCommit()) {
-                    con.rollback();
-                }
-            } catch (SQLException ex) {
-                throw new DAOException(ex);
-            } finally {
-                ConnectionHolder.getInstance().releaseConnection(con);
-            }
-        }
-    }
-
-    @Override
-    public void delete(int id) throws DAOException {
-        Connection con = ConnectionHolder.getInstance().getConnection();
-        boolean commit = false;
-        try (PreparedStatement ps = con.prepareStatement("delete from readers where ID =?;")) {
-            ps.setString(1, String.valueOf(id));
-            ps.executeUpdate();
-
-            if (!con.getAutoCommit()) {
-                con.commit();
-            }
-            commit = true;
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        } finally {
-            try {
-                if (!commit && !con.getAutoCommit()) {
-                    con.rollback();
-                }
-            } catch (SQLException ex) {
-                throw new DAOException(ex);
-            } finally {
-                ConnectionHolder.getInstance().releaseConnection(con);
-            }
-        }
-    }
 }

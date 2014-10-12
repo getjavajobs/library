@@ -1,7 +1,7 @@
 package com.getjavajobs.library.exceptions;
 
 /**
- * Класс-исключение при работе с сервисными классами.
+
  */
 public class ServiceException extends Exception {
 
