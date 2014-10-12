@@ -25,11 +25,12 @@ public class PublisherService {
 
     }
 
+    public PublisherService(PublisherDao publisherDao) {
+        this.publisherDao = publisherDao;
+    }
+
     public Publisher add(Publisher publisher) throws ServiceException {
         try {
-            if (validator == null) {
-                System.out.println("OOOOO!!!");
-            }
             if (!validator.validate(publisher)) {
                 throw new ServiceException("Ошибка валидации");
             }
@@ -71,4 +72,11 @@ public class PublisherService {
         }
     }
 
+    public void setDao(PublisherDao publisherDao) {
+        this.publisherDao = publisherDao;
+    }
+
+    public void setValidator(PublisherValidator publisherValidator) {
+        this.validator = publisherValidator;
+    }
 }
