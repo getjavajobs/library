@@ -18,10 +18,8 @@ public class PublisherService {
 
     @Autowired
     private PublisherDao publisherDao;
-    private PublisherValidator validator = new PublisherValidator();
-    public PublisherService(PublisherDao publisherDao) {
-        this.publisherDao = publisherDao;
-    }
+    @Autowired
+    private PublisherValidator validator;
 
     public PublisherService() {
 
@@ -29,6 +27,9 @@ public class PublisherService {
 
     public Publisher add(Publisher publisher) throws ServiceException {
         try {
+            if (validator == null) {
+                System.out.println("OOOOO!!!");
+            }
             if (!validator.validate(publisher)) {
                 throw new ServiceException("Ошибка валидации");
             }
@@ -37,6 +38,7 @@ public class PublisherService {
             throw new ServiceException(e);
         }
     }
+
     public Publisher get(int id) throws ServiceException {
         try {
             return publisherDao.get(id);
