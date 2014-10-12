@@ -1,6 +1,8 @@
 <%@ page import="com.getjavajobs.library.model.Publisher" %>
 <%@ page import="com.getjavajobs.library.services.PublisherService" %>
 <%@ page import="com.getjavajobs.library.dao.PublisherDao" %>
+<%@ page import="org.springframework.context.ApplicationContext" %>
+<%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
@@ -19,7 +21,8 @@
     <body>
 
         <%
-            PublisherService publisherService = new PublisherService(new PublisherDao());
+            ApplicationContext context =  WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+            PublisherService publisherService = context.getBean(PublisherService.class);
             Publisher publisher = (publisherId == null)? null: publisherService.get(publisherId);
         %>
 
