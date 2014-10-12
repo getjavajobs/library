@@ -5,6 +5,7 @@ import com.getjavajobs.library.model.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -12,7 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Roman on 23.08.14.
@@ -21,205 +24,50 @@ import java.util.List;
 public class AuthorDao implements GenericDao<Author> {
 
     @Autowired
-    private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private  AuthorRowMapper authorRowMapper;
 
-
+    @Transactional
     public Author add(Author author) throws DAOException {
-        Connection con = null;
-        try {
-            con = dataSource.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        boolean success = false;
         String script = "INSERT INTO Author " +
-                "(name,surname,patronymic,dateofbirth,country) VALUES " +
-                "(?,?,?,?,?)";
-        jdbcTemplate = new JdbcTemplate(dataSource);
+                "(name,surname,patronymic,dateofbirth,country) VALUES  (?,?,?,?,?)";
         jdbcTemplate.update(script, new Object[]{author.getName(),author.getSurname() ,author.getPatronymic(),new java.sql.Date(author.getBirthDate().getTime()),author.getBirthPlace()});
-
-        /*try (PreparedStatement ps = con.prepareStatement(script)) {
-            ps.setString(1,author.getName());
-            ps.setString(2,author.getSurname());
-            ps.setString(3,author.getPatronymic());
-            ps.setDate(4, new java.sql.Date(author.getBirthDate().getTime()));
-            ps.setString(5,author.getBirthPlace());
-            ps.executeUpdate();
-            ResultSet rs = ps.executeQuery("Select last_insert_id()");
-            rs.next();
-            int lastInsertedId = Integer.parseInt(rs.getString("last_insert_id()"));
-            author.setId(lastInsertedId);
-            if (!con.getAutoCommit()){
-                con.commit();
-            }
-            success = true;
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(),e);
-        } finally {
-            try {
-                if(!success && !con.getAutoCommit()) {
-                    con.rollback();
-                }
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage(),e);
-            } finally {
-                ConnectionHolder.getInstance().releaseConnection(con);
-            }
-        }*/
         return author;
     }
-
+    @Transactional
     public void delete(int id) throws DAOException {
-        Connection con = null;
-        try {
-            con = dataSource.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        boolean success = false;
         String script = "DELETE FROM Author WHERE id = ?";
-        try (PreparedStatement ps = con.prepareStatement(script)){
-            ps.setInt(1,id);
-            ps.executeUpdate();
-            if (!con.getAutoCommit()){
-                con.commit();
-            }
-            success = true;
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(),e);
-        } finally {
-            try {
-                if(!success && !con.getAutoCommit()) {
-                    con.rollback();
-                }
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage(),e);
-            } finally {
-                ConnectionHolder.getInstance().releaseConnection(con);
-            }
-        }
+        jdbcTemplate.update(script);
     }
 
+    @Transactional
     public Author get(int id) throws DAOException {
-        Connection con = null;
-        try {
-            con = dataSource.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        boolean success = false;
         String script = "SELECT * FROM Author WHERE id = ?";
-        Author author = new Author();
-        try(PreparedStatement ps = con.prepareStatement(script)){
-            ps.setInt(1, id);
-            ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()){
-                author.setId(resultSet.getInt("id"));
-                author.setName(resultSet.getString("name"));
-                author.setSurname(resultSet.getString("surname"));
-                author.setPatronymic(resultSet.getString("patronymic"));
-                author.setBirthDate(new java.util.Date(resultSet.getDate("dateofbirth").getTime()));
-                author.setBirthPlace(resultSet.getString("country"));
-                if (!con.getAutoCommit()){
-                    con.commit();
-                }
-                success = true;
-            } else {
-                throw new DAOException();
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(),e);
-        } finally {
-            try {
-                if(!success && !con.getAutoCommit()) {
-                    con.rollback();
-                }
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage(),e);
-            } finally {
-                ConnectionHolder.getInstance().releaseConnection(con);
-            }
-        }
+        Author author = (Author)jdbcTemplate.queryForObject(script, authorRowMapper);
         return author;
     }
 
     public Author update(Author author) throws DAOException {
-        Connection con = null;
-        try {
-            con = dataSource.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        boolean success = false;
         String script = "UPDATE Author SET " +
                 "name = ?, surname = ?, patronymic = ?, dateofbirth = ?, country = ?" +
                 "WHERE id = ?";
-        try(PreparedStatement ps = con.prepareStatement(script)){
-            ps.setString(1, author.getName());
-            ps.setString(2, author.getSurname());
-            ps.setString(3,author.getPatronymic());
-            ps.setDate(4, new java.sql.Date(author.getBirthDate().getTime()));
-            ps.setString(5, author.getBirthPlace());
-            ps.setInt(6,author.getId());
-            ps.executeUpdate();
-            if (!con.getAutoCommit()){
-                con.commit();
-            }
-            success = true;
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(),e);
-        } finally {
-            try {
-                if(!success && !con.getAutoCommit()) {
-                    con.rollback();
-                }
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage(),e);
-            } finally {
-                ConnectionHolder.getInstance().releaseConnection(con);
-            }
-        }
+        author = (Author)jdbcTemplate.queryForObject(script, authorRowMapper);
         return author;
     }
 
     public List<Author> getAll() throws DAOException {
-        Connection con = null;
-        try {
-            con = dataSource.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM AUTHOR");
         List<Author> authors = new ArrayList<>();
-        boolean success = false;
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Author")){
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                Author author = new Author();
-                author.setId(resultSet.getInt("Id"));
-                author.setName(resultSet.getString("name"));
-                author.setSurname(resultSet.getString("surname"));
-                author.setPatronymic(resultSet.getString("patronymic"));
-                author.setBirthDate(new java.util.Date(resultSet.getDate("dateofbirth").getTime()));
-                author.setBirthPlace(resultSet.getString("country"));
-                authors.add(author);
-            }
-            if (!con.getAutoCommit()){
-                con.commit();
-            }
-            success = true;
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(),e);
-        } finally {
-            try {
-                if(!success && !con.getAutoCommit()) {
-                    con.rollback();
-                }
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage(),e);
-            } finally {
-                ConnectionHolder.getInstance().releaseConnection(con);
-            }
+        for (Map row : rows) {
+            Author author = new Author();
+            author.setId((Integer) (row.get("Id")));
+            author.setName((String) row.get("name"));
+            author.setSurname((String) row.get("surname"));
+            author.setPatronymic((String) row.get("patronymic"));
+            author.setBirthDate((Date) (row.get("dateofbirth")));
+            author.setBirthPlace((String) row.get("country"));
+            authors.add(author);
         }
         return authors;
     }
