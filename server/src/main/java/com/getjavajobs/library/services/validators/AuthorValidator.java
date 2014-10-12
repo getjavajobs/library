@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 /**
  * Created by Vlad on 24.08.2014.
  */
-@Component
 public class AuthorValidator {
     private Author author;
 

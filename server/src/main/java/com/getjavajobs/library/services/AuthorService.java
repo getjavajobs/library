@@ -21,7 +21,6 @@ public class AuthorService {
 
     public AuthorService(){};
 
-    @Autowired
     private AuthorValidator authorValidator;
 
     public AuthorService(AuthorDao authorDao) {
