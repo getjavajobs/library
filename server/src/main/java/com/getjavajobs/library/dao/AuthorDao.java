@@ -3,6 +3,7 @@ package com.getjavajobs.library.dao;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Author;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -21,6 +22,7 @@ public class AuthorDao implements GenericDao<Author> {
 
     @Autowired
     private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
 
 
     public Author add(Author author) throws DAOException {
@@ -34,7 +36,10 @@ public class AuthorDao implements GenericDao<Author> {
         String script = "INSERT INTO Author " +
                 "(name,surname,patronymic,dateofbirth,country) VALUES " +
                 "(?,?,?,?,?)";
-        try (PreparedStatement ps = con.prepareStatement(script)) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.update(script, new Object[]{author.getName(),author.getSurname() ,author.getPatronymic(),new java.sql.Date(author.getBirthDate().getTime()),author.getBirthPlace()});
+
+        /*try (PreparedStatement ps = con.prepareStatement(script)) {
             ps.setString(1,author.getName());
             ps.setString(2,author.getSurname());
             ps.setString(3,author.getPatronymic());
@@ -61,7 +66,7 @@ public class AuthorDao implements GenericDao<Author> {
             } finally {
                 ConnectionHolder.getInstance().releaseConnection(con);
             }
-        }
+        }*/
         return author;
     }
 
