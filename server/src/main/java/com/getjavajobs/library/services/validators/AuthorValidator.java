@@ -1,13 +1,15 @@
 package com.getjavajobs.library.services.validators;
 
 import com.getjavajobs.library.model.Author;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by Vlad on 24.08.2014.
  */
-
+@Component
 public class AuthorValidator {
     private Author author;
+
     public AuthorValidator(Author author){
         this.author=author;
     }
