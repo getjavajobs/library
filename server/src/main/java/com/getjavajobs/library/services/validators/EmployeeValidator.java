@@ -1,9 +1,10 @@
 package com.getjavajobs.library.services.validators;
 
 import com.getjavajobs.library.model.Employee;
+import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
-
+@Component
 public class EmployeeValidator {
 	private static final String COMMON_PATTERN = "[a-zA-Z�-��-�]{1,50}";
 	private Pattern pattern;

@@ -4,13 +4,16 @@ import com.getjavajobs.library.dao.EmployeeDao;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Employee;
 import com.getjavajobs.library.services.validators.EmployeeValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class EmployeeService {
-	private EmployeeDao employeeDao = new EmployeeDao();
-	private EmployeeValidator employeeValidator = new EmployeeValidator();
+    @Autowired
+	private EmployeeDao employeeDao;
+    @Autowired
+	private EmployeeValidator employeeValidator;
 	
 	public Employee add(Employee employee) throws ServiceException {
 		if (employeeValidator.validate(employee)) {
@@ -39,7 +42,7 @@ public class EmployeeService {
 	}
 
 	public List<Employee> getAll() throws ServiceException {
-		List<Employee> employees = new ArrayList<>();
-		return employees = employeeDao.getAll();
+
+		return  employeeDao.getAll();
 	}
 }

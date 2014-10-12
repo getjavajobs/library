@@ -1,23 +1,24 @@
 package com.getjavajobs.library.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.getjavajobs.library.exceptions.DAOException;
+import com.getjavajobs.library.model.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
-import com.getjavajobs.library.exceptions.DAOException;
-import com.getjavajobs.library.model.Employee;
-
 @Repository
 public class EmployeeDao {
-
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 	public Employee add(Employee employee) throws DAOException{
+
+        jdbcTemplate.update()
+
 		Connection con = ConnectionHolder.getInstance().getConnection();
 		boolean commit = false;
 		String query = "INSERT INTO Employees"

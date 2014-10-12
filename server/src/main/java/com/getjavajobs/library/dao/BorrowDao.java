@@ -56,7 +56,7 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
         return updated;
     }
 
-    public List<Borrow> getAll() {
+    public List<Borrow> getAll(){
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM BORROW");
         List<Borrow> borrowList = new ArrayList<>();
         for (Map row : rows) {
@@ -67,6 +67,7 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
             borrow.setDateOfBorrow((Date) row.get("date_of_borrow"));
             borrow.setBook(bookDao.get((Integer) row.get("books_id")));
             borrow.setReader(readerDao.get((Integer) row.get("readers_id")));
+            borrowList.add(borrow);
         }
         return borrowList;
     }
