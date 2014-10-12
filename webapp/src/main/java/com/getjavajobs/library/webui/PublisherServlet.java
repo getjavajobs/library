@@ -1,8 +1,9 @@
 package com.getjavajobs.library.webui;
 
-import com.getjavajobs.library.dao.PublisherDao;
 import com.getjavajobs.library.model.Publisher;
 import com.getjavajobs.library.services.PublisherService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,14 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Component
 public class PublisherServlet extends HttpServlet {
 
-    public PublisherService publisherService = null;
-
-    @Override
-    public void init() {
-        this.publisherService = new PublisherService(new PublisherDao());
-    }
+    @Autowired
+    private PublisherService publisherService;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,6 +53,9 @@ public class PublisherServlet extends HttpServlet {
                 default: {
                     String publisherIdString = request.getParameter("publisherId");
                     int publisherId = Integer.valueOf(publisherIdString);
+                    if (publisherService == null) {
+                        System.out.println("PublisherServlet: publisherService is null!\n");
+                    }
                     publisherService.delete(publisherId);
                     response.sendRedirect("publishers");
                 }
