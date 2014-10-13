@@ -47,7 +47,7 @@ public class AuthorDao implements GenericDao<Author> {
         Author author = (Author)jdbcTemplate.queryForObject(script, authorRowMapper);
         return author;
     }
-
+    @Transactional
     public Author update(Author author) throws DAOException {
         String script = "UPDATE Author SET " +
                 "name = ?, surname = ?, patronymic = ?, dateofbirth = ?, country = ?" +
@@ -55,7 +55,7 @@ public class AuthorDao implements GenericDao<Author> {
         author = (Author)jdbcTemplate.queryForObject(script, authorRowMapper);
         return author;
     }
-
+    @Transactional
     public List<Author> getAll() throws DAOException {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM AUTHOR");
         List<Author> authors = new ArrayList<>();

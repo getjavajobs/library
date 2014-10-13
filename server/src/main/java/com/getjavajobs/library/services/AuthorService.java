@@ -19,8 +19,6 @@ public class AuthorService {
     @Autowired
     private AuthorDao authorDao;
 
-    public AuthorService(){};
-
     @Autowired
     private AuthorValidator authorValidator;
 
@@ -28,6 +26,9 @@ public class AuthorService {
         this.authorDao = authorDao;
     }
 
+    public AuthorService() {
+
+    }
     @Transactional
     public Author add(Author author) throws ServiceException {
          if(authorValidator.validate()) {
