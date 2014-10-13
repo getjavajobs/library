@@ -19,16 +19,14 @@ public class AuthorService {
     @Autowired
     private AuthorDao authorDao;
 
-    @Autowired
+    public AuthorService(){};
+
     private AuthorValidator authorValidator;
 
     public AuthorService(AuthorDao authorDao) {
         this.authorDao = authorDao;
     }
 
-    public AuthorService() {
-
-    }
     @Transactional
     public Author add(Author author) throws ServiceException {
          if(authorValidator.validate()) {
