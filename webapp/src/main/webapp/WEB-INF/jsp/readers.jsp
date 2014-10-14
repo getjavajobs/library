@@ -14,20 +14,16 @@
         <%@ include file="strelHeader.jsp"%>
 		READERS<br/>
 		<table>
-			<%
-				ApplicationContext context =  WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-				ReaderService readerService = context.getBean(ReaderService.class);
-				for (Reader reader : readerService.getAll()) {
-			%>
+			<c:forEach var="reader" items="${requestScope.readersList}">
 				<tr>
 					<td>
-						<%=reader.getFirstName()%>
+						${reader.firstName}
 					</td>
 					<td>
-						<%=reader.getSecondName()%>
+						${reader.secondName}
 					</td>
 				</tr>
-			<% } %>
+			</c:forEach>
 		</table>
         <%@ include file="strelFooter.jsp"%>
 	</body>
