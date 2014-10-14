@@ -18,19 +18,19 @@
     <ul align = "center">
         <li>Книга  <select  name = "book" required>
             <option></option>
-            <c:forEach var="book" items="${bookService.getFree()}">
+            <c:forEach var="book" items="${freeBooks}">
                 <option value="${book.getId()}"> ${book.getName()} </option>
             </c:forEach> </select>  </li>
 
         <li>Читатель  <select name = "reader" required>
             <option></option>
-            <c:forEach var="reader" items="${readerService.getAll()}">
+            <c:forEach var="reader" items="${readers}">
                 <option value="${reader.getReaderId()}"> ${reader.getSecondName()} &emsp; ${reader.getFirstName()} </option>
             </c:forEach> </select>  </li>
 
         <li> Работник <select name = "employee" required>
             <option></option>
-            <c:forEach var="employee" items="${employeeService.getAll()}">
+            <c:forEach var="employee" items="${employees}">
                 <option value="${employee.getId()}"> ${employee.getName()} </option>
             </c:forEach> </select>  </li>
 
