@@ -17,7 +17,7 @@ public class EmployeeDao {
     JdbcTemplate jdbcTemplate;
 	public Employee add(Employee employee) throws DAOException{
 
-        jdbcTemplate.update()
+       // jdbcTemplate.update();
 
 		Connection con = ConnectionHolder.getInstance().getConnection();
 		boolean commit = false;

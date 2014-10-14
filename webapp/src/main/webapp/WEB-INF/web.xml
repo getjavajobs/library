@@ -23,6 +23,14 @@
         <servlet-name>borrow.jsp</servlet-name>
         <url-pattern>/borrows/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>updateborrow</servlet-name>
+        <jsp-file>/WEB-INF/jsp/prolong.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>updateborrow</servlet-name>
+        <url-pattern>/prolong</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>addborrow</servlet-name>

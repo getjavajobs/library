@@ -1,6 +1,8 @@
 <!doctype html/>
 <%@ page import="com.getjavajobs.library.model.Borrow" %>
 <%@ page import="com.getjavajobs.library.services.BorrowService" %>
+<%@ page import="org.springframework.context.ApplicationContext" %>
+<%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -9,7 +11,8 @@
     <title>Продление выдачи</title>
 </head>
 <body>
-<% BorrowService borrowService = new BorrowService();
+<%  ApplicationContext context =  WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+    BorrowService borrowService = context.getBean(BorrowService.class);
     Borrow borrow = borrowService.get(Integer.valueOf(request.getParameter("borrowID")));
 %>
 
