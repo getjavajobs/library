@@ -26,33 +26,6 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>borrow.jsp</servlet-name>
-        <jsp-file>/WEB-INF/jsp/borrow.jsp</jsp-file>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>borrow.jsp</servlet-name>
-        <url-pattern>/borrows/*</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>updateborrow</servlet-name>
-        <jsp-file>/WEB-INF/jsp/prolong.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>updateborrow</servlet-name>
-        <url-pattern>/prolong</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>addborrow</servlet-name>
-        <jsp-file>/WEB-INF/jsp/addBorrow.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>addborrow</servlet-name>
-        <url-pattern>/addborrow</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>books.jsp</servlet-name>
         <jsp-file>/WEB-INF/jsp/books.jsp</jsp-file>
     </servlet>
