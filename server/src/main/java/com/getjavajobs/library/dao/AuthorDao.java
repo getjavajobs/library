@@ -1,5 +1,6 @@
 package com.getjavajobs.library.dao;
 
+import com.getjavajobs.library.dao.mappers.AuthorRowMapper;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Author;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +22,7 @@ public class AuthorDao implements GenericDao<Author> {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
-    private  AuthorRowMapper authorRowMapper;
+    private AuthorRowMapper authorRowMapper;
 
     @Transactional
     public Author add(Author author) throws DAOException {

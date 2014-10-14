@@ -20,7 +20,7 @@ public class AuthorService {
     private AuthorDao authorDao;
 
     public AuthorService(){};
-
+    @Autowired
     private AuthorValidator authorValidator;
 
     public AuthorService(AuthorDao authorDao) {
@@ -29,7 +29,7 @@ public class AuthorService {
 
     @Transactional
     public Author add(Author author) throws ServiceException {
-         if(authorValidator.validate()) {
+         if(authorValidator.validate(author)) {
              return authorDao.add(author);
          }else{
             throw new ServiceException("Fall at authorAdd");
@@ -37,15 +37,15 @@ public class AuthorService {
     }
     @Transactional
     public Author get(int id) throws ServiceException {
-        if(authorValidator.validate()) {
+         try{
             return authorDao.get(id);
-        }else{
-            throw new ServiceException("Fall at authorGet");
+        }catch (Exception e){
+            throw new ServiceException( "Fall at authorGet",e);
         }
     }
     @Transactional
     public Author update(Author author) throws ServiceException {
-        if(authorValidator.validate()) {
+        if(authorValidator.validate(author)) {
             return authorDao.update(author);
         }else{
             throw new ServiceException("Fall at authorUpdate");
@@ -53,17 +53,17 @@ public class AuthorService {
     }
     @Transactional
     public void delete(int id) throws ServiceException{
-        if(authorValidator.validate()) {
+        try{
             authorDao.delete(id);
-        }else{
-            throw new ServiceException("Fall at authorDelete");
+        }catch (Exception e){
+            throw new ServiceException("Fall at authorDelete",e);
         }
     }
     @Transactional
     public List<Author> getAll() throws ServiceException{
-        if(authorValidator.validate()) {
+        try {
             return authorDao.getAll();
-        }else{
+        }catch (Exception e){
             throw new ServiceException("Fall at authorGetAll");
         }
     }
