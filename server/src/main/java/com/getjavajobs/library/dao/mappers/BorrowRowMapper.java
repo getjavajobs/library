@@ -1,5 +1,8 @@
-package com.getjavajobs.library.dao;
+package com.getjavajobs.library.dao.mappers;
 
+import com.getjavajobs.library.dao.BookDao;
+import com.getjavajobs.library.dao.EmployeeDao;
+import com.getjavajobs.library.dao.ReaderDao;
 import com.getjavajobs.library.model.Borrow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;

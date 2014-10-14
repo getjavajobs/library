@@ -1,4 +1,4 @@
-package com.getjavajobs.library.dao;
+package com.getjavajobs.library.webui.controllers;
 
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Book;

@@ -1,5 +1,7 @@
 package com.getjavajobs.library.dao;
 
+import com.getjavajobs.library.dao.mappers.BorrowRowMapper;
+import com.getjavajobs.library.dao.mappers.IntegerRowMapper;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Borrow;
 import org.springframework.beans.factory.annotation.Autowired;

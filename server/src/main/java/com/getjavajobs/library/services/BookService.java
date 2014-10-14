@@ -1,19 +1,22 @@
 package com.getjavajobs.library.services;
 
 import com.getjavajobs.library.dao.BookDao;
-import com.getjavajobs.library.dao.DaoFactory;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Book;
 import com.getjavajobs.library.services.validators.BookValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by Vlad on 21.08.2014.
  */
+@Service
 public class BookService {
-    private BookDao bookDao = DaoFactory.getBookDao();
+    @Autowired
+    private BookDao bookDao;
     public void setBookDao(BookDao bookDao) {
         this.bookDao = bookDao;
     }

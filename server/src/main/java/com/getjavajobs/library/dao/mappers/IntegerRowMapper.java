@@ -1,4 +1,4 @@
-package com.getjavajobs.library.dao;
+package com.getjavajobs.library.dao.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
