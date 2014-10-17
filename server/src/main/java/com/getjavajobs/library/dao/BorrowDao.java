@@ -36,7 +36,7 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
         String sql = "INSERT INTO BORROW(books_id, date_of_borrow," +
                 " date_of_return, readers_id, employee_id) VALUES (?,?,?,?,?)";
 
-        jdbcTemplate.update(sql, new Object[]{borrow.getBook().getId(),borrow.getDateOfBorrow().getTime(),borrow.getDateOfReturn().getTime(),
+        jdbcTemplate.update(sql, new Object[]{borrow.getBook().getId(), borrow.getDateOfBorrow(),borrow.getDateOfReturn(),
                 borrow.getReader().getReaderId(),borrow.getEmployee().getId()});
         int id = (Integer)jdbcTemplate.queryForObject("SELECT last_insert_id()",integerRowMapper);
         added.setBorrowId(id);
@@ -49,7 +49,7 @@ public class BorrowDao implements GenericDao<Borrow> { //interface Dao( тут �
     }
     @Transactional
     public void delete(int id) {
-        jdbcTemplate.update("DELETE FROM Borrow WHERE id = ?");
+        jdbcTemplate.update("DELETE FROM Borrow WHERE id = "+ id);
     }
     @Transactional
     public Borrow update(Borrow borrow) {

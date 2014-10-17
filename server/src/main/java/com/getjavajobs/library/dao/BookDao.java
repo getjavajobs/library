@@ -4,19 +4,22 @@ import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Book;
 import com.getjavajobs.library.model.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Vlad on 21.08.2014.
  */
 @Repository
 public class BookDao implements GenericDao<Book> {
-
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
     @Autowired
     private DataSource dataSource;
     @Autowired
@@ -47,6 +50,7 @@ public class BookDao implements GenericDao<Book> {
         this.publisherDao = publisherDao;
     }
     */
+
     public Book add(Book book) throws DAOException {
         Connection connection = null;
         try {
@@ -225,24 +229,23 @@ public class BookDao implements GenericDao<Book> {
     }
 
     public List<Book> getFree() throws DAOException {
-        Connection connection = null;
         List<Book> books = new ArrayList<>();
-        try {
-            connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try (Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("SELECT * FROM books WHERE id NOT IN (SELECT books_id FROM borrow);");
-            while (rs.next()) {
-                Book book = resultsSetToBook(rs);
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT DISTINCT * FROM books WHERE id NOT IN (SELECT books_id FROM borrow);");
+        for (Map<String, Object> row : rows) {
+            Book book = new Book();
+            book.setId((Integer) row.get("id"));
+            book.setName((String) row.get("title"));
+            book.setAuthor(authorDao.get((Integer) row.get("author_id")));
+            book.setPublisher(publisherDao.get((Integer) row.get("publishing_id")));
+            book.setYear((Integer) row.get("year"));
+            book.setPagesNumber((Integer) row.get("pagenumber"));
+            book.setPrice((Float) row.get("price"));
+            try {
                 book.setGenreList(getGenreList(book.getId()));
-                books.add(book);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
             }
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(),e);
-        }finally {
-            ConnectionHolder.getInstance().releaseConnection(connection);
+            books.add(book);
         }
         return books;
     }

@@ -1,7 +1,6 @@
 package com.getjavajobs.library.services;
 
 import com.getjavajobs.library.dao.BorrowDao;
-import com.getjavajobs.library.dao.DaoFactory;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.exceptions.ServiceException;
 import com.getjavajobs.library.model.Borrow;
@@ -17,7 +16,7 @@ import java.util.List;
 @Service
 public class BorrowService  {
     @Autowired
-    private BorrowDao bd = DaoFactory.getBorrowDao();
+    private BorrowDao bd;
 
     public Borrow get(int id) throws ServiceException {
         try {
