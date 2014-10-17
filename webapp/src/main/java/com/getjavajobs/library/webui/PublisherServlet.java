@@ -3,7 +3,9 @@ package com.getjavajobs.library.webui;
 import com.getjavajobs.library.model.Publisher;
 import com.getjavajobs.library.services.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +23,7 @@ public class PublisherServlet extends HttpServlet {
     public void setPublisherService(PublisherService newPublisherService) {
         publisherService = newPublisherService;
     }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

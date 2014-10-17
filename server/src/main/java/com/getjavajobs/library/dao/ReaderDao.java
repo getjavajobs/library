@@ -5,18 +5,24 @@
  */
 package com.getjavajobs.library.dao;
 
-import java.util.List;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.LikeExpression;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Reader;
+import com.getjavajobs.library.services.ReaderService;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -26,47 +32,133 @@ import com.getjavajobs.library.model.Reader;
 public class ReaderDao implements GenericDao<Reader> {
 
 	@Autowired
-	private SessionFactory sessionFactory;
+	private DataSource dataSource;
 
     @Override
     public Reader get(int id) throws DAOException {
-    	Session session = sessionFactory.getCurrentSession();
+        Connection con = null;
         try {
-        	return (Reader) session.get(Reader.class, id);
-        } catch (Exception e) {
+			con = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        boolean commit = false;
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM readers WHERE Id = ?")) {
+            Reader r = new Reader();
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                r.setReaderId(Integer.parseInt(rs.getString("Id")));
+                r.setSecondName(rs.getString("surname"));
+                r.setFirstName(rs.getString("Name"));
+                r.setAddress(rs.getString("Address"));
+                r.setPasport(rs.getString("passport"));
+                r.setPhone((rs.getString("telephone")));
+            }
+            return r;
+        } catch (SQLException e) {
             throw new DAOException(e);
+        } finally {
+            ConnectionHolder.getInstance().releaseConnection(con);
         }
     }
 
-	@Override
-    @SuppressWarnings("unchecked")
+    @Override
     public List<Reader> getAll() throws DAOException {
-    	Session session = sessionFactory.getCurrentSession();
+        Connection con = null;
         try {
-        	return (List<Reader>) session.createCriteria(Reader.class).list();
-        } catch (Exception e) {
+			con = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        List<Reader> readerBase = new ArrayList<>();
+        try (Statement ps = con.createStatement()) {
+            ResultSet rs = ps.executeQuery("SELECT * FROM readers ");
+            while (rs.next()) {
+                Reader r = new Reader();
+                r.setReaderId(Integer.parseInt(rs.getString("Id")));
+                r.setSecondName(rs.getString("surname"));
+                r.setFirstName(rs.getString("Name"));
+                r.setAddress(rs.getString("Address"));
+                r.setPasport(rs.getString("passport"));
+                r.setPhone((rs.getString("telephone")));
+                readerBase.add(r);
+            }
+            return readerBase;
+        } catch (SQLException e) {
             throw new DAOException(e);
+        } finally {
+            ConnectionHolder.getInstance().releaseConnection(con);
         }
     }
 
     @Override
     public Reader update(Reader reader) throws DAOException {
-    	Session session = sessionFactory.getCurrentSession();
+        Connection con = null;
         try {
-        	session.update(reader);
-        	return reader;
-        } catch (Exception e) {
+			con = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        boolean commit = false;
+        try (PreparedStatement ps = con.prepareStatement("update readers set surname= ?,Name= ? ,Address= ? ,Passport= ? ,telephone=? where Id = ?;")) {
+            ps.setString(1, reader.getSecondName());
+            ps.setString(2, reader.getFirstName());
+            ps.setString(3, reader.getAddress());
+            ps.setString(4, reader.getPassport());
+            ps.setString(5, reader.getPhone());
+            ps.setInt(6, reader.getReaderId());
+            ps.executeUpdate();
+
+            if (!con.getAutoCommit()) {
+                con.commit();
+            }
+            commit = true;
+            return reader;
+        } catch (SQLException e) {
             throw new DAOException(e);
+        } finally {
+            try {
+                if (!commit && !con.getAutoCommit()) {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException(ex);
+            } finally {
+                ConnectionHolder.getInstance().releaseConnection(con);
+            }
         }
     }
 
     @Override
     public void delete(int id) throws DAOException {
-    	Session session = sessionFactory.getCurrentSession();
+        Connection con = null;
         try {
-        	session.delete(get(id));
-        } catch (Exception e) {
+			con = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        boolean commit = false;
+        try (PreparedStatement ps = con.prepareStatement("delete from readers where ID =?;")) {
+            ps.setString(1, String.valueOf(id));
+            ps.executeUpdate();
+
+            if (!con.getAutoCommit()) {
+                con.commit();
+            }
+            commit = true;
+        } catch (SQLException e) {
             throw new DAOException(e);
+        } finally {
+            try {
+                if (!commit && !con.getAutoCommit()) {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException(ex);
+            } finally {
+                ConnectionHolder.getInstance().releaseConnection(con);
+            }
         }
     }
     
@@ -78,13 +170,45 @@ public class ReaderDao implements GenericDao<Reader> {
 
     @Override
     public Reader add(Reader reader) throws DAOException {
-    	Session session = sessionFactory.getCurrentSession();
+        Connection con = null;
         try {
-        	int id = (Integer) session.save(reader);
-        	reader.setReaderId(id);
-        	return reader;
-        } catch (Exception e) {
+			con = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        boolean commit = false;
+        try (PreparedStatement ps = con.prepareStatement("Insert into readers (surname, name, address,passport,telephone) values( ? , ? ,?, ?, ? ) ;")) {
+
+            ps.setString(1, reader.getSecondName());
+            ps.setString(2, reader.getFirstName());
+            ps.setString(3, reader.getAddress());
+            ps.setString(4, reader.getPassport());
+            ps.setString(5, reader.getPhone());
+
+            ps.executeUpdate();
+            Statement s = con.createStatement();
+            ResultSet rs = s.executeQuery("Select last_insert_id()");
+            rs.next();
+            int lastInsertedId = Integer.parseInt(rs.getString("last_insert_id()"));
+            reader.setReaderId(lastInsertedId);
+
+            if (!con.getAutoCommit()) {
+                con.commit();
+            }
+            commit = true;
+            return reader;
+        } catch (SQLException e) {
             throw new DAOException(e);
+        } finally {
+            try {
+                if (!commit && !con.getAutoCommit()) {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException(ex);
+            } finally {
+                ConnectionHolder.getInstance().releaseConnection(con);
+            }
         }
     }
 
