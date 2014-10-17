@@ -39,7 +39,7 @@ public class AuthorDao implements GenericDao<Author> {
 
     @Transactional
     public Author get(int id) throws DAOException {
-        String script = "SELECT * FROM Author WHERE id = ?";
+        String script = "SELECT * FROM Author WHERE id = " + id;
         Author author = (Author)jdbcTemplate.queryForObject(script, authorRowMapper);
         return author;
     }
