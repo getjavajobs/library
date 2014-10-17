@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="com.getjavajobs.library.model.Reader" table="Readers">
+		<id name="ReaderId" type="int">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="secondName" type="string">
+            <column name="surname" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="name" />
+        </property>
+        <property name="address" type="string">
+            <column name="address" />
+        </property>
+	</class>
+
+</hibernate-mapping>
