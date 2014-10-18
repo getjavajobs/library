@@ -58,13 +58,13 @@
                     <td><%=book.getPagesNumber()%></td>
                     <td><%=book.getPrice()%></td>
                     <td>
-                        <form action="addbook" method="post">
+                        <form action="/books/edit" method="post">
                             <input type="hidden" name="bookid" value=<%=book.getId()%>>
                             <input type="submit" value="Изменить">
                         </form>
                     </td>
                     <td>
-                        <form action="changebook" method="post">
+                        <form action="/books/do_action" method="post">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="bookid" value=<%=book.getId()%>>
                             <input type="submit" value="Удалить">
@@ -74,7 +74,7 @@
             <%}%>
         </tbody>
     </table>
-    <input type="button" value="Добавить" onClick="document.location='addbook'">
+    <input type="button" value="Добавить" onClick="document.location='/books/edit'">
     <%@ include file="strelFooter.jsp"%>
 </body>
 </html>

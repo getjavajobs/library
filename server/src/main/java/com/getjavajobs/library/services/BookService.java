@@ -7,6 +7,7 @@ import com.getjavajobs.library.model.Book;
 import com.getjavajobs.library.services.validators.BookValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,15 +18,14 @@ import java.util.List;
 public class BookService {
     @Autowired
     private BookDao bookDao;
-    public void setBookDao(BookDao bookDao) {
-        this.bookDao = bookDao;
-    }
+
 
     /*public Book add(Book book) throws DaoException;
         public void delete(int id) throws DaoException;
         public Book get(int id) throws DaoException;
         public Book update(Book book) throws DaoException;
         public List<Book> getAll() throws DaoException;*/
+    @Transactional
     public Book add(Book book) throws ServiceException {
         BookValidator validator = new BookValidator(book);
         if (!validator.validate()) {
@@ -37,6 +37,7 @@ public class BookService {
             throw new ServiceException(e);
         }
     }
+    @Transactional
     public Book get(int id) throws ServiceException {
         try {
             return bookDao.get(id);
@@ -44,6 +45,7 @@ public class BookService {
             throw new ServiceException(e);
         }
     }
+    @Transactional
     public Book update(Book book) throws ServiceException {
         BookValidator validator = new BookValidator(book);
         if (!validator.validate()) {
@@ -56,6 +58,7 @@ public class BookService {
             throw new ServiceException(e);
         }
     }
+    @Transactional
     public void delete(int id) throws ServiceException{
         try {
             bookDao.delete(id);
@@ -63,6 +66,7 @@ public class BookService {
             throw new ServiceException(e);
         }
     }
+    @Transactional
     public List<Book> getAll() throws ServiceException{
         try {
             return bookDao.getAll();
@@ -70,6 +74,7 @@ public class BookService {
             throw new ServiceException(e);
         }
     }
+    @Transactional
     public List<Book> getFree() throws ServiceException{
         try{
             return bookDao.getFree();
