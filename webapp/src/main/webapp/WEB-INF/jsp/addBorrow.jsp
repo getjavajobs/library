@@ -14,7 +14,7 @@
 <jsp:useBean id = "currentDate" class = "java.util.Date"/>
 <jsp:useBean id = "dateFormat" class = "java.text.SimpleDateFormat"/>
 
-<form action="borrowAddServlet" method = "POST">
+<form action="insertborrow" method = "post">
     <ul align = "center">
         <li>Книга  <select  name = "book" required>
             <option></option>
@@ -34,8 +34,8 @@
                 <option value="${employee.getId()}"> ${employee.getName()} </option>
             </c:forEach> </select>  </li>
 
-        <li> Дата возврата  <input type ="date" name = "dateOfReturn"  min =  "<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date())%>" required /> </li>
-        <input type = "submit" value="Обновить">
+        <li> Дата возврата <input type ="date" name = "dateOfReturn" min = <fmt:formatDate value="${now}"/> /> </li>
+        <input type = "submit" value="Добавить">
     </ul>
 
 </form>
