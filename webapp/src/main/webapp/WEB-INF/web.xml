@@ -26,26 +26,6 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>books.jsp</servlet-name>
-        <jsp-file>/WEB-INF/jsp/books.jsp</jsp-file>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>books.jsp</servlet-name>
-        <url-pattern>/library/books</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>addbook.jsp</servlet-name>
-        <jsp-file>/WEB-INF/jsp/addbook.jsp</jsp-file>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>addbook.jsp</servlet-name>
-        <url-pattern>/library/addbook</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>changebooksevlet</servlet-name>
         <servlet-class>com.getjavajobs.library.webui.ChangeBookServlet</servlet-class>
     </servlet>
