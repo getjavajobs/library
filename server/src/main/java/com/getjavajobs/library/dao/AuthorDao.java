@@ -1,17 +1,14 @@
 package com.getjavajobs.library.dao;
 
-import com.getjavajobs.library.dao.mappers.AuthorRowMapper;
 import com.getjavajobs.library.exceptions.DAOException;
 import com.getjavajobs.library.model.Author;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Roman on 23.08.14.
@@ -20,52 +17,56 @@ import java.util.Map;
 public class AuthorDao implements GenericDao<Author> {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private AuthorRowMapper authorRowMapper;
+    private SessionFactory AuthorSessionFactory;
 
     @Transactional
     public Author add(Author author) throws DAOException {
-        String script = "INSERT INTO Author " +
-                "(name,surname,patronymic,dateofbirth,country) VALUES  (?,?,?,?,?)";
-        jdbcTemplate.update(script, new Object[]{author.getName(),author.getSurname() ,author.getPatronymic(),new java.sql.Date(author.getBirthDate().getTime()),author.getBirthPlace()});
-        return author;
+        Session session = AuthorSessionFactory.getCurrentSession();
+        try {
+            int id = (Integer) session.save(author);
+            author.setId(id);
+            return author;
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
     }
     @Transactional
     public void delete(int id) throws DAOException {
-        String script = "DELETE FROM Author WHERE id = ?";
-        jdbcTemplate.update(script);
+        Session session = AuthorSessionFactory.getCurrentSession();
+        try {
+            session.delete(get(id));
+        }catch (Exception e){
+            throw new DAOException(e);
+        }
     }
 
     @Transactional
     public Author get(int id) throws DAOException {
-        String script = "SELECT * FROM Author WHERE id = ?";
-        Author author = (Author)jdbcTemplate.queryForObject(script, authorRowMapper);
-        return author;
+        Session session = AuthorSessionFactory.getCurrentSession();
+        try{
+            return (Author)session.get(Author.class,id);
+        }catch (Exception e){
+            throw new DAOException(e);
+        }
     }
     @Transactional
     public Author update(Author author) throws DAOException {
-        String script = "UPDATE Author SET " +
-                "name = ?, surname = ?, patronymic = ?, dateofbirth = ?, country = ?" +
-                "WHERE id = ?";
-        author = (Author)jdbcTemplate.queryForObject(script, authorRowMapper);
-        return author;
+        Session session = AuthorSessionFactory.getCurrentSession();
+        try{
+            session.update(author);
+            return author;
+        }catch (Exception e){
+            throw new DAOException(e);
+        }
     }
     @Transactional
     public List<Author> getAll() throws DAOException {
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM AUTHOR");
-        List<Author> authors = new ArrayList<>();
-        for (Map row : rows) {
-            Author author = new Author();
-            author.setId((Integer) (row.get("Id")));
-            author.setName((String) row.get("name"));
-            author.setSurname((String) row.get("surname"));
-            author.setPatronymic((String) row.get("patronymic"));
-            author.setBirthDate((Date) (row.get("dateofbirth")));
-            author.setBirthPlace((String) row.get("country"));
-            authors.add(author);
+        Session session = AuthorSessionFactory.getCurrentSession();
+        try {
+            return (List<Author>)session.createCriteria(Author.class);
+        }catch (Exception e){
+            throw new DAOException(e);
         }
-        return authors;
     }
 
 }

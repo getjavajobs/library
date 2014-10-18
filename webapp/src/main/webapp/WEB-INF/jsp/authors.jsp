@@ -1,10 +1,3 @@
-<%@ page import="com.getjavajobs.library.services.AuthorService" %>
-<%@ page import="org.springframework.context.ApplicationContext" %>
-<%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
-<%@ page import="com.getjavajobs.library.model.Author" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.getjavajobs.library.exceptions.ServiceException" %>
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -15,10 +8,8 @@
 
 <%@ include file="strelHeader.jsp"%>
 
-<c:forEach var="authors" items="${requestScope.authorList}">
-
-<h1>Author table</h1>
-
+<!--<h1>Author table</h1> -->
+<h1>${requestScope.len}</h1>
 <table border="1px solid black">
     <tr>
         <th>ID</th>
@@ -29,7 +20,7 @@
         <th>BIRTH_PLACE</th>
         <th colspan="2">Actions</th>
     </tr>
-
+    <c:forEach var="authors" items="${requestScope.authorList}">
         <td>${authors.getId()}</td>
         <td>${authors.getName()}</td>
         <td>${authors.getSurname()}</td>
@@ -45,13 +36,12 @@
             </form>
         </td>
         <td>
-            <form action="AuthorServlet" method="post">
+            <form action="authorAdd" method="post">
                 <input type="hidden" name="commandType" value="delete">
                 <input type="hidden" name="authorId" value=${authors.getId()}>
                 <input type="submit" value="Delete">
             </form>
         </td>
-    </tr>
     </c:forEach>
 </table>
 

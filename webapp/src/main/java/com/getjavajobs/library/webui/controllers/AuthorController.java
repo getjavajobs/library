@@ -26,6 +26,8 @@ public class AuthorController {
     {
         try {
             List<Author> authorList = autorService.getAll();
+            int len = authorList.size();
+            request.setAttribute("len",len);
             request.setAttribute("authorList", authorList);
         } catch (ServiceException e) {
             e.printStackTrace();
