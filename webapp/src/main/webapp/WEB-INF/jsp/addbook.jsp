@@ -45,7 +45,7 @@
         }
     %>
     <% if (bookId==null) {%>
-        <form method="post" action="changebook">
+        <form method="post" action="/books/do_action">
             <input type="hidden" name="action" value="add">
             <P>Название: <input name="name" required>
             <P>Автор:
@@ -81,7 +81,7 @@
         BookService bookService = new BookService();
         Book book = bookService.get(bookId);
     %>
-    <form method="post" action="changebook">
+    <form method="post" action="/books/do_action">
         <input type="hidden" name="action" value="update">
         <input type="hidden" name="bookid" value=<%=bookId%>>
         <P>Название: <input name="name" value=<%=book.getName()%> required>
