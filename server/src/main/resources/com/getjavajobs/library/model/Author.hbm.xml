@@ -12,7 +12,7 @@
             <column name="name" />
         </property>
         <property name="surname" type="string">
-            <column name="name" />
+            <column name="surname" />
         </property>
         <property name="patronymic" type="string">
             <column name="patronymic" />

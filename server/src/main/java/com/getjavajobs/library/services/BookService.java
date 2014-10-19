@@ -69,7 +69,7 @@ public class BookService {
     @Transactional
     public List<Book> getAll() throws ServiceException{
         try {
-            return bookDao.getAll();
+        	return bookDao.getAll();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

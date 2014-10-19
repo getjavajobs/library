@@ -102,6 +102,27 @@ public class Book {
         return result;
     }
 
-
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Book [id=");
+		builder.append(id);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", author=");
+		builder.append(author);
+		builder.append(", publisher=");
+		builder.append(publisher);
+		builder.append(", genreList=");
+		builder.append(genreList);
+		builder.append(", year=");
+		builder.append(year);
+		builder.append(", pagesNumber=");
+		builder.append(pagesNumber);
+		builder.append(", price=");
+		builder.append(price);
+		builder.append("]");
+		return builder.toString();
+	}
 
 }

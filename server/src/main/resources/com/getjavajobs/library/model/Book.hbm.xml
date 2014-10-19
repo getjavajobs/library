@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.getjavajobs.library.model.Book" table="Books">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+            <column name="title" />
+        </property>
+        <property name="year" type="int">
+            <column name="year" />
+        </property>
+        <property name="pagesNumber" type="int">
+            <column name="pagenumber" />
+        </property>
+        <property name="price" type="double">
+            <column name="price" />
+        </property>
+        <many-to-one name="author" column="author_id" class="com.getjavajobs.library.model.Author" not-null="true" fetch="select" />
+        <bag name="genreList" table="genre_lists" inverse="true" fetch="select">
+        	<key>
+                <column name="book_id" not-null="true" />
+            </key>
+            <many-to-many column="genre_id" class="com.getjavajobs.library.model.Genre" />
+        </bag>
+        <!--  <many-to-one name="publisher" column="publisher_id" class="com.getjavajobs.library.model.Publisher" not-null="true" /> -->
+    </class>
+
+</hibernate-mapping>
