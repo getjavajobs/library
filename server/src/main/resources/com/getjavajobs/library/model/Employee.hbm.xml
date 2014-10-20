@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.getjavajobs.library.model.Employee" table="employees">
+        <id name="id" column="id" type="int"/>
+        <property name="name" type="string" column="name"/>
+        <property name="surname" type="string" column="surname"/>
+        <property name="patronymic" type="string" column="patronymic"/>
+        <property name="dateOfBirth" type="java.util.Date" column="dateofbirth"/>
+        <property name="position" type="string" column="position"/>
+    </class>
+
+
+</hibernate-mapping>

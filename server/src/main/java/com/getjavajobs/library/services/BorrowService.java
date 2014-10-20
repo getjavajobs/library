@@ -7,6 +7,7 @@ import com.getjavajobs.library.model.Borrow;
 import com.getjavajobs.library.services.validators.BorrowValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class BorrowService  {
             throw new ServiceException(e.getMessage(),e);
         }
     }
+    @Transactional
     public Borrow add(Borrow borrow) throws ServiceException {
         if(!new BorrowValidator(borrow).validate()) {
             return null;
@@ -41,7 +43,7 @@ public class BorrowService  {
             }
 
     }
-
+    @Transactional
     public void delete(int id) throws ServiceException {
         try {
             bd.delete(id);
@@ -49,7 +51,7 @@ public class BorrowService  {
             throw new ServiceException(e.getMessage(),e);
         }
     }
-
+    @Transactional
     public Borrow update(Borrow borrow) throws ServiceException {
         if(!new BorrowValidator(borrow).validate()) {
             return null;

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.getjavajobs.library.model.Borrow" table="borrow">
+        <id name="borrowId" type="int">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="book" class="com.getjavajobs.library.model.Book" fetch="join">
+            <column name="books_id" not-null="true"/>
+        </many-to-one>
+        <property name="dateOfBorrow" type="java.util.Date">
+            <column name="date_of_borrow" />
+        </property>
+        <property name="dateOfReturn" type="java.util.Date">
+            <column name="date_of_return" />
+        </property>
+        <many-to-one name="reader" class="com.getjavajobs.library.model.Reader" fetch="join" >
+            <column name="readers_id" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="employee" class="com.getjavajobs.library.model.Employee" fetch="join" >
+            <column name="employee_id" not-null="true"/>
+        </many-to-one>
+    </class>
+
+
+</hibernate-mapping>
