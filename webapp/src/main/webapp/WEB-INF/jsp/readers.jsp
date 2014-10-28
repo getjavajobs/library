@@ -13,6 +13,7 @@
 	<body>
         <%@ include file="strelHeader.jsp"%>
 		READERS<br/>
+		<input id="readers" type="text" value="" />
 		<table>
 			<c:forEach var="reader" items="${requestScope.readersList}">
 				<tr>
@@ -27,4 +28,22 @@
 		</table>
         <%@ include file="strelFooter.jsp"%>
 	</body>
+	<script>
+	$(function() {
+		$('#readers').autocomplete({
+    		source: function (request, response) {
+        		jQuery.get(
+        			"${pageContext.request.contextPath}/readers/filter",
+        			{ query: request.term },
+        			function (data) {
+		  				var suggestions = jQuery.map(data, function(item) {
+ 		      				return { label: item.firstName, data: item.ReaderId };
+		   				});
+          				response(suggestions);
+        		});
+    		},
+    		minLength: 1
+		});
+	});
+	</script>
 </html>
